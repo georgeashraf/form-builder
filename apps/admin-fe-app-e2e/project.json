@@ -1,0 +1,33 @@
+{
+  "name": "admin-fe-app-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/admin-fe-app-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/admin-fe-app-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "admin-fe-app:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "admin-fe-app:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "admin-fe-app:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin-fe-app-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "implicitDependencies": ["admin-fe-app"],
+  "tags": []
+}
