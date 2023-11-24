@@ -9,7 +9,8 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/admin-fe-app"
+        "outputPath": "dist/apps/admin-fe-app",
+        "postcssConfig": "apps/admin-fe-app/postcss.config.js"
       },
       "configurations": {
         "development": {
