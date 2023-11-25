@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { KnexModule } from 'nest-knexjs';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { FormsModule } from './requests/requests.module';
+import { RequestsModule } from './requests/requests.module';
 
 @Module({
   imports: [
@@ -30,7 +30,7 @@ import { FormsModule } from './requests/requests.module';
         },
       },
     }),
-    FormsModule,
+    RequestsModule,
   ],
   controllers: [],
   providers: [],
