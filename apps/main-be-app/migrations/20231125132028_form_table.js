@@ -4,13 +4,13 @@
  */
 exports.up = function (knex) {
   return knex.schema
-    .createTable('form', function (table) {
+    .createTable('request', function (table) {
       table.increments('id').primary();
       table.uuid('key').defaultTo(knex.raw('(UUID())'));
       table.string('label', 255).notNullable();
       table.string('name', 255).notNullable().unique();
       table.text('description', 'TEXT').nullable();
-      table.string('creator').nullable();
+      table.string('creator').notNullable();
       table.boolean('isPublished').defaultTo(false);
       table
         .dateTime('updatedAt')
@@ -29,5 +29,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('form');
+  return knex.schema.dropTableIfExists('request');
 };

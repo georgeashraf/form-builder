@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema
-    .createTable('form_view', function (table) {
+    .createTable('form', function (table) {
       table.increments('id').primary();
       table.uuid('key').defaultTo(knex.raw('(UUID())'));
       table.string('name', 255).notNullable().unique();
@@ -34,5 +34,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('form_view');
+  return knex.schema.dropTableIfExists('form');
 };
