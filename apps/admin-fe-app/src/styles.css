@@ -2,3 +2,68 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* @layer base {
+  :root {
+    --text: #08070e;
+    --background: #f0f0f0;
+    --primary: #213454;
+    --secondary: #4f709c;
+    --accent: #e5d285;
+  }
+  .dark {
+    --text: #f2f1f8;
+    --background: #0f0f0f;
+    --primary: #abbdde;
+    --secondary: #6385b0;
+    --accent: #7a671a;
+  }
+} */
+
+/* @layer base {
+  :root {
+    --text: #08070e;
+    --background: #dee7ed;
+    --primary: #27374e;
+    --secondary: #526e84;
+    --accent: #9cb2bf;
+  }
+  .dark {
+    --text: #f2f1f8;
+    --background: #121b21;
+    --primary: #b1c1d8;
+    --secondary: #7b97ad;
+    --accent: #405663;
+  }
+} */
+
+@layer base {
+  :root {
+    --text: #08070e;
+    --background: #dee7ed;
+    --primary: #27374e;
+    --secondary: #526e84;
+    --accent: #7eadc9;
+    --transparent: rgba(0, 0, 0, 0.03);
+  }
+
+  @media (prefers-color-schema: dark) {
+    :root {
+      --text: #f2f1f8;
+      --background: #121b21;
+      --primary: #b1c1d8;
+      --secondary: #7b97ad;
+      --accent: #366681;
+      --transparent: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  :root[data-theme='dark'] {
+    --text: #f2f1f8;
+    --background: #121b21;
+    --primary: #b1c1d8;
+    --secondary: #7b97ad;
+    --accent: #366681;
+    --transparent: rgba(0, 0, 0, 0.03);
+  }
+}
