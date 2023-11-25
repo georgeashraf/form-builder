@@ -3,20 +3,26 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-
-import { AppModule } from './app/app.module';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const options = {
+    origin: 'http://localhost:4200', // attempted "origin":["http://localhost"]
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
+    credentials: true,
+    allowedHeaders: 'Content-Type, Accept,Authorization',
+  };
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  app.enableCors(options);
+  // app.use(cookieParser());
+  const reflector = new Reflector();
+  // app.useGlobalGuards(new AcessTokenGuard(reflector));
+  await app.listen(8000);
 }
 
 bootstrap();
