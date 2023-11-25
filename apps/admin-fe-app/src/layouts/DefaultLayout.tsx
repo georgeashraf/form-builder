@@ -1,19 +1,30 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import DeafultSideBar from '../components/DefaultSideBar';
+import DefaultTopBar from '../components/DefaultTopBar';
 
-const DefaultLayout = () => {
+const DefaultLayout = ({
+  switchTheme,
+}: {
+  switchTheme: (s: string) => void;
+}) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="bg-background">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
+
       <div className="grid lg:grid-cols-6 h-screen">
         {/* <!-- ===== Sidebar Start ===== --> */}
         <DeafultSideBar className="hidden lg:block bg-transparent" />
         {/* <!-- ===== Sidebar End ===== --> */}
+        {/* <!-- ===== Top Bar Start ===== --> */}
+        <div className="lg:col-end-10 lg:col-span-2">
+          <DefaultTopBar switchTheme={switchTheme} />
+        </div>
 
-        <div className="col-span-3 lg:col-span-4 lg:border-l">
+        {/* <!-- ===== Top Bar End ===== --> */}
+        <div className="col-span-4 lg:col-span-4">
           <div className="h-full px-4 py-6 lg:px-8">
             {/* <!-- ===== Main Content Start ===== --> */}
             <main>
@@ -22,7 +33,7 @@ const DefaultLayout = () => {
               </div>
             </main>
 
-            {/* <!-- ===== ain Content End ===== --> */}
+            {/* <!-- ===== Main Content End ===== --> */}
           </div>
         </div>
       </div>
