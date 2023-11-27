@@ -1,5 +1,5 @@
+import { CreateRequest } from '@engine/shared-types';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateRequest } from './requests.schema';
 import { RequestsService } from './requests.service';
 
 @Controller('/requests')

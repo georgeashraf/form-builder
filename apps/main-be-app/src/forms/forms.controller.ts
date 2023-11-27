@@ -1,5 +1,5 @@
+import { CreateFormModel } from '@engine/shared-types';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateFormModel } from './forms.schema';
 import { FormsService } from './forms.service';
 
 @Controller('/forms')

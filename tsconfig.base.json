@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@engine/design-system": ["libs/design-system/src/index.ts"]
+      "@engine/design-system": ["libs/design-system/src/index.ts"],
+      "@engine/shared-types": ["libs/shared-types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,4 +1,10 @@
 import {
+  CreateRequest,
+  RequestColumns,
+  RequestIncludes,
+  RequestModel,
+} from '@engine/shared-types';
+import {
   HttpException,
   HttpStatus,
   Injectable,
@@ -7,12 +13,6 @@ import {
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { GenericRepository } from '../repository/generic.repository';
-import {
-  CreateRequest,
-  RequestColumns,
-  RequestIncludes,
-  RequestModel,
-} from './requests.schema';
 
 @Injectable()
 export class RequestsService {

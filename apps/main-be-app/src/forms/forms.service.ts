@@ -7,12 +7,7 @@ import {
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { GenericRepository } from '../repository/generic.repository';
-import {
-  CreateFormModel,
-  FormColumns,
-  FormIncludes,
-  FormModel,
-} from './forms.schema';
+import { CreateFormModel, FormColumns, FormIncludes, FormModel } from '@engine/shared-types'
 
 @Injectable()
 export class FormsService {

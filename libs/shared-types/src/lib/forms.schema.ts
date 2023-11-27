@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { RequestModel } from '../requests/requests.schema';
+import { RequestModel } from './requests.schema';
 
 export const FormModel = z.object({
   id: z.number(),
