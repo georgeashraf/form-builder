@@ -1,6 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { Cross2Icon } from '@radix-ui/react-icons';
-import { title } from 'process';
 import { ReactNode } from 'react';
 import './styles.css';
 interface Iprops {
