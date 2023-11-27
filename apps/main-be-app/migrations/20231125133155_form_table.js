@@ -9,10 +9,10 @@ exports.up = function (knex) {
       table.uuid('key').defaultTo(knex.raw('(UUID())'));
       table.string('name', 255).notNullable().unique();
       table
-        .integer('formId')
+        .integer('requestId')
         .unsigned()
         .references('id')
-        .inTable('form')
+        .inTable('request')
         .onDelete('cascade');
       table.jsonb('uiSchema').notNullable();
       table.jsonb('dataSchema').notNullable();

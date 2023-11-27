@@ -8,35 +8,35 @@ import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { GenericRepository } from '../repository/generic.repository';
 import {
-  CreateRequest,
-  RequestColumns,
-  RequestIncludes,
-  RequestModel,
-} from './requests.schema';
+  CreateFormModel,
+  FormColumns,
+  FormIncludes,
+  FormModel,
+} from './forms.schema';
 
 @Injectable()
-export class RequestsService {
-  private _requestRepository: GenericRepository<
-    RequestModel,
-    RequestColumns,
-    RequestIncludes
+export class FormsService {
+  private _formRepository: GenericRepository<
+    FormModel,
+    FormColumns,
+    FormIncludes
   >;
   // TODO: Inject Repository
   constructor(@InjectModel() private readonly knex: Knex) {
-    this._requestRepository = new GenericRepository<
-      RequestModel,
-      RequestColumns,
-      RequestIncludes
-    >('Request', this.knex);
+    this._formRepository = new GenericRepository<
+      FormModel,
+      FormColumns,
+      FormIncludes
+    >('form', this.knex);
   }
-  async create(createRequest: CreateRequest) {
+  async create(createFormModel: CreateFormModel) {
     try {
-      const data = await this._requestRepository.create(createRequest);
+      const data = await this._formRepository.create(createFormModel);
       return { data };
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') {
         throw new HttpException(
-          'Request with same Name already exists',
+          'Form with same Name already exists',
           HttpStatus.BAD_REQUEST
         );
       }
@@ -46,9 +46,9 @@ export class RequestsService {
 
   async findOne(id: string | number) {
     if (!id) {
-      throw new NotFoundException(`Request does not exist`);
+      throw new NotFoundException(`Form does not exist`);
     }
-    const data = await this._requestRepository.findOneOrNull(id);
+    const data = await this._formRepository.findOneOrNull(id);
     return { data };
   }
 }

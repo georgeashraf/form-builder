@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Form } from '../forms/forms.schema';
+import { FormModel } from '../forms/forms.schema';
 
 export const RequestModel = z.object({
   id: z.number(),
@@ -20,7 +20,7 @@ export const CreateRequest = RequestModel.omit({
   updatedAt: true,
   publishedAt: true,
 });
-export const RequestRelations = z.object({ forms: z.array(Form) });
+export const RequestRelations = z.object({ forms: z.array(FormModel) });
 export const RequestWithRelations = RequestModel.merge(RequestRelations);
 
 export type RequestModel = z.infer<typeof RequestModel>;

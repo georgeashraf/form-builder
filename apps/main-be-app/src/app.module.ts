@@ -3,6 +3,7 @@ import { KnexModule } from 'nest-knexjs';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { RequestsModule } from './requests/requests.module';
+import { FormsModule } from './forms/forms.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { RequestsModule } from './requests/requests.module';
       },
     }),
     RequestsModule,
+    FormsModule
   ],
   controllers: [],
   providers: [],
