@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import DeafultSideBar from '../components/DefaultSideBar';
 import DefaultTopBar from '../components/DefaultTopBar';
 
@@ -11,34 +12,36 @@ const DefaultLayout = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="bg-background">
-      {/* <!-- ===== Page Wrapper Start ===== --> */}
-
-      <div className="grid lg:grid-cols-6 h-screen">
-        {/* <!-- ===== Sidebar Start ===== --> */}
-        <DeafultSideBar className="hidden lg:block bg-transparent" />
-        {/* <!-- ===== Sidebar End ===== --> */}
-        {/* <!-- ===== Top Bar Start ===== --> */}
-        <div className="lg:col-end-10 lg:col-span-2">
-          <DefaultTopBar switchTheme={switchTheme} />
+    <>
+      <ToastContainer
+        position="top-left"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <div className="flex flex-row bg-background h-screen ">
+        {/* Sidebar */}
+        <div className="overflow-y-auto basis-1/6">
+          <DeafultSideBar className="hidden lg:block bg-transparent" />{' '}
         </div>
 
-        {/* <!-- ===== Top Bar End ===== --> */}
-        <div className="col-span-4 lg:col-span-4">
-          <div className="h-full px-4 py-6 lg:px-8">
-            {/* <!-- ===== Main Content Start ===== --> */}
-            <main>
-              <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-                <Outlet />
-              </div>
-            </main>
-
-            {/* <!-- ===== Main Content End ===== --> */}
-          </div>
+        {/* Content area */}
+        <div className="relative overflow-y-auto overflow-x-hidden basis-5/6">
+          {/*  Site header */}
+          <DefaultTopBar switchTheme={switchTheme} />
+          <main>
+            <div className="container px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+              <Outlet />
+            </div>
+          </main>
         </div>
       </div>
-      {/* <!-- ===== Page Wrapper End ===== --> */}
-    </div>
+    </>
   );
 };
 

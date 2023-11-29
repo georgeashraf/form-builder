@@ -2,6 +2,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Suspense, useEffect, useState } from 'react';
 import DefaultLayout from './layouts/DefaultLayout';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import RequestListing from './pages/requests/RequestListing';
+import ErrorPage from './components/ErrorPage';
 
 function App() {
   // Check user set theme mode...
@@ -20,8 +22,8 @@ function App() {
     {
       path: '/',
       element: <DefaultLayout switchTheme={switchTheme} />,
-      // errorElement: <ErrorPage />,
-      children: [],
+      errorElement: <ErrorPage />,
+      children: [{ path: '/requests', element: <RequestListing /> }],
     },
   ]);
   const queryClient = new QueryClient({

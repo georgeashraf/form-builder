@@ -5,7 +5,7 @@ interface TopBarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 const DefaultTopBar = ({ switchTheme }: TopBarProps) => {
   return (
-    <nav className='flex'>
+    <nav className='flex justify-end'>
       <Avatar>
         <AvatarImage src="" />
         <AvatarFallback>User</AvatarFallback>
