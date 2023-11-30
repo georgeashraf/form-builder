@@ -6,14 +6,14 @@ import axios from 'axios';
 import { notifyError } from '../../components/Toasts/error';
 import { createRequests } from './api';
 import { useGenericMutation } from '../../hooks/useMutation';
-import { Button, cn, Input } from '@engine/design-system';
+import { Button, Checkbox, cn, Input, Textarea } from '@engine/design-system';
 import { CreateRequestSchema, CreateRequestType } from '@engine/shared-types';
 
 const initialData = {
   label: '',
   name: '',
   description: '',
-  creator: '',
+  creator: 'fdd0452e-6d89-4115-8a51-223db23ea313',
   isPublished: false,
 };
 
@@ -77,13 +77,20 @@ export default function RequestForm() {
         name="description"
         control={control}
         render={({ field, fieldState }) => (
-          <Input
+          <Textarea
             {...field}
             value={field.value}
             // error={fieldState.error?.message}
             placeholder="Description"
             className="w-full"
           />
+        )}
+      />
+      <Controller
+        name="isPublished"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
         )}
       />
 
