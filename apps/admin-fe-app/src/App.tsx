@@ -4,6 +4,7 @@ import DefaultLayout from './layouts/DefaultLayout';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import RequestListing from './pages/requests/RequestListing';
 import ErrorPage from './components/ErrorPage';
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   // Check user set theme mode...

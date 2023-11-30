@@ -1,7 +1,9 @@
 import { Button, Modal } from '@engine/design-system';
+import { useState } from 'react';
 import RequestForm from './RequestForm';
 
 const RequestListing = () => {
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -9,8 +11,10 @@ const RequestListing = () => {
         trigger={<Button type="submit">Add</Button>}
         title="Create a new request"
         description=""
+        open={open}
+        setOpen={setOpen}
       >
-        <RequestForm />
+        <RequestForm setOpen={setOpen} />
       </Modal>
     </>
   );

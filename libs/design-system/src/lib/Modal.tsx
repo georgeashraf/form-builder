@@ -6,14 +6,18 @@ interface Iprops {
   title: string;
   description: string;
   trigger?: ReactNode;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const Modal = ({
   children,
   trigger,
   title,
   description,
+  open,
+  setOpen,
 }: Iprops) => (
-  <Dialog.Root>
+  <Dialog.Root open={open} onOpenChange={setOpen}>
     <Dialog.Trigger asChild>
       {trigger ? (
         trigger

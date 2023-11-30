@@ -1,5 +1,4 @@
-import { z } from 'zod';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { notifySuccess } from '../../components/Toasts/success';
 import axios from 'axios';
@@ -24,7 +23,11 @@ const initialData = {
   isPublished: false,
 };
 
-export default function RequestForm() {
+type RequestFormProps = {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function RequestForm({ setOpen }: RequestFormProps) {
   const { handleSubmit, control } = useForm<CreateRequestType>({
     defaultValues: initialData,
     resolver: zodResolver(CreateRequestSchema),
@@ -33,6 +36,7 @@ export default function RequestForm() {
   const { isLoading, mutate } = useGenericMutation(createRequests, undefined, {
     onSuccess: async (data, variables, context) => {
       notifySuccess('Request Created Succesfully');
+      setOpen(false);
     },
     onError: (err: any) => {
       if (axios.isAxiosError(err)) {
@@ -43,8 +47,7 @@ export default function RequestForm() {
     },
   });
   const onSubmit = (data: any) => {
-    console.log('🚀 ~ file: RequestForm.tsx:37 ~ onSubmit ~ data:', data);
-    // mutate(data);
+    mutate(data);
   };
 
   return (
