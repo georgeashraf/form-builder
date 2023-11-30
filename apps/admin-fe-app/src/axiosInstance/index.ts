@@ -1,6 +1,4 @@
 import axios from "axios";
-import useAuthStore from "../store/AuthStore";
-import TokenHandler from "../store/TokenHandler";
 
 export const AttachmentURL = "http://localhost:8000";
 export const axiosApiInstance = axios.create({
@@ -18,18 +16,18 @@ export const axiosApiInstancePublic = axios.create({
 });
 
 // Request interceptor for API calls
-axiosApiInstance.interceptors.request.use(
-  async (config: any) => {
-    config.headers = {
-      Authorization: `Bearer ${TokenHandler.getToken()}`,
-      Accept: "application/json",
-    };
-    return config;
-  },
-  (error) => {
-    Promise.reject(error);
-  }
-);
+// axiosApiInstance.interceptors.request.use(
+//   async (config: any) => {
+//     config.headers = {
+//       Authorization: `Bearer ${TokenHandler.getToken()}`,
+//       Accept: "application/json",
+//     };
+//     return config;
+//   },
+//   (error) => {
+//     Promise.reject(error);
+//   }
+// );
 
 // Response interceptor for API calls
 axiosApiInstance.interceptors.response.use((response) => {

@@ -1,5 +1,5 @@
 import {
-  CreateRequest,
+  CreateRequestType,
   RequestColumns,
   RequestIncludes,
   RequestModel,
@@ -29,7 +29,7 @@ export class RequestsService {
       RequestIncludes
     >('Request', this.knex);
   }
-  async create(createRequest: CreateRequest) {
+  async create(createRequest: CreateRequestType) {
     try {
       const data = await this._requestRepository.create(createRequest);
       return { data };

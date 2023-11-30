@@ -1,17 +1,14 @@
 import { axiosApiInstance } from '../../axiosInstance';
 import {
-  CreateRequest, RequestModel,
+  CreateRequestType,
+  RequestModel,
 } from '@engine/shared-types';
-const selectColumnsMap = new Map<string, string>([
-  ['id', 'group.id'],
-  ['name', 'group.name'],
-  ['description', 'group.description'],
-]);
+
 export const listRequests = async () => {
   return await axiosApiInstance.get('/requests', { withCredentials: true });
 };
 
-export const createRequests = async (data: CreateRequest) => {
+export const createRequests = async (data: CreateRequestType) => {
   return await axiosApiInstance.post('/requests', data, {
     withCredentials: true,
   });

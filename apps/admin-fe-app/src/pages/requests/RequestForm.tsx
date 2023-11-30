@@ -1,37 +1,95 @@
-import { z } from "zod";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from 'zod';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { notifySuccess } from '../../components/Toasts/success';
+import axios from 'axios';
+import { notifyError } from '../../components/Toasts/error';
+import { createRequests } from './api';
+import { useGenericMutation } from '../../hooks/useMutation';
+import { Button, cn, Input } from '@engine/design-system';
+import { CreateRequestSchema, CreateRequestType } from '@engine/shared-types';
 
-const SignUpSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(3).max(20)
-});
-type SignUpSchemaType = z.infer<typeof SignUpSchema>;
+const initialData = {
+  label: '',
+  name: '',
+  description: '',
+  creator: '',
+  isPublished: false,
+};
 
 export default function RequestForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<SignUpSchemaType>({ resolver: zodResolver(SignUpSchema) });
+  const { handleSubmit, control } = useForm<CreateRequestType>({
+    defaultValues: initialData,
+    resolver: zodResolver(CreateRequestSchema),
+  });
 
-  //we should here call like API or something...
-  const onSubmit: SubmitHandler<SignUpSchemaType> = (data) => console.log(data);
+  const { isLoading, mutate } = useGenericMutation(createRequests, undefined, {
+    onSuccess: async (data, variables, context) => {
+      notifySuccess('Request Created Succesfully');
+    },
+    onError: (err: any) => {
+      if (axios.isAxiosError(err)) {
+        notifyError(JSON.stringify(err.response?.data?.message));
+      } else {
+        notifyError('Something Went Wrong');
+      }
+    },
+  });
+  const onSubmit = (data: any) => {
+    console.log('🚀 ~ file: RequestForm.tsx:37 ~ onSubmit ~ data:', data);
+    // mutate(data);
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="form">
-      <input className="input" placeholder="email" {...register("email")} />
-      {errors.email && <span>{errors.email.message}</span>}
-
-      <input
-        className="input"
-        placeholder="password"
-        {...register("password")}
+    <form
+      className={cn('space-y-6 mx-4', '')}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <Controller
+        name="label"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Input
+            {...field}
+            value={field.value}
+            // error={fieldState.error?.message}
+            placeholder="Label"
+            className="w-full"
+          />
+        )}
       />
 
-      {errors.password && <span>{errors.password.message}</span>}
+      <Controller
+        name="name"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Input
+            {...field}
+            value={field.value}
+            // error={fieldState.error?.message}
+            placeholder="Name"
+            className="w-full"
+          />
+        )}
+      />
 
-      <button type="submit">submit!</button>
+      <Controller
+        name="description"
+        control={control}
+        render={({ field, fieldState }) => (
+          <Input
+            {...field}
+            value={field.value}
+            // error={fieldState.error?.message}
+            placeholder="Description"
+            className="w-full"
+          />
+        )}
+      />
+
+      <div className="w-full flex justify-end">
+        <Button type="submit">Create</Button>
+      </div>
     </form>
   );
 }

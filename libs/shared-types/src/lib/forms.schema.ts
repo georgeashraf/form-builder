@@ -1,7 +1,6 @@
 import { z } from 'zod';
-import { RequestModel } from './requests.schema';
 
-export const FormModel = z.object({
+export const FormModelSchema = z.object({
   id: z.number(),
   key: z.string().uuid(),
   name: z.string().min(1).max(255),
@@ -13,7 +12,7 @@ export const FormModel = z.object({
   publishedAt: z.date(),
 });
 
-export const CreateForm = FormModel.omit({
+export const CreateFormSchema = FormModelSchema.omit({
   id: true,
   key: true,
   requestId: true,
@@ -21,12 +20,26 @@ export const CreateForm = FormModel.omit({
   updatedAt: true,
   publishedAt: true,
 }).merge(z.object({ requestKey: z.string().uuid() }));
-export const FormRelations = z.object({ request: RequestModel });
-export const FormWithRelations = FormModel.merge(FormRelations);
+export const FormRelationsSchema = z.object({
+  request: z.object({
+    id: z.number(),
+    key: z.string().uuid(),
+    label: z.string().min(1).max(255),
+    name: z.string().min(1).max(255),
+    description: z.string().min(0),
+    creator: z.string().uuid(),
+    isPublished: z.boolean(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+    publishedAt: z.date(),
+  }),
+});
+export const FormWithRelationsSchema =
+  FormModelSchema.merge(FormRelationsSchema);
 
-export type FormModel = z.infer<typeof FormModel>;
-export type CreateFormModel = z.infer<typeof CreateForm>;
-export type FormRelations = z.infer<typeof FormRelations>;
+export type FormModelType = z.infer<typeof FormModelSchema>;
+export type CreateFormModelType = z.infer<typeof CreateFormSchema>;
+export type FormRelationsType = z.infer<typeof FormRelationsSchema>;
 
-export type FormColumns = keyof FormModel;
-export type FormIncludes = keyof FormRelations;
+export type FormColumnsType = keyof FormModelType;
+export type FormIncludesType = keyof FormRelationsType;

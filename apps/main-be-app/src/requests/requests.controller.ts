@@ -1,4 +1,4 @@
-import { CreateRequest } from '@engine/shared-types';
+import { CreateRequestType } from '@engine/shared-types';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RequestsService } from './requests.service';
 
@@ -8,7 +8,7 @@ export class RequestsController {
 
   @Post()
   //   @UsePipes(ValidationPipe)
-  create(@Body() createForm: CreateRequest) {
+  create(@Body() createForm: CreateRequestType) {
     return this.requestsService.create(createForm);
   }
 

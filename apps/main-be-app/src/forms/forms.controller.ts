@@ -1,4 +1,4 @@
-import { CreateFormModel } from '@engine/shared-types';
+import { CreateFormModelType } from '@engine/shared-types';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { FormsService } from './forms.service';
 
@@ -8,7 +8,7 @@ export class FormsController {
 
   @Post()
   //   @UsePipes(ValidationPipe)
-  create(@Body() createForm: CreateFormModel) {
+  create(@Body() createForm: CreateFormModelType) {
     return this.formsService.create(createForm);
   }
 

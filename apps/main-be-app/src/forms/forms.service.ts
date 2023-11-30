@@ -1,4 +1,10 @@
 import {
+  CreateFormModelType,
+  FormColumnsType,
+  FormIncludesType,
+  FormModelType,
+} from '@engine/shared-types';
+import {
   HttpException,
   HttpStatus,
   Injectable,
@@ -7,24 +13,23 @@ import {
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { GenericRepository } from '../repository/generic.repository';
-import { CreateFormModel, FormColumns, FormIncludes, FormModel } from '@engine/shared-types'
 
 @Injectable()
 export class FormsService {
   private _formRepository: GenericRepository<
-    FormModel,
-    FormColumns,
-    FormIncludes
+    FormModelType,
+    FormColumnsType,
+    FormIncludesType
   >;
   // TODO: Inject Repository
   constructor(@InjectModel() private readonly knex: Knex) {
     this._formRepository = new GenericRepository<
-      FormModel,
-      FormColumns,
-      FormIncludes
+      FormModelType,
+      FormColumnsType,
+      FormIncludesType
     >('form', this.knex);
   }
-  async create(createFormModel: CreateFormModel) {
+  async create(createFormModel: CreateFormModelType) {
     try {
       const data = await this._formRepository.create(createFormModel);
       return { data };
