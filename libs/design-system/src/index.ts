@@ -11,4 +11,6 @@ export * from './lib/Input';
 export * from './lib/Select';
 export * from './lib/CheckBox';
 export * from './lib/TextArea';
+export * from './lib/Label';
+
 

@@ -6,7 +6,14 @@ import axios from 'axios';
 import { notifyError } from '../../components/Toasts/error';
 import { createRequests } from './api';
 import { useGenericMutation } from '../../hooks/useMutation';
-import { Button, Checkbox, cn, Input, Textarea } from '@engine/design-system';
+import {
+  Button,
+  Checkbox,
+  cn,
+  Input,
+  Label,
+  Textarea,
+} from '@engine/design-system';
 import { CreateRequestSchema, CreateRequestType } from '@engine/shared-types';
 
 const initialData = {
@@ -45,19 +52,26 @@ export default function RequestForm() {
       className={cn('space-y-6 mx-4', '')}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Controller
-        name="label"
-        control={control}
-        render={({ field, fieldState }) => (
-          <Input
-            {...field}
-            value={field.value}
-            // error={fieldState.error?.message}
-            placeholder="Label"
-            className="w-full"
-          />
-        )}
-      />
+      <div className="flex flex-col">
+        <Label className="mb-2">Label</Label>
+        <Controller
+          name="label"
+          control={control}
+          render={({ field, fieldState }) => (
+            <>
+              <Input
+                {...field}
+                value={field.value}
+                placeholder="Label"
+                className="w-full"
+              />
+              {fieldState.error?.message && (
+                <Label variant={'error'}>{fieldState.error?.message}</Label>
+              )}
+            </>
+          )}
+        />
+      </div>
 
       <Controller
         name="name"
