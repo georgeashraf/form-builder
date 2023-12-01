@@ -7,7 +7,7 @@ export function useGenericQuery<RType>(
   params: any,
   options?: UseQueryOptions<RType, AxiosError<{ message: string }>>
 ) {
-  useQuery<RType, AxiosError<{ message: string }>>(
+  return useQuery<RType, AxiosError<{ message: string }>>(
     queryKey,
     () => queryFn(params, handlerFunction),
     {

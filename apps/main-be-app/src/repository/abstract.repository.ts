@@ -1,14 +1,13 @@
 import { QueryOptions } from './types';
 
 export abstract class AbstractRepository<Model, ModelColumns, Relations> {
-  //   abstract getAll(options: any): Promise<Model[]>;
-
   abstract findOneOrNull(
     identifier: number | string,
     options?: QueryOptions<ModelColumns, Relations>
   ): Promise<Model | null>;
 
-    abstract create(item: Model): Promise<number[]>;
+  abstract create(item: Model): Promise<number[]>;
+  abstract list(queryOptions: QueryOptions<ModelColumns, Relations>);
 
   //   abstract batchCreate(rows: Model[]): Promise<Model[]>;
 

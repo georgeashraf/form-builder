@@ -3,8 +3,12 @@ import {
   RequestColumns,
   RequestIncludes,
   RequestModel,
+  RequestQueryType,
+  RequestRelations,
+  requestRelationsMap,
 } from '@engine/shared-types';
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -13,6 +17,7 @@ import {
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { GenericRepository } from '../repository/generic.repository';
+import { QueryOptions } from '../repository/types';
 
 @Injectable()
 export class RequestsService {
@@ -44,11 +49,55 @@ export class RequestsService {
     }
   }
 
+  async list(query: RequestQueryType) {
+    try {
+      const queryOptions = this.parseQueryOptions(query);
+      const data = await this._requestRepository.list(queryOptions);
+      return { data };
+    } catch (error) {
+      console.log(
+        '🚀 ~ file: requests.service.ts:57 ~ RequestsService ~ list ~ error:',
+        error
+      );
+      throw new BadRequestException(`Couldn't find Requests`);
+    }
+  }
+
   async findOne(id: string | number) {
     if (!id) {
       throw new NotFoundException(`Request does not exist`);
     }
     const data = await this._requestRepository.findOneOrNull(id);
     return { data };
+  }
+  parseQueryOptions(query: RequestQueryType) {
+    let queryOptions: QueryOptions<RequestColumns, RequestIncludes> = {};
+    if (
+      query.pagination?.limit !== undefined &&
+      query.pagination?.offset !== undefined
+    ) {
+      //@ts-ignore
+      queryOptions.pagination = query.pagination;
+    }
+    if (query.selects) {
+      queryOptions.select = query.selects;
+    }
+    if (query.filters) {
+      // @ts-ignore
+      queryOptions.where = query.filters;
+    }
+    if (query.includes) {
+      let populate = [];
+      query.includes.forEach((relation) => {
+        populate.push({
+          model: requestRelationsMap.get(relation),
+          as: relation,
+          joinType: 'left',
+          foreignKey: 'requestId',
+        });
+      });
+      queryOptions.populate = populate;
+    }
+    return queryOptions;
   }
 }

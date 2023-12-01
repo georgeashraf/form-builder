@@ -2,10 +2,14 @@ import { axiosApiInstance } from '../../axiosInstance';
 import {
   CreateRequestType,
   RequestModel,
+  RequestQueryType,
 } from '@engine/shared-types';
 
-export const listRequests = async () => {
-  return await axiosApiInstance.get('/requests', { withCredentials: true });
+export const listRequests = async (params: RequestQueryType) => {
+  return await axiosApiInstance.get('/requests', {
+    withCredentials: true,
+    params,
+  });
 };
 
 export const createRequests = async (data: CreateRequestType) => {
