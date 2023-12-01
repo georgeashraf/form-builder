@@ -12,5 +12,11 @@ export * from './lib/Select';
 export * from './lib/CheckBox';
 export * from './lib/TextArea';
 export * from './lib/Label';
+export * from './lib/data-table';
+export * from './lib/table';
+export * from './lib/Tooltip';
+
+
+
 
 

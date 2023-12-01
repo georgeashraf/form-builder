@@ -1,5 +1,5 @@
 import { Table } from '@tanstack/react-table';
-import { DataTableFacetedFilter } from './data-table-faceted-filter';
+import { DataTableFilter } from './data-table-filter';
 import { Button } from '.././button';
 import { DataTableViewOptions } from './data-table-view-options';
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons';
@@ -17,20 +17,12 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        {/* <Input
-          placeholder="Filter tasks..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="h-8 w-[150px] lg:w-[250px]"
-        /> */}
         {tableMapping &&
           tableMapping.map(
             (mapping, idx) =>
               table.getColumn(mapping.elementName) &&
               mapping.enableFiltering && (
-                <DataTableFacetedFilter
+                <DataTableFilter
                   key={idx}
                   column={table.getColumn(mapping.elementName)}
                   title={mapping.elementLabel}

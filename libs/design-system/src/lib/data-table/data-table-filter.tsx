@@ -1,9 +1,9 @@
 import { Column } from '@tanstack/react-table';
 
-import { Button } from '.././button';
-import { Badge } from '.././badge';
-import { Popover, PopoverTrigger, PopoverContent } from '.././popover';
-import { Separator } from '.././separator';
+import { Button } from '../button';
+import { Badge } from '../badge';
+import { Popover, PopoverTrigger, PopoverContent } from '../popover';
+import { Separator } from '../separator';
 import {
   Command,
   CommandInput,
@@ -12,7 +12,7 @@ import {
   CommandGroup,
   CommandItem,
   CommandSeparator,
-} from '.././command';
+} from '../command';
 import { useEffect, useState } from 'react';
 import { cn } from '../utils/helpers';
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
@@ -28,7 +28,7 @@ interface DataTableFacetedFilter<TData, TValue> {
   optionsCondition: any;
 }
 
-export function DataTableFacetedFilter<TData, TValue>({
+export function DataTableFilter<TData, TValue>({
   column,
   title,
   options,

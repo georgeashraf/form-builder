@@ -1,23 +1,13 @@
 import { Button, Modal } from '@engine/design-system';
 import { RequestQueryType } from '@engine/shared-types';
 import { useState } from 'react';
-import { useGenericQuery } from '../../hooks/useQuery';
-import { listRequests } from './api';
+import { DataTable } from '../../components/DataTable';
 import RequestForm from './RequestForm';
+import { RequestTableColumns } from './RequestTableColumn';
 
 const RequestListing = () => {
-  const RequestListingParams: RequestQueryType = {
-    // pagination: { limit: 2, offset: 1 },
-    selects: ['key', 'creator', 'description', 'key'],
-    includes: ['forms'],
-    // filters: { key: { op: '$eq', value: 'key' } },
-  };
   const [open, setOpen] = useState(false);
-  const { data, isLoading } = useGenericQuery(
-    () => listRequests(RequestListingParams),
-    'getRequests',
-    {}
-  );
+
   return (
     <>
       <Modal
@@ -29,6 +19,7 @@ const RequestListing = () => {
       >
         <RequestForm setOpen={setOpen} />
       </Modal>
+      <DataTable columns={RequestTableColumns} />
     </>
   );
 };
