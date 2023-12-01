@@ -13,28 +13,24 @@ import {
   CommandItem,
   CommandSeparator,
 } from '../command';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { cn } from '../utils/helpers';
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 
-interface DataTableFacetedFilter<TData, TValue> {
-  column?: Column<TData, TValue>;
-  title?: string;
+interface DataTableFilterProps<TData, TValue> {
+  column: Column<TData, TValue>;
+  title: string;
   options: {
     label: string;
     value: string;
   }[];
-  optionsResource: string;
-  optionsCondition: any;
 }
 
 export function DataTableFilter<TData, TValue>({
   column,
   title,
   options,
-  optionsResource,
-  optionsCondition,
-}: DataTableFacetedFilter<TData, TValue>) {
+}: DataTableFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
   const [optionsState, setOptionsState] = useState<any[]>(options);

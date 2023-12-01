@@ -14,7 +14,6 @@ import {
   PaginationState,
 } from '@tanstack/react-table';
 
-import { useParams } from 'react-router-dom';
 import {
   DataTablePagination,
   DataTableToolbar,
@@ -31,14 +30,11 @@ import { RequestQueryType } from '@engine/shared-types';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  tableMapping?: any[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
-  tableMapping,
 }: DataTableProps<TData, TValue>) {
-  const { key } = useParams();
   const [rowSelection, setRowSelection] = React.useState({});
   const RequestListingParams: RequestQueryType = {
     // pagination: { limit: 2, offset: 1 },

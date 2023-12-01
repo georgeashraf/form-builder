@@ -1,33 +1,22 @@
-import { Row } from '@tanstack/react-table';
-
 import { Button } from '.././button';
-import { useNavigate } from 'react-router-dom';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuItem,
 } from '../DropDownMenu';
+import { ReactNode } from 'react';
 export type DataTableRowActionsProps = {
-  setRefetch: (x: boolean) => void;
-  setActiveModal: (x: any | undefined) => void;
-  row: Row<any>;
-  refetch: boolean;
-  activeModal: any | undefined;
+  children: ReactNode;
 };
-export function DataTableRowActions({
-  row,
-  setActiveModal,
-  setRefetch,
-  refetch,
-  activeModal,
-}: DataTableRowActionsProps) {
-  const navigate = useNavigate();
-
-  const closeModal = () => {
-    setActiveModal(undefined);
-    setRefetch(!refetch);
-  };
+export function DataTableRowActions({ children }: DataTableRowActionsProps) {
   return (
     <>
       <DropdownMenu>
@@ -41,23 +30,8 @@ export function DataTableRowActions({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          {/* <DropdownMenuSeparator />
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger>
-            <Tags className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Labels
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={"xxx"}>
-              {labels.map((label) => (
-                <DropdownMenuRadioItem key={label.value} value={label.value}>
-                  {label.label}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuSeparator /> */}
+          <DropdownMenuItem>{children}</DropdownMenuItem>
+          <DropdownMenuSeparator />
         </DropdownMenuContent>
       </DropdownMenu>
     </>
