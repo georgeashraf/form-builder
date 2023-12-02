@@ -24,21 +24,11 @@ const DefaultLayout = ({
         draggable
         pauseOnHover
       />
-      <div className="flex flex-row bg-background h-screen ">
-        {/* Sidebar */}
-        <div className="overflow-y-auto basis-1/6">
-          <DeafultSideBar className="hidden lg:block bg-transparent" />{' '}
-        </div>
-
-        {/* Content area */}
-        <div className="relative overflow-y-auto overflow-x-hidden basis-5/6">
-          {/*  Site header */}
+      <div className="flex">
+        <DeafultSideBar className="flex-none bg-transparent h-screen basis-1/6" />
+        <div className="flex-1 md:flex h-screen relative basis-5/6">
           <DefaultTopBar switchTheme={switchTheme} />
-          <main>
-            <div className="container px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-              <Outlet />
-            </div>
-          </main>
+          <Outlet />
         </div>
       </div>
     </>
