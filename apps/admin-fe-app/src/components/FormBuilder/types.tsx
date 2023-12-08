@@ -1,6 +1,7 @@
 import { TextFieldFormElement } from './FormElements/TextField';
+import { HorizontalLayoutElement } from './Layouts/Horizontal';
 
-export type ElementsType = 'TextField';
+export type ElementsType = 'TextField' | 'HorizontalLayout';
 
 export type FormElement = {
   type: ElementsType;
@@ -10,15 +11,17 @@ export type FormElement = {
     label: string;
   };
   construct: (id: string) => FormElementInstance;
-
-  designerComponent: React.FC<{elementInstance: FormElementInstance}>;
-  formComponent: React.FC;
-  propertiesComponent: React.FC;
+  baseDataSchema?: any;
+  baseUISchema: any;
+  designerComponent: React.FC<{ elementInstance: FormElementInstance }>;
+  // formComponent: React.FC;
+  // propertiesComponent: React.FC;
 };
 
 export type FormElementInstance = {
   id: string;
-  type: ElementsType;
+  type: 'Input' | 'Layout';
+  subtype: ElementsType;
   extraAttributes?: Record<string, any>;
 };
 type FormElementsType = {
@@ -27,4 +30,5 @@ type FormElementsType = {
 
 export const FormElements: FormElementsType = {
   TextField: TextFieldFormElement,
+  HorizontalLayout: HorizontalLayoutElement,
 };

@@ -57,7 +57,7 @@ const Designer = () => {
             </div>
           )}
           {elements.length > 0 && (
-            <div className="flex flex-col w-full gap-2 p-4">
+            <div className="flex flex-col w-full h-full gap-2 p-4">
               {elements.map((element) => (
                 <DesignerElementWrapper key={element.id} element={element} />
               ))}
@@ -101,13 +101,16 @@ const DesignerElementWrapper = ({
     },
   });
   if (draggable.isDragging) return null;
-  const DesignerElement = FormElements[element.type].designerComponent;
+  const DesignerElement = FormElements[element.subtype].designerComponent;
   return (
     <div
       ref={draggable.setNodeRef}
       {...draggable.listeners}
       {...draggable.attributes}
-      className="relative h-[120px] flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
+      className={cn(
+        'relative flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset',
+        element.type === 'Layout' ? 'h-full' : 'h-[120px]'
+      )}
       onMouseEnter={() => setMouseIsOver(true)}
       onMouseLeave={() => setMouseIsOver(false)}
     >
@@ -142,8 +145,9 @@ const DesignerElementWrapper = ({
       )}
       <div
         className={cn(
-          'flex w-full h-[120px] items-center rounded-md bg-accent px-4 py-2 pointer-events-none opacity-100',
-          mouseIsOver && 'opacity-30'
+          'flex w-full items-center rounded-md bg-accent px-4 py-2 pointer-events-none opacity-100',
+          mouseIsOver && 'opacity-30',
+          element.type === 'Layout' ? 'h-full' : 'h-[120px]'
         )}
       >
         <DesignerElement elementInstance={element} />

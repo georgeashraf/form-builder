@@ -35,7 +35,7 @@ const FormBuilder = () => {
               <Button>Preview</Button>
             </div>
           </div>
-          <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-[200px]  bg-[url(/plus.svg)]">
+          <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-full  bg-[url(/plus.svg)]">
             <Designer />
           </div>
         </div>

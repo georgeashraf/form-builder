@@ -8,10 +8,10 @@ const DesignerSideBar = () => {
         Form Elements
         <SidebarBtnElement formElement={FormElements.TextField} />
       </div>
-      {/* <div>
+      <div>
         Layouts
-        <SidebarBtnElement formElement={FormElements.TextField} />
-      </div> */}
+        <SidebarBtnElement formElement={FormElements.HorizontalLayout} />
+      </div>
     </aside>
   );
 };

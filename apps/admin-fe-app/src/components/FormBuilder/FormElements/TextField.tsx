@@ -7,7 +7,8 @@ export const TextFieldFormElement: FormElement = {
   type: 'TextField',
   construct: (id: string) => ({
     id,
-    type: 'TextField',
+    type: 'Input',
+    subtype: 'TextField',
     extraAttributes: {
       label: 'Text Input',
       helperText: 'Helper Text',
@@ -20,9 +21,22 @@ export const TextFieldFormElement: FormElement = {
     label: 'Text  filed',
   },
   designerComponent: DesignerComponent,
+  baseDataSchema: {
+    type: 'string',
+    pattern: '',
+    nullable: true,
+    maxLength: 255,
+    minLength: 1,
+    errorMessage: { type: 'foo must be an Integer' },
+  },
+  baseUISchema: {
+    type: 'Control',
+    label: '',
+    scope: '',
+  },
 
-  formComponent: () => <div>Designer component</div>,
-  propertiesComponent: () => <div>Designer component</div>,
+  // formComponent: () => <div>Designer component</div>,
+  // propertiesComponent: () => <div>Designer component</div>,
 };
 
 function DesignerComponent({
