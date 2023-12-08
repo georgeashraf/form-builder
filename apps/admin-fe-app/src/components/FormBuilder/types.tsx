@@ -1,7 +1,9 @@
+import { ReactNode } from 'react';
 import { TextFieldFormElement } from './FormElements/TextField';
 import { HorizontalLayoutElement } from './Layouts/Horizontal';
+import { VerticalLayoutElement } from './Layouts/Vertical';
 
-export type ElementsType = 'TextField' | 'HorizontalLayout';
+export type ElementsType = 'TextField' | 'HorizontalLayout' | 'VerticalLayout';
 export type SchemaPrimitiveType =
   | 'object'
   | 'array'
@@ -57,7 +59,11 @@ export type FormElement = {
     label: string;
   };
   construct: (id: string) => FormElementInstance;
-  designerComponent: React.FC<{ elementInstance: FormElementInstance }>;
+  designerComponent: React.FC<{
+    elementInstance: FormElementInstance;
+    cols?: number;
+    children?: ReactNode;
+  }>;
   // formComponent: React.FC;
   // propertiesComponent: React.FC;
 };
@@ -75,4 +81,5 @@ type FormElementsType = {
 export const FormElements: FormElementsType = {
   TextField: TextFieldFormElement,
   HorizontalLayout: HorizontalLayoutElement,
+  VerticalLayout: VerticalLayoutElement,
 };

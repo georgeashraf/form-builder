@@ -1,5 +1,11 @@
-import { DesignerElementWrapper } from '../Designer';
-import { DataSchema, ElementsType, UISchema } from '../types';
+import DesignerComponentWrapper from '../DesignerComponentWrapper';
+import {
+  DataSchema,
+  ElementsType,
+  FormElement,
+  FormElements,
+  UISchema,
+} from '../types';
 import { findPropertyFromScope } from '../utils';
 
 const testSchema = {
@@ -61,20 +67,40 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
   return item.map((el) => {
     switch (el.type) {
       case 'VerticalLayout':
+        const VericalLayout =
+          FormElements['VerticalLayout' as ElementsType].designerComponent;
         return (
-          <div key={el.key} className={`flex flex-col`}>
+          <VericalLayout
+            elementInstance={{
+              id: el.key,
+              type: 'Layout',
+              subtype: 'VerticalLayout',
+              extraAttributes: { uiSchema: el },
+            }}
+            cols={el?.elements?.length}
+          >
             {el?.elements?.length
               ? renderElements(el.elements, dataSchema)
               : null}
-          </div>
+          </VericalLayout>
         );
       case 'HorizontalLayout':
+        const HorizontalLayout =
+          FormElements['HorizontalLayout' as ElementsType].designerComponent;
         return (
-          <div key={el.key} className={`flex flex-row`}>
+          <HorizontalLayout
+            elementInstance={{
+              id: el.key,
+              type: 'Layout',
+              subtype: 'HorizontalLayout',
+              extraAttributes: { uiSchema: el },
+            }}
+            cols={el?.elements?.length}
+          >
             {el?.elements?.length
               ? renderElements(el.elements, dataSchema)
               : null}
-          </div>
+          </HorizontalLayout>
         );
       case 'Control':
         const scope = el.scope;
@@ -98,7 +124,7 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
         }
 
         return element ? (
-          <DesignerElementWrapper key={element.id} element={element} />
+          <DesignerComponentWrapper key={element.id} element={element} />
         ) : (
           <div></div>
         );
@@ -108,11 +134,11 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
 const FormRenderer = ({
   dataSchema,
   uiSchema,
-  isDesigner = true
+  isDesigner = true,
 }: {
   dataSchema: DataSchema;
   uiSchema: UISchema;
-  isDesigner: boolean
+  isDesigner: boolean;
 }) => {
   return <div>{renderElements([testSchema], testDataSchema as any)}</div>;
 };

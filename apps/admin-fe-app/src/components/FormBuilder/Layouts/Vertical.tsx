@@ -2,14 +2,14 @@ import { TextAlignCenterIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 import { FormElement, FormElementInstance } from '../types';
 
-export const HorizontalLayoutElement: FormElement = {
-  type: 'HorizontalLayout',
+export const VerticalLayoutElement: FormElement = {
+  type: 'VerticalLayout',
   construct: (id: string) => ({
     id,
     type: 'Layout',
-    subtype: 'HorizontalLayout',
+    subtype: 'VerticalLayout',
     extraAttributes: {
-      uiSchema: { key: id, type: 'HorizontalLayout', elements: [] },
+      uiSchema: { key: id, type: 'VerticalLayout', elements: [] },
     },
   }),
   designerBtnElement: {
@@ -32,7 +32,7 @@ function DesignerComponent({
   children?: ReactNode;
 }) {
   return (
-    <div className={`grid grid-cols-${cols} grid-flow-row gap-4  divide-x `}>
+    <div className={`grid grid-rows-${cols} grid-flow-col gap-4  divide-y `}>
       {children}
     </div>
   );
