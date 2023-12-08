@@ -1,6 +1,5 @@
 import { Input, Label } from '@engine/design-system';
 import { TextAlignCenterIcon } from '@radix-ui/react-icons';
-import Designer from '../Designer';
 import { FormElement, FormElementInstance } from '../types';
 
 export const TextFieldFormElement: FormElement = {
@@ -10,10 +9,21 @@ export const TextFieldFormElement: FormElement = {
     type: 'Input',
     subtype: 'TextField',
     extraAttributes: {
-      label: 'Text Input',
-      helperText: 'Helper Text',
-      required: true,
-      polaceHolder: 'place holder',
+      dataSchema: {
+        key: id,
+        type: 'string',
+        pattern: '',
+        nullable: true,
+        maxLength: 255,
+        minLength: 1,
+        errorMessage: { type: 'foo must be an Integer' },
+      },
+      uiSchema: {
+        key: id,
+        type: 'Control',
+        label: '',
+        scope: '',
+      },
     },
   }),
   designerBtnElement: {
@@ -21,20 +31,6 @@ export const TextFieldFormElement: FormElement = {
     label: 'Text  filed',
   },
   designerComponent: DesignerComponent,
-  baseDataSchema: {
-    type: 'string',
-    pattern: '',
-    nullable: true,
-    maxLength: 255,
-    minLength: 1,
-    errorMessage: { type: 'foo must be an Integer' },
-  },
-  baseUISchema: {
-    type: 'Control',
-    label: '',
-    scope: '',
-  },
-
   // formComponent: () => <div>Designer component</div>,
   // propertiesComponent: () => <div>Designer component</div>,
 };

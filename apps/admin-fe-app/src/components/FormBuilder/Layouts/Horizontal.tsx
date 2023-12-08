@@ -10,7 +10,7 @@ export const HorizontalLayoutElement: FormElement = {
     type: 'Layout',
     subtype: 'HorizontalLayout',
     extraAttributes: {
-      UISchema: { type: 'HorizontalLayout', elements: [] },
+      uiSchema: { key: id, type: 'HorizontalLayout', elements: [] },
     },
   }),
   designerBtnElement: {
@@ -18,7 +18,6 @@ export const HorizontalLayoutElement: FormElement = {
     label: 'Horizontal',
   },
   designerComponent: DesignerComponent,
-  baseUISchema: { type: 'HorizontalLayout', elements: [] },
 
   //   formComponent: () => <div>Designer component</div>,
   //   propertiesComponent: () => <div>Designer component</div>,
@@ -29,10 +28,6 @@ function DesignerComponent({
 }: {
   elementInstance: FormElementInstance;
 }) {
-  console.log(
-    '🚀 ~ file: Horizontal.tsx:34 ~ elementInstance:',
-    elementInstance
-  );
   return (
     <div
       className={`grid grid-cols-5 grid-flow-row gap-4  divide-x `}

@@ -11,11 +11,13 @@ import { ElementsType, FormElementInstance, FormElements } from './types';
 import ShortUniqueId from 'short-unique-id';
 import { useState } from 'react';
 import { TrashIcon } from '@radix-ui/react-icons';
+import FormRenderer from './Renderers/FormRenderer';
 const Designer = () => {
   const uniqueId = new ShortUniqueId({ length: 16 });
-  const { elements, addElement } = useDesigner();
+  const { elements, addElement, dataSchema, uiSchema, addElementSchemas } =
+    useDesigner();
   const dropZone = useDroppable({
-    id: 'form-designer-drop-zone',
+    id: uniqueId.rnd(),
     data: {
       isDesignerDropZone: true,
     },
@@ -33,6 +35,7 @@ const Designer = () => {
           uniqueId.rnd()
         );
         addElement(0, newElement);
+        addElementSchemas(over.id, newElement);
       }
     },
   });
@@ -63,13 +66,16 @@ const Designer = () => {
               ))}
             </div>
           )}
+          {/* <div>
+          <FormRenderer/>
+          </div> */}
         </div>
       </div>
       <DesignerSideBar />
     </div>
   );
 };
-const DesignerElementWrapper = ({
+export const DesignerElementWrapper = ({
   element,
 }: {
   element: FormElementInstance;
