@@ -1,5 +1,6 @@
 import { DesignerElementWrapper } from '../Designer';
-import { ElementsType, FormElements, UISchema } from '../types';
+import { DataSchema, ElementsType, UISchema } from '../types';
+import { findPropertyFromScope } from '../utils';
 
 const testSchema = {
   type: 'VerticalLayout',
@@ -13,13 +14,13 @@ const testSchema = {
           type: 'Control',
           key: 'noiau',
           label: 'X1',
-          scope: '#/properties/person/properties/firstName',
+          scope: '#/properties/firstName',
         },
         {
           type: 'Control',
           key: 'kapiej',
           label: 'X2',
-          scope: '#/properties/person/properties/lastName',
+          scope: '#/properties/lastName',
         },
       ],
     },
@@ -32,61 +33,88 @@ const testSchema = {
           key: 'insos',
           label: 'X3',
           type: 'Control',
-          scope: '#/properties/person/properties/firstName',
+          scope: '#/properties/firstName',
         },
         {
           key: 'ndyusj',
           label: 'X4',
           type: 'Control',
-          scope: '#/properties/person/properties/lastName',
+          scope: '#/properties/lastName',
         },
       ],
     },
   ],
 };
-const renderElements = (item: UISchema[]) => {
+const testDataSchema = {
+  type: 'object',
+  properties: {
+    firstName: {
+      type: 'string',
+    },
+    lastName: {
+      type: 'string',
+    },
+  },
+};
+
+const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
   return item.map((el) => {
     switch (el.type) {
       case 'VerticalLayout':
         return (
           <div key={el.key} className={`flex flex-col`}>
-            {el?.elements?.length ? renderElements(el.elements) : null}
+            {el?.elements?.length
+              ? renderElements(el.elements, dataSchema)
+              : null}
           </div>
         );
       case 'HorizontalLayout':
         return (
           <div key={el.key} className={`flex flex-row`}>
-            {el?.elements?.length ? renderElements(el.elements) : null}
+            {el?.elements?.length
+              ? renderElements(el.elements, dataSchema)
+              : null}
           </div>
         );
       case 'Control':
-        const DesignerElementComponent =
-          FormElements['TextField'].designerComponent;
-        const element = {
-          id: '455',
-          type: 'Input' as 'Input',
-          subtype: 'TextField' as ElementsType,
-          extraAttributes: {
-            dataSchema: {
-              key: '455',
-              type: 'string',
-              pattern: '',
-              nullable: true,
-              maxLength: 255,
-              minLength: 1,
-              errorMessage: { type: 'foo must be an Integer' },
-            },
-            uiSchema: el,
-          },
-        };
-        return (
+        const scope = el.scope;
+        const elementDataSchema = findPropertyFromScope(
+          scope || '',
+          dataSchema as DataSchema
+        );
+        let element;
+        switch (elementDataSchema?.type) {
+          case 'string':
+            element = {
+              id: el.key,
+              type: 'Input' as 'Input',
+              subtype: 'TextField' as ElementsType,
+              extraAttributes: { dataSchema: elementDataSchema, uiSchema: el },
+            };
+            break;
+
+          default:
+            break;
+        }
+
+        return element ? (
           <DesignerElementWrapper key={element.id} element={element} />
+        ) : (
+          <div></div>
         );
     }
   });
 };
-const FormRenderer = () => {
-  return <div>{renderElements([testSchema])}</div>;
+const FormRenderer = ({
+  dataSchema,
+  uiSchema,
+  isDesigner = true
+}: {
+  dataSchema: DataSchema;
+  uiSchema: UISchema;
+  isDesigner: boolean
+}) => {
+  return <div>{renderElements([testSchema], testDataSchema as any)}</div>;
 };
 
 export default FormRenderer;
