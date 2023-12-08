@@ -30,7 +30,7 @@ export function DataTableRowActions({ children }: DataTableRowActionsProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem>{children}</DropdownMenuItem>
+          {children}
           <DropdownMenuSeparator />
         </DropdownMenuContent>
       </DropdownMenu>

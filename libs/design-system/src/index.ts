@@ -15,8 +15,8 @@ export * from './lib/Label';
 export * from './lib/data-table';
 export * from './lib/table';
 export * from './lib/Tooltip';
-
-
-
-
+export * from './lib/HorizontalLayout';
+export * from './lib/VerticalLayout';
+export * from './lib/Spinner';
+export * from './lib/Skeleton';
 

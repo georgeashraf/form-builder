@@ -4,7 +4,8 @@ import DefaultLayout from './layouts/DefaultLayout';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import RequestListing from './pages/requests/RequestListing';
 import ErrorPage from './components/ErrorPage';
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
+import FormBuilder from './components/FormBuilder/FormBuilder';
 
 function App() {
   // Check user set theme mode...
@@ -24,7 +25,10 @@ function App() {
       path: '/',
       element: <DefaultLayout switchTheme={switchTheme} />,
       errorElement: <ErrorPage />,
-      children: [{ path: '/requests', element: <RequestListing /> }],
+      children: [
+        { path: '/requests', element: <RequestListing /> },
+        { path: '/form-builder', element: <FormBuilder /> },
+      ],
     },
   ]);
   const queryClient = new QueryClient({
