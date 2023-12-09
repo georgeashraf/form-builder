@@ -1,21 +1,16 @@
 import DesignerSideBar from './DesignerSideBar';
-import {
-  DragEndEvent,
-  useDndMonitor,
-  useDraggable,
-  useDroppable,
-} from '@dnd-kit/core';
-import { Button, cn } from '@engine/design-system';
+import { DragEndEvent, useDndMonitor, useDroppable } from '@dnd-kit/core';
+import { cn } from '@engine/design-system';
 import useDesigner from './Hooks/useDesigner';
-import { ElementsType, FormElementInstance, FormElements } from './types';
+import { ElementsType, FormElements } from './types';
 import ShortUniqueId from 'short-unique-id';
-import { useState } from 'react';
-import { TrashIcon } from '@radix-ui/react-icons';
 import FormRenderer from './Renderers/FormRenderer';
 const Designer = () => {
   const uniqueId = new ShortUniqueId({ length: 16 });
   const { elements, addElement, dataSchema, uiSchema, addElementSchemas } =
     useDesigner();
+  console.log('🚀 ~ file: Designer.tsx:15 ~ Designer ~ uiSchema:', uiSchema);
+
   const dropZone = useDroppable({
     id: uniqueId.rnd(),
     data: {
@@ -34,7 +29,7 @@ const Designer = () => {
         const newElement = FormElements[type as ElementsType].construct(
           uniqueId.rnd()
         );
-        addElement(0, newElement);
+        // addElement(0, newElement);
         addElementSchemas(over.id, newElement);
       }
     },
@@ -45,7 +40,7 @@ const Designer = () => {
         <div
           ref={dropZone.setNodeRef}
           className={cn(
-            'bg-background max-w-[920px] h-full m-auto rounded-xl flex flex-col flex-grow items-center justify-start flex-1 overflow-y-auto',
+            'bg-background max-w-[920px] h-full m-auto rounded-xl flex flex-col flex-grow  justify-start flex-1 overflow-y-auto',
             dropZone.isOver && 'ring-2 ring-primary'
           )}
         >
@@ -79,6 +74,5 @@ const Designer = () => {
     </div>
   );
 };
-
 
 export default Designer;

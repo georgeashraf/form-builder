@@ -11,20 +11,36 @@ const DesignerComponentWrapper = ({
 }) => {
   const { removeElement } = useDesigner();
   const [mouseIsOver, setMouseIsOver] = useState(false);
-  const topHalf = useDroppable({
+  const top = useDroppable({
     id: element.id + '-top',
     data: {
       type: element.type,
       elementId: element.id,
-      isTopHalfDesignerElement: true,
+      isTopDesignerElement: true,
     },
   });
-  const bottomHalf = useDroppable({
+  const bottom = useDroppable({
     id: element.id + '-bottom',
     data: {
       type: element.type,
       elementId: element.id,
-      isBottomHalfDesignerElement: true,
+      isBottomDesignerElement: true,
+    },
+  });
+  const left = useDroppable({
+    id: element.id + '-left',
+    data: {
+      type: element.type,
+      elLeftementId: element.id,
+      isDesignerElement: true,
+    },
+  });
+  const right = useDroppable({
+    id: element.id + '-right',
+    data: {
+      type: element.type,
+      elementId: element.id,
+      isRightDesignerElement: true,
     },
   });
   const draggable = useDraggable({
@@ -50,12 +66,20 @@ const DesignerComponentWrapper = ({
       onMouseLeave={() => setMouseIsOver(false)}
     >
       <div
-        ref={topHalf.setNodeRef}
-        className="absolute w-full h-1/2 rounded-t-md"
+        ref={top.setNodeRef}
+        className="absolute w-full h-1/2 bg-green rounded-t-md"
       />
       <div
-        ref={bottomHalf.setNodeRef}
+        ref={bottom.setNodeRef}
         className="absolute w-full bottom-0 h-1/2 rounded-b-md"
+      />
+      <div
+        ref={left.setNodeRef}
+        className="absolute w-1/2  h-full rounded-b-md"
+      />
+      <div
+        ref={right.setNodeRef}
+        className="absolute w-1/2 right-0  h-full rounded-b-md"
       />
       {mouseIsOver && (
         <>
@@ -75,8 +99,11 @@ const DesignerComponentWrapper = ({
           </div>
         </>
       )}
-      {topHalf.isOver && (
+      {top.isOver && (
         <div className="absolute top-0 w-full rounded-md h-[7px] bg-green-900 rounded-b-none" />
+      )}
+      {left.isOver && (
+        <div className="absolute left-0 h-full rounded-md w-[7px] bg-green-900  " />
       )}
       <div
         className={cn(
@@ -87,8 +114,11 @@ const DesignerComponentWrapper = ({
       >
         <DesignerElement elementInstance={element} />
       </div>
-      {bottomHalf.isOver && (
+      {bottom.isOver && (
         <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-green-900 rounded-t-none" />
+      )}
+      {right.isOver && (
+        <div className="absolute right-0 h-full rounded-md w-[7px] bg-green-900  " />
       )}
     </div>
   );

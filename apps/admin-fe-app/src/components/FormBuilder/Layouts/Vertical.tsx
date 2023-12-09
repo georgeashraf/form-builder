@@ -32,7 +32,9 @@ function DesignerComponent({
   children?: ReactNode;
 }) {
   return (
-    <div className={`grid grid-rows-${cols} grid-flow-col gap-4  divide-y `}>
+    <div
+      className={`flex flex-col flex-grow items-start gap-4 justify-between flex-1  `}
+    >
       {children}
     </div>
   );
