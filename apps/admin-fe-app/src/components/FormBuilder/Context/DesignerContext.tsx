@@ -1,6 +1,11 @@
 import { UniqueIdentifier } from '@dnd-kit/core';
 import { createContext, ReactNode, useState } from 'react';
-import { DataSchema, FormElementInstance, SchemaPrimitiveType } from '../types';
+import {
+  DataSchema,
+  FormElementInstance,
+  SchemaPrimitiveType,
+  UISchema,
+} from '../types';
 
 type DesignerContextType = {
   elements: FormElementInstance[];
@@ -30,7 +35,7 @@ export default function DesignerContextProvider({
   };
   const [elements, setElements] = useState<FormElementInstance[]>([]);
   const [dataSchema, setDataSchema] = useState<DataSchema>(baseDataSchema);
-  const [uiSchema, setUISchema] = useState();
+  const [uiSchema, setUISchema] = useState<any>();
 
   const addElement = (index: number, element: FormElementInstance) => {
     setElements((prev) => {
@@ -39,21 +44,43 @@ export default function DesignerContextProvider({
       return newElements;
     });
   };
-  const removeElement = (id: string) => {
-    setElements((prev) => prev.filter((element) => element.id !== id));
+  const removeElement = (key: string) => {
+    setElements((prev) => prev.filter((element) => element.key !== key));
   };
   const addElementSchemas = (
     parentKey: UniqueIdentifier,
     element: FormElementInstance
   ) => {
-    if(Object.keys(dataSchema.properties).length === 0 && element.type === 'Input') {
+    if (
+      Object.keys(dataSchema.properties).length === 0 &&
+      element.type === 'Input'
+    ) {
       setDataSchema((prev) => {
-        return { ...prev, properties: element.extraAttributes?.dataSchema };
+        return {
+          ...prev,
+          properties: {
+            ...prev.properties,
+            [element.key]: element.extraAttributes?.dataSchema,
+          },
+        };
       });
     }
 
     if (uiSchema === undefined) {
       setUISchema(element.extraAttributes?.uiSchema);
+    }
+    if (uiSchema && Object.keys(uiSchema).length) {
+      if (element.extraAttributes) {
+        element.extraAttributes.uiSchema.scope = `#/properties/${element.key}`;
+      }
+      setUISchema((prev: UISchema) => {
+        return {
+          ...prev,
+          elements: prev?.elements
+            ? [...prev.elements, element.extraAttributes?.uiSchema]
+            : [element.extraAttributes?.uiSchema],
+        };
+      });
     }
   };
 

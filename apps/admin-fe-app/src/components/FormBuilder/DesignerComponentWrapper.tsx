@@ -12,42 +12,42 @@ const DesignerComponentWrapper = ({
   const { removeElement } = useDesigner();
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const top = useDroppable({
-    id: element.id + '-top',
+    id: element.key + '-top',
     data: {
       type: element.type,
-      elementId: element.id,
+      elementId: element.key,
       isTopDesignerElement: true,
     },
   });
   const bottom = useDroppable({
-    id: element.id + '-bottom',
+    id: element.key + '-bottom',
     data: {
       type: element.type,
-      elementId: element.id,
+      elementId: element.key,
       isBottomDesignerElement: true,
     },
   });
   const left = useDroppable({
-    id: element.id + '-left',
+    id: element.key + '-left',
     data: {
       type: element.type,
-      elLeftementId: element.id,
+      elLeftementId: element.key,
       isDesignerElement: true,
     },
   });
   const right = useDroppable({
-    id: element.id + '-right',
+    id: element.key + '-right',
     data: {
       type: element.type,
-      elementId: element.id,
+      elementId: element.key,
       isRightDesignerElement: true,
     },
   });
   const draggable = useDraggable({
-    id: element.id + '-drag-handler',
+    id: element.key + '-drag-handler',
     data: {
       type: element.type,
-      elementId: element.id,
+      elementId: element.key,
       isDesignerElement: true,
     },
   });
@@ -87,7 +87,7 @@ const DesignerComponentWrapper = ({
             <Button
               className="flex justify-center h-full border rounded-md rounded-l-none bg-red-500"
               variant={'outline'}
-              onClick={() => removeElement(element.id)}
+              onClick={() => removeElement(element.key)}
             >
               <TrashIcon className="h-6 w-6" />
             </Button>

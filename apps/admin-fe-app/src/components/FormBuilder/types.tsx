@@ -58,7 +58,7 @@ export type FormElement = {
     icon: React.ElementType;
     label: string;
   };
-  construct: (id: string) => FormElementInstance;
+  construct: (key: string) => FormElementInstance;
   designerComponent: React.FC<{
     elementInstance: FormElementInstance;
     cols?: number;
@@ -69,7 +69,7 @@ export type FormElement = {
 };
 
 export type FormElementInstance = {
-  id: string;
+  key: string;
   type: 'Input' | 'Layout';
   subtype: ElementsType;
   extraAttributes?: Record<string, any>;

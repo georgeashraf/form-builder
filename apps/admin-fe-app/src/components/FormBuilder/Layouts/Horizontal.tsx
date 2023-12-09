@@ -4,12 +4,12 @@ import { FormElement, FormElementInstance } from '../types';
 
 export const HorizontalLayoutElement: FormElement = {
   type: 'HorizontalLayout',
-  construct: (id: string) => ({
-    id,
+  construct: (key: string) => ({
+    key,
     type: 'Layout',
     subtype: 'HorizontalLayout',
     extraAttributes: {
-      uiSchema: { key: id, type: 'HorizontalLayout', elements: [] },
+      uiSchema: { key, type: 'HorizontalLayout', elements: [] },
     },
   }),
   designerBtnElement: {

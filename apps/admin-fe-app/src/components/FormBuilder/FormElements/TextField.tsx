@@ -4,13 +4,13 @@ import { FormElement, FormElementInstance } from '../types';
 
 export const TextFieldFormElement: FormElement = {
   type: 'TextField',
-  construct: (id: string) => ({
-    id,
+  construct: (key: string) => ({
+    key,
     type: 'Input',
     subtype: 'TextField',
     extraAttributes: {
       dataSchema: {
-        key: id,
+        key,
         type: 'string',
         pattern: '',
         nullable: true,
@@ -19,10 +19,10 @@ export const TextFieldFormElement: FormElement = {
         errorMessage: { type: 'foo must be an Integer' },
       },
       uiSchema: {
-        key: id,
+        key,
         type: 'Control',
         label: '',
-        scope: '',
+        scope: '#/properties/first',
       },
     },
   }),
@@ -43,7 +43,7 @@ function DesignerComponent({
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label>
-        {elementInstance.extraAttributes?.label}
+        {elementInstance.extraAttributes?.uiSchema.key}
         {elementInstance.extraAttributes?.required && '*'}
       </Label>
       <Input

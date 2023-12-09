@@ -71,8 +71,9 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
           FormElements['VerticalLayout' as ElementsType].designerComponent;
         return (
           <VericalLayout
+            key={el.key}
             elementInstance={{
-              id: el.key,
+              key: el.key,
               type: 'Layout',
               subtype: 'VerticalLayout',
               extraAttributes: { uiSchema: el },
@@ -89,8 +90,9 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
           FormElements['HorizontalLayout' as ElementsType].designerComponent;
         return (
           <HorizontalLayout
+            key={el.key}
             elementInstance={{
-              id: el.key,
+              key: el.key,
               type: 'Layout',
               subtype: 'HorizontalLayout',
               extraAttributes: { uiSchema: el },
@@ -112,7 +114,7 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
         switch (elementDataSchema?.type) {
           case 'string':
             element = {
-              id: el.key,
+              key: el.key,
               type: 'Input' as 'Input',
               subtype: 'TextField' as ElementsType,
               extraAttributes: { dataSchema: elementDataSchema, uiSchema: el },
@@ -124,7 +126,7 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
         }
 
         return element ? (
-          <DesignerComponentWrapper key={element.id} element={element} />
+          <DesignerComponentWrapper key={element.key} element={element} />
         ) : (
           <div></div>
         );
@@ -140,7 +142,11 @@ const FormRenderer = ({
   uiSchema: UISchema;
   isDesigner: boolean;
 }) => {
-  return <div>{renderElements([testSchema], testDataSchema as any)}</div>;
+  return (
+    <div>
+      {dataSchema && uiSchema && renderElements([uiSchema], dataSchema)}
+    </div>
+  );
 };
 
 export default FormRenderer;
