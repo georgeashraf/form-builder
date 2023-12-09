@@ -1,9 +1,9 @@
 import { DataSchema, UISchema } from '../types';
 
-export const findPropertyFromScope = (
+export function findPropertyFromScope(
   scope: string,
   dataSchema: DataSchema
-): Partial<DataSchema> | null => {
+): Partial<DataSchema> | null {
   const s = scope.split('/');
   const first = s.shift();
   if (!first) {
@@ -17,9 +17,12 @@ export const findPropertyFromScope = (
     return findPropertyFromScope(s.join('/'), property as any);
   }
   return null;
-};
+}
 
-export const findUiElementByKey = (key: string, uiSchema: UISchema): Partial<UISchema> | null => {
+export function findUiElementByKey(
+  key: string,
+  uiSchema: UISchema
+): Partial<UISchema> | null {
   if (!key) return null;
 
   if (uiSchema.hasOwnProperty('key')) {
@@ -34,4 +37,70 @@ export const findUiElementByKey = (key: string, uiSchema: UISchema): Partial<UIS
     }
   }
   return null;
-};
+}
+
+export function removeElementByKey(
+  key: string,
+  uiSchema: UISchema,
+  dataSchema: DataSchema
+): { uiSchema: UISchema; dataSchema: DataSchema } | null {
+  if (!key) return null;
+
+  return null;
+}
+
+export function findPath(
+  obj: any,
+  name: string,
+  val: string,
+  currentPath?: string
+): string | undefined {
+  currentPath = currentPath || '';
+
+  let matchingPath;
+
+  if (!obj || typeof obj !== 'object') return;
+
+  if (obj[name] === val) return `${currentPath}/${name}`;
+
+  for (const key of Object.keys(obj)) {
+    if (key === name && obj[key] === val) {
+      matchingPath = currentPath;
+    } else {
+      matchingPath = findPath(obj[key], name, val, `${currentPath}/${key}`);
+    }
+
+    if (matchingPath) break;
+  }
+
+  return matchingPath;
+}
+
+export function removePropertyByName(obj: any, key: string) {
+  for (var i in obj) {
+    if (!obj.hasOwnProperty(i)) continue;
+    if (i == key) {
+      delete obj[key];
+    } else if (typeof obj[i] == 'object') {
+        removePropertyByName(obj[i], key);
+    }
+  }
+  return obj;
+}
+
+
+export function removePropertyByPath(obj: any, path: string) {
+  const p = path.split('/');
+  const first = p.shift();
+  for (var i in obj) {
+    if (!obj.hasOwnProperty(i)) continue;
+    if (i == first) {
+      if (p.length === 0) {
+        delete obj[first];
+      } else if (typeof obj[i] == 'object') {
+        removePropertyByPath(obj[i], p.join('/'));
+      }
+    }
+  }
+  return obj;
+}

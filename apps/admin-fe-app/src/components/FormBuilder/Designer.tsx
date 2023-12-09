@@ -7,10 +7,8 @@ import ShortUniqueId from 'short-unique-id';
 import FormRenderer from './Renderers/FormRenderer';
 const Designer = () => {
   const uniqueId = new ShortUniqueId({ length: 16 });
-  const { elements, addElement, dataSchema, uiSchema, addElementSchemas } =
+  const { dataSchema, uiSchema, addElementSchemas } =
     useDesigner();
-  console.log('🚀 ~ file: Designer.tsx:15 ~ Designer ~ uiSchema:', uiSchema);
-
   const dropZone = useDroppable({
     id: uniqueId.rnd(),
     data: {

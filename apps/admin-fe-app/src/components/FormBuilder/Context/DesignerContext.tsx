@@ -6,17 +6,19 @@ import {
   SchemaPrimitiveType,
   UISchema,
 } from '../types';
+import { findPath, removePropertyByPath } from '../utils';
 
 type DesignerContextType = {
-  elements: FormElementInstance[];
+  // elements: FormElementInstance[];
   dataSchema: any;
   uiSchema: any;
-  addElement: (index: number, element: FormElementInstance) => void;
+  // addElement: (index: number, element: FormElementInstance) => void;
   addElementSchemas: (
     parentKey: UniqueIdentifier,
     element: FormElementInstance
   ) => void;
-  removeElement: (id: string) => void;
+  removeElement: (key: string) => void;
+  // removeElement: (id: string) => void;
 };
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -37,24 +39,29 @@ export default function DesignerContextProvider({
   const [dataSchema, setDataSchema] = useState<DataSchema>(baseDataSchema);
   const [uiSchema, setUISchema] = useState<any>();
 
-  const addElement = (index: number, element: FormElementInstance) => {
-    setElements((prev) => {
-      const newElements = [...prev];
-      newElements.splice(index, 0, element);
-      return newElements;
-    });
-  };
+  // const addElement = (index: number, element: FormElementInstance) => {
+  //   setElements((prev) => {
+  //     const newElements = [...prev];
+  //     newElements.splice(index, 0, element);
+  //     return newElements;
+  //   });
+  // };
+  // const removeElement = (key: string) => {
+  //   setElements((prev) => prev.filter((element) => element.key !== key));
+  // };
   const removeElement = (key: string) => {
-    setElements((prev) => prev.filter((element) => element.key !== key));
+    let pathToDelete = findPath(dataSchema, 'key', key);
+    pathToDelete = pathToDelete?.replace('/key','')
+    pathToDelete = pathToDelete?.replace('/','')
+    const updatedDataSchema = removePropertyByPath(dataSchema, pathToDelete!)
+    setDataSchema(updatedDataSchema)
+    // setUISchema()
   };
   const addElementSchemas = (
     parentKey: UniqueIdentifier,
     element: FormElementInstance
   ) => {
-    if (
-      Object.keys(dataSchema.properties).length === 0 &&
-      element.type === 'Input'
-    ) {
+    if (element.type === 'Input') {
       setDataSchema((prev) => {
         return {
           ...prev,
@@ -87,15 +94,14 @@ export default function DesignerContextProvider({
   return (
     <DesignerContext.Provider
       value={{
-        elements,
-        addElement,
         dataSchema,
         uiSchema,
-        removeElement,
         addElementSchemas,
+        removeElement,
       }}
     >
       {children}
     </DesignerContext.Provider>
   );
 }
+
