@@ -88,9 +88,8 @@ export function removePropertyByName(obj: any, key: string) {
   return obj;
 }
 
-export function removePropertyByPath(obj: any, path: string) {
-
-  if (!path.includes('/')) {
+export function removePropertyByPath(obj: any, path: string, isRoot = true) {
+  if (isRoot) {
     // remove entire root object
     if (obj.hasOwnProperty(path)) {
       return {};
@@ -108,7 +107,7 @@ export function removePropertyByPath(obj: any, path: string) {
           delete obj[first];
         }
       } else if (typeof obj[i] == 'object') {
-        removePropertyByPath(obj[i], p.join('/'));
+        removePropertyByPath(obj[i], p.join('/'), false);
       }
     }
   }
