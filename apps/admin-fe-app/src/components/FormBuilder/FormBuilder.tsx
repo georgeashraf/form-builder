@@ -10,6 +10,7 @@ import {
 import DragOverlayWrapper from './DragOverlayWrapper';
 import FormSubmitionForm from './FormSubmitionForm';
 import DesignerContextProvider from './Context/DesignerContext';
+import { useNavigate } from 'react-router-dom';
 const FormBuilder = () => {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -22,6 +23,7 @@ const FormBuilder = () => {
       tolerance: 5,
     },
   });
+  const navigate = useNavigate()
   const sensors = useSensors(mouseSensor, touchSensor);
   return (
     <DesignerContextProvider>
@@ -32,7 +34,7 @@ const FormBuilder = () => {
             <FormSubmitionForm />
             <div className="flex items-center gap-2">
               <Button>Save</Button>
-              <Button>Preview</Button>
+              <Button onClick={() => navigate('/form-preview')}>Preview</Button>
             </div>
           </div>
           <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-full  bg-[url(/plus.svg)]">

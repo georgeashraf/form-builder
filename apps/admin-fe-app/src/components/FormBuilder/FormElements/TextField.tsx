@@ -31,7 +31,7 @@ export const TextFieldFormElement: FormElement = {
     label: 'Text  filed',
   },
   designerComponent: DesignerComponent,
-  // formComponent: () => <div>Designer component</div>,
+  formComponent: FormComponent,
   // propertiesComponent: () => <div>Designer component</div>,
 };
 
@@ -51,6 +51,27 @@ function DesignerComponent({
         disabled
         placeholder={elementInstance.extraAttributes?.placeholder}
       />
+      {elementInstance.extraAttributes?.helperText && (
+        <p className="text-muted-foreground text-[0.8rem]">
+          {elementInstance.extraAttributes?.helperText}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function FormComponent({
+  elementInstance,
+}: {
+  elementInstance: FormElementInstance;
+}) {
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <Label>
+        {elementInstance.extraAttributes?.uiSchema.key}
+        {/* {elementInstance.extraAttributes?.required && '*'} */}
+      </Label>
+      <Input  placeholder={elementInstance.extraAttributes?.uiSchema.key} />
       {elementInstance.extraAttributes?.helperText && (
         <p className="text-muted-foreground text-[0.8rem]">
           {elementInstance.extraAttributes?.helperText}

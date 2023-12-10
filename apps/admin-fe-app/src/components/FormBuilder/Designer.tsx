@@ -5,10 +5,10 @@ import useDesigner from './Hooks/useDesigner';
 import { ElementsType, FormElements } from './types';
 import ShortUniqueId from 'short-unique-id';
 import FormRenderer from './Renderers/FormRenderer';
+import FormPreview from './FormPreview';
 const Designer = () => {
   const uniqueId = new ShortUniqueId({ length: 16 });
-  const { dataSchema, uiSchema, addElementSchemas } =
-    useDesigner();
+  const { dataSchema, uiSchema, addElementSchemas } = useDesigner();
   const dropZone = useDroppable({
     id: uniqueId.rnd(),
     data: {
@@ -68,6 +68,8 @@ const Designer = () => {
           </div>
         </div>
       </div>
+      {/* <FormPreview /> */}
+
       <DesignerSideBar />
     </div>
   );

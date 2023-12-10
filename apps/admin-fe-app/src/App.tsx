@@ -6,6 +6,7 @@ import RequestListing from './pages/requests/RequestListing';
 import ErrorPage from './components/ErrorPage';
 import 'react-toastify/dist/ReactToastify.css';
 import FormBuilder from './components/FormBuilder/FormBuilder';
+import FormPreview from './components/FormBuilder/FormPreview';
 
 function App() {
   // Check user set theme mode...
@@ -28,6 +29,8 @@ function App() {
       children: [
         { path: '/requests', element: <RequestListing /> },
         { path: '/form-builder', element: <FormBuilder /> },
+        { path: '/form-preview', element: <FormPreview /> },
+
       ],
     },
   ]);

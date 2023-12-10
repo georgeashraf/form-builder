@@ -25,7 +25,7 @@ export const HorizontalLayoutElement: FormElement = {
   },
   designerComponent: DesignerComponent,
 
-  //   formComponent: () => <div>Designer component</div>,
+  formComponent: FormComponent,
   //   propertiesComponent: () => <div>Designer component</div>,
 };
 
@@ -64,5 +64,23 @@ function DesignerComponent({
         {children}
       </div>
     </>
+  );
+}
+
+function FormComponent({
+  elementInstance,
+  cols = 1,
+  children,
+}: {
+  elementInstance: FormElementInstance;
+  cols?: number;
+  children?: ReactNode;
+}) {
+  return (
+    <div
+      className={`flex flex-row flex-grow items-start gap-4 justify-between flex-1`}
+    >
+      {children}
+    </div>
   );
 }

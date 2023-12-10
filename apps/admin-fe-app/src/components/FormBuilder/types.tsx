@@ -64,7 +64,10 @@ export type FormElement = {
     cols?: number;
     children?: ReactNode;
   }>;
-  // formComponent: React.FC;
+  formComponent: React.FC<{
+    elementInstance: FormElementInstance;
+    children?: ReactNode;
+  }>;
   // propertiesComponent: React.FC;
 };
 

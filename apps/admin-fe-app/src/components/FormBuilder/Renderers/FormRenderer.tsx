@@ -1,4 +1,6 @@
 import DesignerComponentWrapper from '../DesignerComponentWrapper';
+import FormComponentWrapper from '../FormComponentWrapper';
+import FormLayoutWrapper from '../FormLayoutWrapper';
 import {
   DataSchema,
   ElementsType,
@@ -53,23 +55,30 @@ const testSchema = {
 };
 const testDataSchema = {
   type: 'object',
+  key: 'x',
   properties: {
     firstName: {
+      key: 'y',
       type: 'string',
     },
     lastName: {
+      key: 'z',
       type: 'string',
     },
   },
 };
 
-const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
+const renderElements = (
+  item: UISchema[],
+  dataSchema: DataSchema,
+  isDesigner: boolean
+) => {
   return item.map((el) => {
     switch (el.type) {
       case 'VerticalLayout':
         const VericalLayout =
           FormElements['VerticalLayout' as ElementsType].designerComponent;
-        return (
+        return isDesigner ? (
           <VericalLayout
             key={el.key}
             elementInstance={{
@@ -81,14 +90,28 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
             cols={el?.elements?.length}
           >
             {el?.elements?.length
-              ? renderElements(el.elements, dataSchema)
+              ? renderElements(el.elements, dataSchema, isDesigner)
               : null}
           </VericalLayout>
+        ) : (
+          <FormLayoutWrapper
+            key={el.key}
+            element={{
+              key: el.key,
+              type: 'Layout',
+              subtype: 'VerticalLayout',
+              extraAttributes: { uiSchema: el },
+            }}
+          >
+            {el?.elements?.length
+              ? renderElements(el.elements, dataSchema, isDesigner)
+              : null}
+          </FormLayoutWrapper>
         );
       case 'HorizontalLayout':
         const HorizontalLayout =
           FormElements['HorizontalLayout' as ElementsType].designerComponent;
-        return (
+        return isDesigner ? (
           <HorizontalLayout
             key={el.key}
             elementInstance={{
@@ -100,9 +123,24 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
             cols={el?.elements?.length}
           >
             {el?.elements?.length
-              ? renderElements(el.elements, dataSchema)
+              ? renderElements(el.elements, dataSchema, isDesigner)
               : null}
           </HorizontalLayout>
+        ) : (
+          <FormLayoutWrapper
+            key={el.key}
+            element={{
+              key: el.key,
+              type: 'Layout',
+              subtype: 'HorizontalLayout',
+              extraAttributes: { uiSchema: el },
+            }}
+          >
+            {' '}
+            {el?.elements?.length
+              ? renderElements(el.elements, dataSchema, isDesigner)
+              : null}{' '}
+          </FormLayoutWrapper>
         );
       case 'Control':
         const scope = el.scope;
@@ -126,7 +164,11 @@ const renderElements = (item: UISchema[], dataSchema: DataSchema) => {
         }
 
         return element ? (
-          <DesignerComponentWrapper key={element.key} element={element} />
+          isDesigner ? (
+            <DesignerComponentWrapper key={element.key} element={element} />
+          ) : (
+            <FormComponentWrapper key={element.key} element={element} />
+          )
         ) : (
           <div></div>
         );
@@ -142,9 +184,12 @@ const FormRenderer = ({
   uiSchema: UISchema;
   isDesigner: boolean;
 }) => {
+  console.log('🚀 ~ file: FormRenderer.tsx:157 ~ isDesigner:', isDesigner);
   return (
     <div>
-      {dataSchema && uiSchema && renderElements([uiSchema], dataSchema)}
+      {dataSchema &&
+        uiSchema &&
+        renderElements([uiSchema], dataSchema, isDesigner)}
     </div>
   );
 };
