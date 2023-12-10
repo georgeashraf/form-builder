@@ -82,21 +82,31 @@ export function removePropertyByName(obj: any, key: string) {
     if (i == key) {
       delete obj[key];
     } else if (typeof obj[i] == 'object') {
-        removePropertyByName(obj[i], key);
+      removePropertyByName(obj[i], key);
     }
   }
   return obj;
 }
 
-
 export function removePropertyByPath(obj: any, path: string) {
+
+  if (!path.includes('/')) {
+    // remove entire root object
+    if (obj.hasOwnProperty(path)) {
+      return {};
+    }
+  }
   const p = path.split('/');
   const first = p.shift();
   for (var i in obj) {
     if (!obj.hasOwnProperty(i)) continue;
     if (i == first) {
       if (p.length === 0) {
-        delete obj[first];
+        if (parseInt(first) !== NaN && Array.isArray(obj)) {
+          obj.splice(+first, 1);
+        } else {
+          delete obj[first];
+        }
       } else if (typeof obj[i] == 'object') {
         removePropertyByPath(obj[i], p.join('/'));
       }

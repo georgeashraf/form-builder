@@ -18,6 +18,7 @@ type DesignerContextType = {
     element: FormElementInstance
   ) => void;
   removeElement: (key: string) => void;
+  removeLayout: (key: string) => void;
   // removeElement: (id: string) => void;
 };
 
@@ -37,7 +38,7 @@ export default function DesignerContextProvider({
   };
   const [elements, setElements] = useState<FormElementInstance[]>([]);
   const [dataSchema, setDataSchema] = useState<DataSchema>(baseDataSchema);
-  const [uiSchema, setUISchema] = useState<any>();
+  const [uiSchema, setUISchema] = useState<UISchema>();
 
   // const addElement = (index: number, element: FormElementInstance) => {
   //   setElements((prev) => {
@@ -50,12 +51,48 @@ export default function DesignerContextProvider({
   //   setElements((prev) => prev.filter((element) => element.key !== key));
   // };
   const removeElement = (key: string) => {
-    let pathToDelete = findPath(dataSchema, 'key', key);
-    pathToDelete = pathToDelete?.replace('/key','')
-    pathToDelete = pathToDelete?.replace('/','')
-    const updatedDataSchema = removePropertyByPath(dataSchema, pathToDelete!)
-    setDataSchema(updatedDataSchema)
-    // setUISchema()
+    let dataSchemaControlPath = findPath(dataSchema, 'key', key);
+    dataSchemaControlPath = dataSchemaControlPath?.replace('/key', '');
+    dataSchemaControlPath = dataSchemaControlPath?.replace('/', '');
+    let uiSchemaControlPath = findPath(uiSchema, 'key', key);
+    uiSchemaControlPath = uiSchemaControlPath?.replace('/', '');
+    uiSchemaControlPath = uiSchemaControlPath?.replace('/key', '');
+    const updatedDataSchema = removePropertyByPath(
+      dataSchema,
+      dataSchemaControlPath!
+    );
+    const updatedUISchema = removePropertyByPath(
+      uiSchema,
+      uiSchemaControlPath!
+    );
+
+    setDataSchema(updatedDataSchema);
+    setUISchema((prev) => {
+      return {
+        ...prev,
+        ...updatedUISchema,
+      };
+    });
+  };
+
+  const removeLayout = (key: string) => {
+    let uiSchemaControlPath = findPath(uiSchema, 'key', key);
+    uiSchemaControlPath = uiSchemaControlPath?.replace('/', '');
+    uiSchemaControlPath = uiSchemaControlPath?.replace('/key', '');
+    const updatedUISchema = removePropertyByPath(
+      uiSchema,
+      uiSchemaControlPath!
+    );
+    if (Object.keys(updatedUISchema).length) {
+      setUISchema((prev) => {
+        return {
+          ...prev,
+          ...updatedUISchema,
+        };
+      });
+    } else {
+      setUISchema(undefined);
+    }
   };
   const addElementSchemas = (
     parentKey: UniqueIdentifier,
@@ -76,17 +113,18 @@ export default function DesignerContextProvider({
     if (uiSchema === undefined) {
       setUISchema(element.extraAttributes?.uiSchema);
     }
-    if (uiSchema && Object.keys(uiSchema).length) {
+    if (uiSchema !== undefined && Object.keys(uiSchema).length) {
       if (element.extraAttributes) {
         element.extraAttributes.uiSchema.scope = `#/properties/${element.key}`;
       }
-      setUISchema((prev: UISchema) => {
-        return {
-          ...prev,
-          elements: prev?.elements
-            ? [...prev.elements, element.extraAttributes?.uiSchema]
-            : [element.extraAttributes?.uiSchema],
-        };
+      setUISchema((prev) => {
+        if (prev)
+          return {
+            ...prev,
+            elements: prev?.elements
+              ? [...prev.elements, element.extraAttributes?.uiSchema]
+              : [element.extraAttributes?.uiSchema],
+          };
       });
     }
   };
@@ -98,10 +136,10 @@ export default function DesignerContextProvider({
         uiSchema,
         addElementSchemas,
         removeElement,
+        removeLayout,
       }}
     >
       {children}
     </DesignerContext.Provider>
   );
 }
-

@@ -44,7 +44,7 @@
     --primary: #27374e;
     --secondary: #526e84;
     --accent: #7eadc9;
-    --transparent: rgba(0, 0, 0, 0.03);
+    --transparent: rgba(0, 0, 0, 0.125);
   }
 
   @media (prefers-color-schema: dark) {
