@@ -28,8 +28,8 @@ const FormBuilder = () => {
   return (
     <DesignerContextProvider>
       <DndContext sensors={sensors}>
-        <div className="mx-2 mt-10 flex flex-col w-full  text-text">
-          <div className="flex justify-between border-b-2 p-4 gap-3 items-center">
+        <div className="mx-2 flex flex-col w-full h-full  text-text">
+          <div className="flex justify-between border-b-2  gap-3 items-center">
             <h2>Form:</h2>
             <FormSubmitionForm />
             <div className="flex items-center gap-2">

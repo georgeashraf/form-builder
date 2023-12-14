@@ -1,3 +1,4 @@
+import { cn } from '@engine/design-system';
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -24,13 +25,21 @@ const DefaultLayout = ({
         draggable
         pauseOnHover
       />
-      <div className="flex">
-        <DeafultSideBar className="flex-none bg-transparent h-screen basis-1/6" />
-        <div className="flex-1 md:flex h-screen relative basis-5/6">
-          <DefaultTopBar switchTheme={switchTheme} />
+      <>
+        <DefaultTopBar switchTheme={switchTheme} />
+        <DeafultSideBar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+        />
+        <div
+          className={cn(
+            'h-screen  relative transform ease-in-out duration-500 pt-20 px-2 md:px-5 pb-4 ',
+            sidebarOpen ? 'ml-12 md:ml-60' : 'ml-12'
+          )}
+        >
           <Outlet />
         </div>
-      </div>
+      </>
     </>
   );
 };

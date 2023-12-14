@@ -38,8 +38,7 @@ export default function FormSubmitionForm() {
   return (
     <form
       className={cn(
-        ' mx-4',
-        'flex flex-row justify-between border-b-2 p-4 gap-3 items-center'
+        'flex flex-row justify-between border-b-2 pb-4 pt-2 gap-3 items-center'
       )}
       //   onSubmit={handleSubmit(onSubmit)}
       //   onChange={onSubmit}
