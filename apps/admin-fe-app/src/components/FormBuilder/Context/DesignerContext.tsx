@@ -6,20 +6,22 @@ import {
   SchemaPrimitiveType,
   UISchema,
 } from '../types';
-import { findPath, removePropertyByPath } from '../utils';
+import { addPropertyByPath, findPath, removePropertyByPath } from '../utils';
 
 type DesignerContextType = {
-  // elements: FormElementInstance[];
-  dataSchema: any;
-  uiSchema: any;
-  // addElement: (index: number, element: FormElementInstance) => void;
-  addElementSchemas: (
-    parentKey: UniqueIdentifier,
-    element: FormElementInstance
-  ) => void;
+  dataSchema: DataSchema;
+  uiSchema?: UISchema;
+  addElementSchemas: (element: FormElementInstance) => void;
   removeElement: (key: string) => void;
   removeLayout: (key: string) => void;
-  // removeElement: (id: string) => void;
+  addElementBefore: (
+    element: FormElementInstance,
+    keyOfElementBefore: string
+  ) => void;
+  addElementAfter: (
+    element: FormElementInstance,
+    keyOfElementAfter: string
+  ) => void;
 };
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -31,25 +33,14 @@ export default function DesignerContextProvider({
 }) {
   const baseDataSchema = {
     $schema: 'https://json-schema.org/draft/2020-12/schema',
-    title: 'Product',
-    description: "A product from Acme's catalog",
+    title: 'Form',
+    description: 'New Form DataSchema',
     type: 'object' as SchemaPrimitiveType,
     properties: {},
   };
-  const [elements, setElements] = useState<FormElementInstance[]>([]);
   const [dataSchema, setDataSchema] = useState<DataSchema>(baseDataSchema);
-  const [uiSchema, setUISchema] = useState<UISchema>();
+  const [uiSchema, setUISchema] = useState<UISchema | undefined>();
 
-  // const addElement = (index: number, element: FormElementInstance) => {
-  //   setElements((prev) => {
-  //     const newElements = [...prev];
-  //     newElements.splice(index, 0, element);
-  //     return newElements;
-  //   });
-  // };
-  // const removeElement = (key: string) => {
-  //   setElements((prev) => prev.filter((element) => element.key !== key));
-  // };
   const removeElement = (key: string) => {
     let dataSchemaControlPath = findPath(dataSchema, 'key', key);
     dataSchemaControlPath = dataSchemaControlPath?.replace('/key', '');
@@ -94,10 +85,7 @@ export default function DesignerContextProvider({
       setUISchema(undefined);
     }
   };
-  const addElementSchemas = (
-    parentKey: UniqueIdentifier,
-    element: FormElementInstance
-  ) => {
+  const addElementSchemas = (element: FormElementInstance) => {
     if (element.type === 'Input') {
       setDataSchema((prev) => {
         return {
@@ -128,13 +116,50 @@ export default function DesignerContextProvider({
       });
     }
   };
+  const addElementBefore = (
+    element: FormElementInstance,
+    keyOfElementBefore: string
+  ) => {
+    let dataSchemaControlPath = findPath(dataSchema, 'key', keyOfElementBefore);
+    dataSchemaControlPath = dataSchemaControlPath?.replace('/key', '');
+    dataSchemaControlPath = dataSchemaControlPath?.replace('/', '');
 
+    let uiSchemaControlPath = findPath(uiSchema, 'key', keyOfElementBefore);
+    uiSchemaControlPath = uiSchemaControlPath?.replace('/', '');
+    uiSchemaControlPath = uiSchemaControlPath?.replace('/key', '');
+    const newDataSchema = addPropertyByPath(
+      dataSchema,
+      dataSchemaControlPath!,
+      element.extraAttributes?.dataSchema
+    );
+    console.log(
+      '🚀 ~ file: DesignerContext.tsx:136 ~ newDataSchema:',
+      newDataSchema
+    );
+    const newUISchema = addPropertyByPath(
+      uiSchema,
+      uiSchemaControlPath!,
+      element.extraAttributes?.uiSchema
+    );
+    console.log(
+      '🚀 ~ file: DesignerContext.tsx:142 ~ newUISchema:',
+      newUISchema
+    );
+    setDataSchema(newDataSchema);
+    setUISchema(newUISchema);
+  };
+  const addElementAfter = (
+    element: FormElementInstance,
+    keyOfElementAfter: string
+  ) => {};
   return (
     <DesignerContext.Provider
       value={{
         dataSchema,
         uiSchema,
         addElementSchemas,
+        addElementBefore,
+        addElementAfter,
         removeElement,
         removeLayout,
       }}

@@ -181,10 +181,9 @@ const FormRenderer = ({
   isDesigner = true,
 }: {
   dataSchema: DataSchema;
-  uiSchema: UISchema;
+  uiSchema?: UISchema;
   isDesigner: boolean;
 }) => {
-  console.log('🚀 ~ file: FormRenderer.tsx:157 ~ isDesigner:', isDesigner);
   return (
     <div>
       {dataSchema &&

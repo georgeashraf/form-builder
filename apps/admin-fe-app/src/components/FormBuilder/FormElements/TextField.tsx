@@ -22,7 +22,7 @@ export const TextFieldFormElement: FormElement = {
         key,
         type: 'Control',
         label: '',
-        scope: '#/properties/first',
+        scope: `#/properties/${key}`,
       },
     },
   }),

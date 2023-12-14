@@ -113,3 +113,37 @@ export function removePropertyByPath(obj: any, path: string, isRoot = true) {
   }
   return obj;
 }
+
+export function addPropertyByPath(
+  obj: any,
+  path: string,
+  element: DataSchema | UISchema,
+  isRoot = true
+) {
+  if (isRoot) {
+    //  root object
+    if (obj.hasOwnProperty(path)) {
+      Array.isArray(obj) ? obj.push(element) : (obj[path] = element);
+      return obj;
+    }
+  }
+  const p = path.split('/');
+  const first = p.shift();
+  for (var i in obj) {
+    console.log(obj);
+
+    if (!obj.hasOwnProperty(i)) continue;
+    if (i == first) {
+      if (p.length === 0) {
+        if (parseInt(first) !== NaN && Array.isArray(obj)) {
+          obj.push(element);
+        } else {
+          obj[first] = element;
+        }
+      } else if (typeof obj[i] == 'object') {
+        addPropertyByPath(obj[i], p.join('/'), element, false);
+      }
+    }
+  }
+  return obj;
+}

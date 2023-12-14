@@ -8,9 +8,15 @@ import FormRenderer from './Renderers/FormRenderer';
 import FormPreview from './FormPreview';
 const Designer = () => {
   const uniqueId = new ShortUniqueId({ length: 16 });
-  const { dataSchema, uiSchema, addElementSchemas } = useDesigner();
+  const {
+    dataSchema,
+    uiSchema,
+    addElementSchemas,
+    addElementBefore,
+    addElementAfter,
+  } = useDesigner();
   const dropZone = useDroppable({
-    id: uniqueId.rnd(),
+    id: `${uniqueId.rnd()}-drop-zone`,
     data: {
       isDesignerDropZone: true,
     },
@@ -27,8 +33,27 @@ const Designer = () => {
         const newElement = FormElements[type as ElementsType].construct(
           uniqueId.rnd()
         );
-        // addElement(0, newElement);
-        addElementSchemas(over.id, newElement);
+        if (typeof over.id === 'string' && over.id.includes('drop-zone')) {
+          addElementSchemas(newElement);
+        }
+        if (
+          typeof over.id === 'string' &&
+          (over.id.includes('top') || over.id.includes('left'))
+        ) {
+          const parentKey = over.id.includes('top')
+            ? over.id.replace('-top', '')
+            : over.id.replace('-left', '');
+          addElementBefore(newElement, parentKey);
+        }
+        if (
+          typeof over.id === 'string' &&
+          (over.id.includes('bottom') || over.id.includes('right'))
+        ) {
+          const parentKey = over.id.includes('bottom')
+            ? over.id.replace('-bottom', '')
+            : over.id.replace('-right', '');
+          addElementAfter(newElement, parentKey);
+        }
       }
     },
   });
@@ -52,13 +77,6 @@ const Designer = () => {
               <div className="h-[120px] rounded-md bg-white"></div>
             </div>
           )}
-          {/* {elements.length > 0 && (
-            <div className="flex flex-col w-full h-full gap-2 p-4">
-              {elements.map((element) => (
-                <DesignerElementWrapper key={element.id} element={element} />
-              ))}
-            </div>
-          )} */}
           <div>
             <FormRenderer
               dataSchema={dataSchema}
