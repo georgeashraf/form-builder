@@ -15,9 +15,7 @@ export const HorizontalLayoutElement: FormElement = {
     key,
     type: 'Layout',
     subtype: 'HorizontalLayout',
-    extraAttributes: {
-      uiSchema: { key, type: 'HorizontalLayout', elements: [] },
-    },
+    uiSchema: { key, type: 'HorizontalLayout', elements: [] },
   }),
   designerBtnElement: {
     icon: TextAlignCenterIcon,

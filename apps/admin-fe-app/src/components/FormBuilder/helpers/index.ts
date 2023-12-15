@@ -1,9 +1,9 @@
-import { DataSchema, UISchema } from '../types';
+import { DataSchema, SchemaProperty, SchemaPropertyBody, UISchema } from '../types';
 
 export function findPropertyFromScope(
   scope: string,
   dataSchema: DataSchema
-): Partial<DataSchema> | null {
+): SchemaPropertyBody | null {
   const s = scope.split('/');
   const first = s.shift();
   if (!first) {
@@ -117,21 +117,20 @@ export function removePropertyByPath(obj: any, path: string, isRoot = true) {
 export function addPropertyByPath(
   obj: any,
   path: string,
-  element: DataSchema | UISchema,
+  element: SchemaProperty | UISchema,
   isRoot = true
 ) {
   if (isRoot) {
     //  root object
     if (obj.hasOwnProperty(path)) {
-      Array.isArray(obj) ? obj.push(element) : (obj[path] = element);
+      //@ts-ignore
+      Array.isArray(obj) ? obj.push(element) : (obj[path] = {...obj[path], ...element});
       return obj;
     }
   }
   const p = path.split('/');
   const first = p.shift();
   for (var i in obj) {
-    console.log(obj);
-
     if (!obj.hasOwnProperty(i)) continue;
     if (i == first) {
       if (p.length === 0) {

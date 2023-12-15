@@ -12,29 +12,30 @@ export type SchemaPrimitiveType =
   | 'boolean'
   | 'null';
 
-export type SchemaProperty = {
-  [key: string]: {
-    type: SchemaPrimitiveType | SchemaPrimitiveType[];
-    description?: string;
-    properties?: SchemaProperty;
-    items?: { type: SchemaPrimitiveType | SchemaPrimitiveType[] };
-    minItems?: number;
-    maxItems?: number;
-    uniqueItems?: boolean;
-    required?: string[];
-    enum?: SchemaPrimitiveType[];
-    multipleOf?: number;
-    maximum?: number;
-    exclusiveMaximum?: number;
-    minimum?: number;
-    exclusiveMinimum?: number;
-    maxLength?: number;
-    minLenght?: number;
-    pattern?: string;
-    dependentRequired?: {
-      [key: string]: string[];
-    };
+export type SchemaPropertyBody = {
+  type: SchemaPrimitiveType | SchemaPrimitiveType[];
+  description?: string;
+  properties?: SchemaProperty;
+  items?: { type: SchemaPrimitiveType | SchemaPrimitiveType[] };
+  minItems?: number;
+  maxItems?: number;
+  uniqueItems?: boolean;
+  required?: string[];
+  enum?: SchemaPrimitiveType[];
+  multipleOf?: number;
+  maximum?: number;
+  exclusiveMaximum?: number;
+  minimum?: number;
+  exclusiveMinimum?: number;
+  maxLength?: number;
+  minLenght?: number;
+  pattern?: string;
+  dependentRequired?: {
+    [key: string]: string[];
   };
+};
+export type SchemaProperty = {
+  [key: string]: SchemaPropertyBody;
 };
 export type DataSchema = {
   $schema?: string;
@@ -75,7 +76,8 @@ export type FormElementInstance = {
   key: string;
   type: 'Input' | 'Layout';
   subtype: ElementsType;
-  extraAttributes?: Record<string, any>;
+  uiSchema: UISchema;
+  dataSchema?: SchemaProperty;
 };
 type FormElementsType = {
   [key in ElementsType]: FormElement;

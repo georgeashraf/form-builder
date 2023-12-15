@@ -6,9 +6,10 @@ import {
   ElementsType,
   FormElement,
   FormElements,
+  SchemaProperty,
   UISchema,
 } from '../types';
-import { findPropertyFromScope } from '../utils';
+import { findPropertyFromScope } from '../helpers';
 
 const testSchema = {
   type: 'VerticalLayout',
@@ -85,7 +86,7 @@ const renderElements = (
               key: el.key,
               type: 'Layout',
               subtype: 'VerticalLayout',
-              extraAttributes: { uiSchema: el },
+              uiSchema: el,
             }}
             cols={el?.elements?.length}
           >
@@ -100,7 +101,7 @@ const renderElements = (
               key: el.key,
               type: 'Layout',
               subtype: 'VerticalLayout',
-              extraAttributes: { uiSchema: el },
+              uiSchema: el,
             }}
           >
             {el?.elements?.length
@@ -118,7 +119,7 @@ const renderElements = (
               key: el.key,
               type: 'Layout',
               subtype: 'HorizontalLayout',
-              extraAttributes: { uiSchema: el },
+              uiSchema: el,
             }}
             cols={el?.elements?.length}
           >
@@ -133,7 +134,7 @@ const renderElements = (
               key: el.key,
               type: 'Layout',
               subtype: 'HorizontalLayout',
-              extraAttributes: { uiSchema: el },
+              uiSchema: el,
             }}
           >
             {' '}
@@ -144,18 +145,22 @@ const renderElements = (
         );
       case 'Control':
         const scope = el.scope;
-        const elementDataSchema = findPropertyFromScope(
+        const elementSchemaProperties = findPropertyFromScope(
           scope || '',
           dataSchema as DataSchema
         );
+        const elementDataSchema = {
+          [el.key]: elementSchemaProperties,
+        } as SchemaProperty;
         let element;
-        switch (elementDataSchema?.type) {
+        switch (elementSchemaProperties?.type) {
           case 'string':
             element = {
               key: el.key,
               type: 'Input' as 'Input',
               subtype: 'TextField' as ElementsType,
-              extraAttributes: { dataSchema: elementDataSchema, uiSchema: el },
+              dataSchema: elementDataSchema,
+              uiSchema: el,
             };
             break;
 

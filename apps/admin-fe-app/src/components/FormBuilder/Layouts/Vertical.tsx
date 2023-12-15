@@ -16,9 +16,7 @@ export const VerticalLayoutElement: FormElement = {
     key,
     type: 'Layout',
     subtype: 'VerticalLayout',
-    extraAttributes: {
-      uiSchema: { key, type: 'VerticalLayout', elements: [] },
-    },
+    uiSchema: { key, type: 'VerticalLayout', elements: [] },
   }),
   designerBtnElement: {
     icon: TextAlignCenterIcon,

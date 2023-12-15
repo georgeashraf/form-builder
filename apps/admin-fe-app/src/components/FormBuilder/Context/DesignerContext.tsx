@@ -6,7 +6,7 @@ import {
   SchemaPrimitiveType,
   UISchema,
 } from '../types';
-import { addPropertyByPath, findPath, removePropertyByPath } from '../utils';
+import { addPropertyByPath, findPath, removePropertyByPath } from '../helpers';
 
 type DesignerContextType = {
   dataSchema: DataSchema;
@@ -86,33 +86,32 @@ export default function DesignerContextProvider({
     }
   };
   const addElementSchemas = (element: FormElementInstance) => {
-    if (element.type === 'Input') {
-      setDataSchema((prev) => {
-        return {
-          ...prev,
-          properties: {
-            ...prev.properties,
-            [element.key]: element.extraAttributes?.dataSchema,
-          },
-        };
-      });
-    }
-
     if (uiSchema === undefined) {
-      setUISchema(element.extraAttributes?.uiSchema);
+      setUISchema(element.uiSchema);
     }
     if (uiSchema !== undefined && Object.keys(uiSchema).length) {
-      if (element.extraAttributes) {
-        element.extraAttributes.uiSchema.scope = `#/properties/${element.key}`;
-      }
+      // if (element.uiSchema) {
+      //   element.uiSchema.scope = `#/properties/${element.uiSchema.key}`;
+      // }
       setUISchema((prev) => {
         if (prev)
           return {
             ...prev,
             elements: prev?.elements
-              ? [...prev.elements, element.extraAttributes?.uiSchema]
-              : [element.extraAttributes?.uiSchema],
+              ? [...prev.elements, element.uiSchema]
+              : [element.uiSchema],
           };
+      });
+    }
+    if (element.type === 'Input' && element.dataSchema) {
+      setDataSchema((prev) => {
+        return {
+          ...prev,
+          properties: {
+            ...prev.properties,
+            ...element.dataSchema!,
+          },
+        };
       });
     }
   };
@@ -121,7 +120,10 @@ export default function DesignerContextProvider({
     keyOfElementBefore: string
   ) => {
     let dataSchemaControlPath = findPath(dataSchema, 'key', keyOfElementBefore);
-    dataSchemaControlPath = dataSchemaControlPath?.replace('/key', '');
+    dataSchemaControlPath = dataSchemaControlPath?.replace(
+      `/${keyOfElementBefore}/key`,
+      ''
+    );
     dataSchemaControlPath = dataSchemaControlPath?.replace('/', '');
 
     let uiSchemaControlPath = findPath(uiSchema, 'key', keyOfElementBefore);
@@ -130,20 +132,12 @@ export default function DesignerContextProvider({
     const newDataSchema = addPropertyByPath(
       dataSchema,
       dataSchemaControlPath!,
-      element.extraAttributes?.dataSchema
-    );
-    console.log(
-      '🚀 ~ file: DesignerContext.tsx:136 ~ newDataSchema:',
-      newDataSchema
+      element?.dataSchema!
     );
     const newUISchema = addPropertyByPath(
       uiSchema,
       uiSchemaControlPath!,
-      element.extraAttributes?.uiSchema
-    );
-    console.log(
-      '🚀 ~ file: DesignerContext.tsx:142 ~ newUISchema:',
-      newUISchema
+      element?.uiSchema
     );
     setDataSchema(newDataSchema);
     setUISchema(newUISchema);

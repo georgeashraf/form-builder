@@ -8,8 +8,8 @@ export const TextFieldFormElement: FormElement = {
     key,
     type: 'Input',
     subtype: 'TextField',
-    extraAttributes: {
-      dataSchema: {
+    dataSchema: {
+      [key]: {
         key,
         type: 'string',
         pattern: '',
@@ -18,12 +18,12 @@ export const TextFieldFormElement: FormElement = {
         minLength: 1,
         errorMessage: { type: 'foo must be an Integer' },
       },
-      uiSchema: {
-        key,
-        type: 'Control',
-        label: '',
-        scope: `#/properties/${key}`,
-      },
+    },
+    uiSchema: {
+      key,
+      type: 'Control',
+      label: '',
+      scope: `#/properties/${key}`,
     },
   }),
   designerBtnElement: {
@@ -42,20 +42,13 @@ function DesignerComponent({
 }) {
   return (
     <div className="flex flex-col gap-2 w-full">
-      <Label variant={'base'}>
-        {elementInstance.extraAttributes?.uiSchema.key}
-        {elementInstance.extraAttributes?.required && '*'}
-      </Label>
-      <Input
-        readOnly
-        disabled
-        placeholder={elementInstance.extraAttributes?.placeholder}
-      />
-      {elementInstance.extraAttributes?.helperText && (
+      <Label variant={'base'}>{elementInstance.uiSchema.key}</Label>
+      <Input readOnly disabled placeholder={'placeholder'} />
+      {/* {elementInstance.helperText && (
         <p className="text-muted-foreground text-[0.8rem]">
-          {elementInstance.extraAttributes?.helperText}
+          {elementInstance.helperText}
         </p>
-      )}
+      )} */}
     </div>
   );
 }
@@ -68,15 +61,15 @@ function FormComponent({
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label>
-        {elementInstance.extraAttributes?.uiSchema.key}
-        {/* {elementInstance.extraAttributes?.required && '*'} */}
+        {elementInstance.uiSchema.key}
+        {/* {elementInstance.required && '*'} */}
       </Label>
-      <Input  placeholder={elementInstance.extraAttributes?.uiSchema.key} />
-      {elementInstance.extraAttributes?.helperText && (
+      <Input placeholder={elementInstance.uiSchema.key} />
+      {/* {elementInstance.helperText && (
         <p className="text-muted-foreground text-[0.8rem]">
-          {elementInstance.extraAttributes?.helperText}
+          {elementInstance.helperText}
         </p>
-      )}
+      )} */}
     </div>
   );
 }
