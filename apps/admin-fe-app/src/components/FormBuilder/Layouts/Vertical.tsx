@@ -20,7 +20,7 @@ export const VerticalLayoutElement: FormElement = {
   }),
   designerBtnElement: {
     icon: TextAlignCenterIcon,
-    label: 'Horizontal',
+    label: 'Vertical',
   },
   designerComponent: DesignerComponent,
 
@@ -58,7 +58,7 @@ function DesignerComponent({
       </TooltipProvider>
 
       <div
-        className={`flex flex-col flex-grow items-start gap-4 justify-between flex-1  border-slate-400 border-4 hover:bg-transparent `}
+        className={`flex flex-col  items-start gap-4 justify-between flex-1  border-primary border-4 hover:bg-transparent `}
       >
         {children}
       </div>

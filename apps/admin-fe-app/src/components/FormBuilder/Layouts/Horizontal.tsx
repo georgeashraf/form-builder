@@ -57,7 +57,7 @@ function DesignerComponent({
       </TooltipProvider>
 
       <div
-        className={`flex flex-row flex-grow items-start gap-4 justify-between flex-1 border-slate-400 border-4	hover:bg-transparent `}
+        className={`flex flex-row min-h-[100px] w-full items-start gap-4 justify-between flex-1 border-primary border-4	hover:bg-transparent `}
       >
         {children}
       </div>
