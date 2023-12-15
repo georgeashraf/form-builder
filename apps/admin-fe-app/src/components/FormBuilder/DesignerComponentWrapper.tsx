@@ -59,7 +59,7 @@ const DesignerComponentWrapper = ({
       {...draggable.listeners}
       {...draggable.attributes}
       className={cn(
-        'relative flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset',
+        'relative flex flex-col  hover:cursor-pointer rounded-md ring-1 ring-primary ring-inset',
         element.type === 'Layout' ? 'h-full' : 'h-[120px]'
       )}
       onMouseEnter={() => setMouseIsOver(true)}
@@ -67,7 +67,7 @@ const DesignerComponentWrapper = ({
     >
       <div
         ref={top.setNodeRef}
-        className="absolute w-full h-1/2 bg-green rounded-t-md"
+        className="absolute w-full h-1/2 rounded-t-md"
       />
       <div
         ref={bottom.setNodeRef}
@@ -100,14 +100,14 @@ const DesignerComponentWrapper = ({
         </>
       )}
       {top.isOver && (
-        <div className="absolute top-0 w-full rounded-md h-[7px] bg-green-900 rounded-b-none" />
+        <div className="absolute top-0 w-full rounded-md h-[7px] bg-accent rounded-b-none" />
       )}
       {left.isOver && (
-        <div className="absolute left-0 h-full rounded-md w-[7px] bg-green-900  " />
+        <div className="absolute left-0 h-full rounded-md w-[7px] bg-accent  " />
       )}
       <div
         className={cn(
-          'flex w-full items-center rounded-md bg-accent px-4 py-2 pointer-events-none opacity-100',
+          'flex w-full items-center rounded-md bg-primary  px-4 py-2 pointer-events-none opacity-100',
           mouseIsOver && 'opacity-30',
           element.type === 'Layout' ? 'h-full' : 'h-[120px]'
         )}
@@ -115,10 +115,10 @@ const DesignerComponentWrapper = ({
         <DesignerElement elementInstance={element} />
       </div>
       {bottom.isOver && (
-        <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-green-900 rounded-t-none" />
+        <div className="absolute bottom-0 w-full rounded-md h-[7px] bg-accent rounded-t-none" />
       )}
       {right.isOver && (
-        <div className="absolute right-0 h-full rounded-md w-[7px] bg-green-900  " />
+        <div className="absolute right-0 h-full rounded-md w-[7px] bg-accent  " />
       )}
     </div>
   );

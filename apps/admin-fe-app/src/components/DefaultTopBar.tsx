@@ -5,8 +5,8 @@ interface TopBarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 const DefaultTopBar = ({ switchTheme }: TopBarProps) => {
   return (
-    <div className="fixed w-full z-30 flex bg-gray-200 p-2 items-center justify-center h-16 px-10">
-      <div className="logo ml-12 dark:text-white  transform ease-in-out duration-500 flex-none h-full flex items-center justify-center">
+    <div className="fixed w-full z-30 flex bg-background p-2 items-center justify-center h-16 px-10">
+      <div className="logo ml-12  transform ease-in-out duration-500 flex-none h-full flex items-center justify-center">
         LOGO HERE
       </div>
       <div className="grow h-full flex items-center justify-center"></div>
@@ -21,7 +21,7 @@ const DefaultTopBar = ({ switchTheme }: TopBarProps) => {
             </div>
           </div>
 
-          <div className="hidden md:block text-sm md:text-md text-black dark:text-white">
+          <div className="hidden md:block text-sm md:text-md text-black">
             <ThemeSwitcher switchTheme={switchTheme} />
           </div>
         </div>

@@ -58,7 +58,7 @@ const Designer = () => {
     },
   });
   return (
-    <div className="flex w-full h-full">
+    <div className="flex w-full h-full ">
       <div className="p-4 w-full">
         <div
           ref={dropZone.setNodeRef}
@@ -68,7 +68,7 @@ const Designer = () => {
           )}
         >
           {!dropZone.isOver && !uiSchema && (
-            <p className="text-3xl text-muted-foreground flex flex-grow items-center font-bold">
+            <p className="text-3xl mx-80 text-muted-foreground flex flex-grow items-center font-bold">
               Drop components
             </p>
           )}

@@ -39,14 +39,26 @@
 
 @layer base {
   :root {
-    --text: #08070e;
+    /* --text: #08070e;
     --background: #dee7ed;
     --primary: #27374e;
     --secondary: #526e84;
     --accent: #7eadc9;
+    --transparent: rgba(0, 0, 0, 0.125); */
+
+    --text: 249deg 33% 4%;
+    --background: 204deg 29.4% 90%;
+    --primary: 217deg 33% 33%;
+    --secondary: 199deg 98% 48%;
+    --accent: 37deg 91% 60%;
+    --base-100: 220deg 14% 96%;
+    --info: 212deg 96% 78%;
+    --success: 158deg 64% 52%;
+    --warning: 33deg 100% 45%;
+    --error: 0deg 91% 71%;
     --transparent: rgba(0, 0, 0, 0.125);
   }
-
+  /* 
   @media (prefers-color-schema: dark) {
     :root {
       --text: #f2f1f8;
@@ -65,5 +77,5 @@
     --secondary: #7b97ad;
     --accent: #366681;
     --transparent: rgba(0, 0, 0, 0.03);
-  }
+  } */
 }

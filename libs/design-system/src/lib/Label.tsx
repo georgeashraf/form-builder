@@ -10,6 +10,7 @@ const labelVariants = cva(
       variant: {
         default: 'text-text',
         error: 'text-error',
+        base: 'text-base-100'
       },
       size: {
         default: '',
