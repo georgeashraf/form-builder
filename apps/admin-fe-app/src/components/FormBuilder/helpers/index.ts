@@ -1,4 +1,9 @@
-import { DataSchema, SchemaProperty, SchemaPropertyBody, UISchema } from '../types';
+import {
+  DataSchema,
+  SchemaProperty,
+  SchemaPropertyBody,
+  UISchema,
+} from '../types';
 
 export function findPropertyFromScope(
   scope: string,
@@ -116,33 +121,58 @@ export function removePropertyByPath(obj: any, path: string, isRoot = true) {
 
 export function addPropertyByPath(
   obj: any,
-  path: string,
+  parentPath: string,
   element: SchemaProperty | UISchema,
+  keyOfElementBefore: string,
+  position: 'before' | 'after',
   isRoot = true
 ) {
   if (isRoot) {
     //  root object
-    if (obj.hasOwnProperty(path)) {
-      //@ts-ignore
-      Array.isArray(obj) ? obj.push(element) : (obj[path] = {...obj[path], ...element});
+    if (obj.hasOwnProperty(parentPath)) {
+      Array.isArray(obj)
+        ? addElementInPosition(element, keyOfElementBefore, obj, position)
+        : (obj[parentPath] = { ...obj[parentPath], ...element });
       return obj;
     }
   }
-  const p = path.split('/');
+  const p = parentPath.split('/');
   const first = p.shift();
   for (var i in obj) {
     if (!obj.hasOwnProperty(i)) continue;
     if (i == first) {
       if (p.length === 0) {
         if (parseInt(first) !== NaN && Array.isArray(obj)) {
-          obj.push(element);
+          addElementInPosition(element, keyOfElementBefore, obj, position);
         } else {
-          obj[first] = element;
+          obj[first] = { ...obj[first], ...element };
         }
       } else if (typeof obj[i] == 'object') {
-        addPropertyByPath(obj[i], p.join('/'), element, false);
+        addPropertyByPath(
+          obj[i],
+          p.join('/'),
+          element,
+          keyOfElementBefore,
+          position,
+          false
+        );
       }
     }
   }
   return obj;
+}
+
+export function addElementInPosition(
+  element: SchemaProperty | UISchema,
+  adjacentElementKey: string,
+  parentElement: any[],
+  position: 'before' | 'after'
+) {
+  const pIndex = parentElement.findIndex((x) => x.key === adjacentElementKey);
+  if (position === 'before') {
+    parentElement.splice(pIndex, 0, element);
+  }
+  if (position === 'after') {
+    parentElement.splice(pIndex + 1, 0, element);
+  }
 }

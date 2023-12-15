@@ -14,13 +14,10 @@ type DesignerContextType = {
   addElementSchemas: (element: FormElementInstance) => void;
   removeElement: (key: string) => void;
   removeLayout: (key: string) => void;
-  addElementBefore: (
+  addElementInPosition: (
     element: FormElementInstance,
-    keyOfElementBefore: string
-  ) => void;
-  addElementAfter: (
-    element: FormElementInstance,
-    keyOfElementAfter: string
+    keyOfElementBefore: string,
+    position: 'before' | 'after'
   ) => void;
 };
 
@@ -115,9 +112,10 @@ export default function DesignerContextProvider({
       });
     }
   };
-  const addElementBefore = (
+  const addElementInPosition = (
     element: FormElementInstance,
-    keyOfElementBefore: string
+    keyOfElementBefore: string,
+    position: 'before' | 'after'
   ) => {
     let dataSchemaControlPath = findPath(dataSchema, 'key', keyOfElementBefore);
     dataSchemaControlPath = dataSchemaControlPath?.replace(
@@ -132,28 +130,27 @@ export default function DesignerContextProvider({
     const newDataSchema = addPropertyByPath(
       dataSchema,
       dataSchemaControlPath!,
-      element?.dataSchema!
+      element?.dataSchema!,
+      keyOfElementBefore,
+      position
     );
     const newUISchema = addPropertyByPath(
       uiSchema,
       uiSchemaControlPath!,
-      element?.uiSchema
+      element?.uiSchema,
+      keyOfElementBefore,
+      position
     );
     setDataSchema(newDataSchema);
     setUISchema(newUISchema);
   };
-  const addElementAfter = (
-    element: FormElementInstance,
-    keyOfElementAfter: string
-  ) => {};
   return (
     <DesignerContext.Provider
       value={{
         dataSchema,
         uiSchema,
         addElementSchemas,
-        addElementBefore,
-        addElementAfter,
+        addElementInPosition,
         removeElement,
         removeLayout,
       }}

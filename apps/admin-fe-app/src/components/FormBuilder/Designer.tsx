@@ -8,13 +8,8 @@ import FormRenderer from './Renderers/FormRenderer';
 import FormPreview from './FormPreview';
 const Designer = () => {
   const uniqueId = new ShortUniqueId({ length: 16 });
-  const {
-    dataSchema,
-    uiSchema,
-    addElementSchemas,
-    addElementBefore,
-    addElementAfter,
-  } = useDesigner();
+  const { dataSchema, uiSchema, addElementSchemas, addElementInPosition } =
+    useDesigner();
   const dropZone = useDroppable({
     id: `${uniqueId.rnd()}-drop-zone`,
     data: {
@@ -43,7 +38,7 @@ const Designer = () => {
           const parentKey = over.id.includes('top')
             ? over.id.replace('-top', '')
             : over.id.replace('-left', '');
-          addElementBefore(newElement, parentKey);
+          addElementInPosition(newElement, parentKey, 'before');
         }
         if (
           typeof over.id === 'string' &&
@@ -52,7 +47,7 @@ const Designer = () => {
           const parentKey = over.id.includes('bottom')
             ? over.id.replace('-bottom', '')
             : over.id.replace('-right', '');
-          addElementAfter(newElement, parentKey);
+          addElementInPosition(newElement, parentKey, 'after');
         }
       }
     },
