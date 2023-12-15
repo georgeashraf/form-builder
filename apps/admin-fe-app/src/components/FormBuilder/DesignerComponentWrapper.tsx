@@ -85,7 +85,7 @@ const DesignerComponentWrapper = ({
         <>
           <div className="absolute right-0 h-full">
             <Button
-              className="flex justify-center h-full border rounded-md rounded-l-none bg-red-500"
+              className="flex justify-center h-full border rounded-md rounded-l-none bg-error"
               variant={'outline'}
               onClick={() => removeElement(element.key)}
             >
@@ -93,8 +93,8 @@ const DesignerComponentWrapper = ({
             </Button>
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse">
-            <p className="text-muted-foreground text-sm">
-              Click For Properties
+            <p className="text-text text-md">
+              Click to Edit Properties
             </p>
           </div>
         </>
