@@ -1,11 +1,11 @@
 import DesignerSideBar from './DesignerSideBar';
 import { DragEndEvent, useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { cn } from '@engine/design-system';
-import useDesigner from './Hooks/useDesigner';
-import { ElementsType, FormElements } from './types';
+import useDesigner from '../Hooks/useDesigner';
+import { ElementsType, FormElements } from '../types';
 import ShortUniqueId from 'short-unique-id';
-import FormRenderer from './Renderers/FormRenderer';
-import FormPreview from './FormPreview';
+import FormRenderer from '../Renderers/FormRenderer';
+import FormPreview from '../FormPreview';
 const Designer = () => {
   const uniqueId = new ShortUniqueId({ length: 16 });
   const {

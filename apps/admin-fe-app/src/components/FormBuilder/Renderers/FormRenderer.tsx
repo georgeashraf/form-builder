@@ -1,5 +1,5 @@
-import DesignerComponentWrapper from '../DesignerComponentWrapper';
-import FormComponentWrapper from '../FormComponentWrapper';
+import DesignerComponentWrapper from '../Wrappers/DesignerComponentWrapper';
+import FormComponentWrapper from '../Wrappers/FormComponentWrapper';
 import {
   DataSchema,
   ElementsType,
@@ -8,7 +8,7 @@ import {
   UISchema,
 } from '../types';
 import { findPropertyFromScope } from '../helpers';
-import LayoutComponentWrapper from '../LayoutComponentWrapper';
+import LayoutComponentWrapper from '../Wrappers/LayoutComponentWrapper';
 
 const testSchema = {
   type: 'VerticalLayout',

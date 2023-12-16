@@ -2,8 +2,8 @@ import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { cn, Button } from '@engine/design-system';
 import { TrashIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import useDesigner from './Hooks/useDesigner';
-import { FormElementInstance, FormElements } from './types';
+import useDesigner from '../Hooks/useDesigner';
+import { FormElementInstance, FormElements } from '../types';
 const DesignerComponentWrapper = ({
   element,
 }: {

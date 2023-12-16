@@ -1,6 +1,6 @@
 import { Label } from '@engine/design-system';
 import { SidebarBtnElement } from './SidebarBtnElement';
-import { FormElements } from './types';
+import { FormElements } from '../types';
 
 const DesignerSideBar = () => {
   return (

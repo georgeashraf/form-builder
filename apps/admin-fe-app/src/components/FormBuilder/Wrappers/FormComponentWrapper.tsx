@@ -1,5 +1,5 @@
 import { cn } from '@engine/design-system';
-import { FormElementInstance, FormElements } from './types';
+import { FormElementInstance, FormElements } from '../types';
 const FormComponentWrapper = ({
   element,
 }: {

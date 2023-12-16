@@ -10,8 +10,8 @@ import {
 } from '@engine/design-system';
 import { Cross1Icon, MoveIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
-import useDesigner from './Hooks/useDesigner';
-import {FormElementInstance, FormElements } from './types';
+import useDesigner from '../Hooks/useDesigner';
+import {FormElementInstance, FormElements } from '../types';
 
 const LayoutComponentWrapper = ({
   element,

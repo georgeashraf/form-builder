@@ -1,5 +1,5 @@
 import { Button } from '@engine/design-system';
-import Designer from './Designer';
+import Designer from './Designer/Designer';
 import {
   DndContext,
   MouseSensor,
@@ -7,7 +7,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import DragOverlayWrapper from './DragOverlayWrapper';
+import DragOverlayWrapper from './Wrappers/DragOverlayWrapper';
 import FormSubmitionForm from './FormSubmitionForm';
 import DesignerContextProvider from './Context/DesignerContext';
 import { useNavigate } from 'react-router-dom';
