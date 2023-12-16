@@ -40,7 +40,7 @@ function DesignerComponent({
 
   return (
     <>
-      <TooltipProvider>
+      {/* <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <button
@@ -54,10 +54,10 @@ function DesignerComponent({
             <h1 className="text-white">{elementInstance.subtype}</h1>
           </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
+      </TooltipProvider> */}
 
       <div
-        className={`flex flex-row min-h-[100px] w-full items-start gap-4 justify-between flex-1 border-primary border-4	hover:bg-transparent `}
+        className={`flex flex-row min-h-[100px] w-full items-start gap-4 justify-between flex-1 border-primary border-4	 `}
       >
         {children}
       </div>

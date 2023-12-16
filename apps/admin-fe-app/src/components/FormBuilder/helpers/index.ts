@@ -1,5 +1,6 @@
 import {
   DataSchema,
+  FormElementInstance,
   SchemaProperty,
   SchemaPropertyBody,
   UISchema,
@@ -42,6 +43,28 @@ export function findUiElementByKey(
     }
   }
   return null;
+}
+
+export function UpdateUiElementByKey(
+  key: string,
+  uiSchema: UISchema,
+  element: FormElementInstance
+): UISchema {
+  if (!key) return uiSchema;
+
+  if (uiSchema.hasOwnProperty('key')) {
+    if (uiSchema['key'] === key) {
+      uiSchema.elements?.push(element.uiSchema);
+      return uiSchema;
+    } else {
+      if (uiSchema['elements'] && uiSchema['elements'].length) {
+        for (const schemaElement of uiSchema['elements']) {
+          UpdateUiElementByKey(key, schemaElement, element);
+        }
+      }
+    }
+  }
+  return uiSchema;
 }
 
 export function removeElementByKey(
@@ -128,11 +151,23 @@ export function addPropertyByPath(
   isRoot = true
 ) {
   if (isRoot) {
+    if (!parentPath) {
+      if (obj.hasOwnProperty('properties')) {
+        obj['properties'] = { ...obj['properties'], ...element };
+        return obj;
+      }
+      if (obj.hasOwnProperty('elements')) {
+        obj['elements'] = [...obj['elements'], element];
+        return obj;
+      }
+    }
     //  root object
     if (obj.hasOwnProperty(parentPath)) {
-      Array.isArray(obj)
-        ? addElementInPosition(element, keyOfElementBefore, obj, position)
-        : (obj[parentPath] = { ...obj[parentPath], ...element });
+      if (Array.isArray(obj)) {
+        addElementInPosition(element, keyOfElementBefore, obj, position);
+      } else {
+        obj[parentPath] = { ...obj[parentPath], ...element };
+      }
       return obj;
     }
   }
@@ -175,4 +210,59 @@ export function addElementInPosition(
   if (position === 'after') {
     parentElement.splice(pIndex + 1, 0, element);
   }
+}
+
+export function addElementInLayoutByPath(
+  obj: any,
+  layoutPath: string,
+  element: SchemaProperty | UISchema,
+  layoutKey: string,
+  isRoot = true
+) {
+  console.log('🚀 ~ file: index.ts:199 ~ layoutPath:', layoutPath);
+  console.log('🚀 ~ file: index.ts:199 ~ obj:', obj);
+  if (isRoot) {
+    if (!layoutPath) {
+      if (obj.hasOwnProperty('properties')) {
+        obj['properties'] = { ...obj['properties'], ...element };
+        return obj;
+      }
+      if (obj.hasOwnProperty('elements')) {
+        obj['elements'] = [...obj['elements'], element];
+        return obj;
+      }
+    }
+    //  root object
+    if (obj.hasOwnProperty(layoutPath)) {
+      if (Array.isArray(obj)) {
+        obj = [...obj, element];
+      } else {
+        obj[layoutPath] = { ...obj[layoutPath], ...element };
+      }
+      return obj;
+    }
+  }
+  const p = layoutPath.split('/');
+  const first = p.shift();
+  for (var i in obj) {
+    if (!obj.hasOwnProperty(i)) continue;
+    if (i == first) {
+      if (p.length === 0) {
+        if (parseInt(first) !== NaN && Array.isArray(obj)) {
+          obj = [...obj, element];
+        } else {
+          obj[first] = { ...obj[first], ...element };
+        }
+      } else if (typeof obj[i] == 'object') {
+        addElementInLayoutByPath(
+          obj[i],
+          p.join('/'),
+          element,
+          layoutKey,
+          false
+        );
+      }
+    }
+  }
+  return obj;
 }

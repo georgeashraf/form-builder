@@ -8,8 +8,15 @@ import FormRenderer from './Renderers/FormRenderer';
 import FormPreview from './FormPreview';
 const Designer = () => {
   const uniqueId = new ShortUniqueId({ length: 16 });
-  const { dataSchema, uiSchema, addElementSchemas, addElementInPosition } =
-    useDesigner();
+  const {
+    dataSchema,
+    uiSchema,
+    addElementSchemas,
+    addElementInPosition,
+    addElementInLayout,
+  } = useDesigner();
+  // console.log("🚀 ~ file: Designer.tsx:12 ~ Designer ~ uiSchema:", uiSchema)
+
   const dropZone = useDroppable({
     id: `${uniqueId.rnd()}-drop-zone`,
     data: {
@@ -30,6 +37,11 @@ const Designer = () => {
         );
         if (typeof over.id === 'string' && over.id.includes('drop-zone')) {
           addElementSchemas(newElement);
+        }
+        if (typeof over.id === 'string' && over.id.includes('layout')) {
+          // console.log(over);
+          // addElementSchemas(newElement);
+          addElementInLayout(newElement, over.id.replace('-layout', ''));
         }
         if (
           typeof over.id === 'string' &&

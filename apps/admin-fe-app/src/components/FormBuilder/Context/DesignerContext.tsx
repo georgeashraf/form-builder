@@ -6,7 +6,13 @@ import {
   SchemaPrimitiveType,
   UISchema,
 } from '../types';
-import { addPropertyByPath, findPath, removePropertyByPath } from '../helpers';
+import {
+  addElementInLayoutByPath,
+  addPropertyByPath,
+  findPath,
+  removePropertyByPath,
+  UpdateUiElementByKey,
+} from '../helpers';
 
 type DesignerContextType = {
   dataSchema: DataSchema;
@@ -19,6 +25,7 @@ type DesignerContextType = {
     keyOfElementBefore: string,
     position: 'before' | 'after'
   ) => void;
+  addElementInLayout: (element: FormElementInstance, layoutKey: string) => void;
 };
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -37,7 +44,42 @@ export default function DesignerContextProvider({
   };
   const [dataSchema, setDataSchema] = useState<DataSchema>(baseDataSchema);
   const [uiSchema, setUISchema] = useState<UISchema | undefined>();
+  const uSchema = {
+    key: 'rkBMY92EH6Li9RA2',
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        key: '2O9atN2dLWxaYpS6',
+        type: 'HorizontalLayout',
+        elements: [],
+      },
+    ],
+  };
+  const element = {
+    key: 'JqgXfhNwWlKkq8N8',
+    type: 'Control',
+    label: '',
+    scope: '#/properties/JqgXfhNwWlKkq8N8',
+  };
+  const parent = '2O9atN2dLWxaYpS6';
 
+  const wrong = {
+    key: 'rkBMY92EH6Li9RA2',
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        key: '2O9atN2dLWxaYpS6',
+        type: 'HorizontalLayout',
+        elements: [],
+      },
+      {
+        key: 'JqgXfhNwWlKkq8N8',
+        type: 'Control',
+        label: '',
+        scope: '#/properties/JqgXfhNwWlKkq8N8',
+      },
+    ],
+  };
   const removeElement = (key: string) => {
     let dataSchemaControlPath = findPath(dataSchema, 'key', key);
     dataSchemaControlPath = dataSchemaControlPath?.replace('/key', '');
@@ -117,23 +159,10 @@ export default function DesignerContextProvider({
     keyOfElementBefore: string,
     position: 'before' | 'after'
   ) => {
-    let dataSchemaControlPath = findPath(dataSchema, 'key', keyOfElementBefore);
-    dataSchemaControlPath = dataSchemaControlPath?.replace(
-      `/${keyOfElementBefore}/key`,
-      ''
-    );
-    dataSchemaControlPath = dataSchemaControlPath?.replace('/', '');
-
     let uiSchemaControlPath = findPath(uiSchema, 'key', keyOfElementBefore);
-    uiSchemaControlPath = uiSchemaControlPath?.replace('/', '');
     uiSchemaControlPath = uiSchemaControlPath?.replace('/key', '');
-    const newDataSchema = addPropertyByPath(
-      dataSchema,
-      dataSchemaControlPath!,
-      element?.dataSchema!,
-      keyOfElementBefore,
-      position
-    );
+    uiSchemaControlPath = uiSchemaControlPath?.replace('/', '');
+
     const newUISchema = addPropertyByPath(
       uiSchema,
       uiSchemaControlPath!,
@@ -141,14 +170,66 @@ export default function DesignerContextProvider({
       keyOfElementBefore,
       position
     );
-    setDataSchema(newDataSchema);
+
     setUISchema(newUISchema);
+    if (element.dataSchema) {
+      let dataSchemaControlPath = findPath(
+        dataSchema,
+        'key',
+        keyOfElementBefore
+      );
+      dataSchemaControlPath = dataSchemaControlPath?.replace(
+        `/${keyOfElementBefore}/key`,
+        ''
+      );
+      dataSchemaControlPath = dataSchemaControlPath?.replace('/', '');
+
+      const newDataSchema = addPropertyByPath(
+        dataSchema,
+        dataSchemaControlPath!,
+        element?.dataSchema!,
+        keyOfElementBefore,
+        position
+      );
+
+      setDataSchema(newDataSchema);
+    }
   };
+
+  const addElementInLayout = (
+    element: FormElementInstance,
+    layoutKey: string
+  ) => {
+    let uiSchemaLayoutPath = findPath(uiSchema, 'key', layoutKey);
+    uiSchemaLayoutPath = uiSchemaLayoutPath?.replace('/key', '');
+    uiSchemaLayoutPath = uiSchemaLayoutPath?.replace('/', '');
+
+    const newUISchema = UpdateUiElementByKey(
+      layoutKey,
+      uiSchema!,
+      element
+    );
+  
+    setUISchema(newUISchema);
+    if (element.type === 'Input' && element.dataSchema) {
+      setDataSchema((prev) => {
+        return {
+          ...prev,
+          properties: {
+            ...prev.properties,
+            ...element.dataSchema!,
+          },
+        };
+      });
+    }
+  };
+
   return (
     <DesignerContext.Provider
       value={{
         dataSchema,
         uiSchema,
+        addElementInLayout,
         addElementSchemas,
         addElementInPosition,
         removeElement,
