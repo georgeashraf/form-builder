@@ -37,28 +37,10 @@ function DesignerComponent({
   cols?: number;
   children?: ReactNode;
 }) {
-  const { removeLayout } = useDesigner();
-
   return (
     <>
-      {/* <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={() => removeLayout(elementInstance.key)}
-              className=" flex ml-1 w-5 h-5 items-center justify-center -top-1 -right-1 rounded-full bg-black"
-            >
-              <Cross1Icon className="" width={10} height={10} stroke="white" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <h1 className="text-white">{elementInstance.subtype}</h1>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider> */}
-
       <div
-        className={`flex flex-col  items-start gap-4 justify-between flex-1  border-primary border-4 hover:bg-transparent `}
+        className={`flex flex-col min-h-[150px]  items-start gap-4 justify-between flex-1  border-primary border-4  `}
       >
         {children}
       </div>
