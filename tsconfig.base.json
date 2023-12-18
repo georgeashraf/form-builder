@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@engine/design-system": ["libs/design-system/src/index.ts"],
+      "@engine/parser-combinator": ["libs/parser-combinator/src/index.ts"],
       "@engine/shared-types": ["libs/shared-types/src/index.ts"]
     }
   },
