@@ -14,6 +14,8 @@ const Designer = () => {
     addElementSchemas,
     addElementInPosition,
     addElementInLayout,
+    selectedElement,
+    setSelectedElement,
   } = useDesigner();
   // console.log("🚀 ~ file: Designer.tsx:12 ~ Designer ~ uiSchema:", uiSchema)
 
@@ -66,7 +68,12 @@ const Designer = () => {
   });
   return (
     <div className="flex w-full h-full ">
-      <div className="p-4 w-full">
+      <div
+        className="p-4 w-full"
+        onClick={() => {
+          if (selectedElement) setSelectedElement(null);
+        }}
+      >
         <div
           ref={dropZone.setNodeRef}
           className={cn(

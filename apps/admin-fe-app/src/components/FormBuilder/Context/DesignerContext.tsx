@@ -1,4 +1,3 @@
-import { UniqueIdentifier } from '@dnd-kit/core';
 import { createContext, ReactNode, useState } from 'react';
 import {
   DataSchema,
@@ -7,7 +6,6 @@ import {
   UISchema,
 } from '../types';
 import {
-  addElementInLayoutByPath,
   addPropertyByPath,
   findPath,
   removePropertyByPath,
@@ -26,6 +24,10 @@ type DesignerContextType = {
     position: 'before' | 'after'
   ) => void;
   addElementInLayout: (element: FormElementInstance, layoutKey: string) => void;
+  selectedElement: FormElementInstance | null;
+  setSelectedElement: React.Dispatch<
+    React.SetStateAction<FormElementInstance | null>
+  >;
 };
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -44,42 +46,9 @@ export default function DesignerContextProvider({
   };
   const [dataSchema, setDataSchema] = useState<DataSchema>(baseDataSchema);
   const [uiSchema, setUISchema] = useState<UISchema | undefined>();
-  const uSchema = {
-    key: 'rkBMY92EH6Li9RA2',
-    type: 'HorizontalLayout',
-    elements: [
-      {
-        key: '2O9atN2dLWxaYpS6',
-        type: 'HorizontalLayout',
-        elements: [],
-      },
-    ],
-  };
-  const element = {
-    key: 'JqgXfhNwWlKkq8N8',
-    type: 'Control',
-    label: '',
-    scope: '#/properties/JqgXfhNwWlKkq8N8',
-  };
-  const parent = '2O9atN2dLWxaYpS6';
+  const [selectedElement, setSelectedElement] =
+    useState<FormElementInstance | null>(null);
 
-  const wrong = {
-    key: 'rkBMY92EH6Li9RA2',
-    type: 'HorizontalLayout',
-    elements: [
-      {
-        key: '2O9atN2dLWxaYpS6',
-        type: 'HorizontalLayout',
-        elements: [],
-      },
-      {
-        key: 'JqgXfhNwWlKkq8N8',
-        type: 'Control',
-        label: '',
-        scope: '#/properties/JqgXfhNwWlKkq8N8',
-      },
-    ],
-  };
   const removeElement = (key: string) => {
     let dataSchemaControlPath = findPath(dataSchema, 'key', key);
     dataSchemaControlPath = dataSchemaControlPath?.replace('/key', '');
@@ -204,12 +173,8 @@ export default function DesignerContextProvider({
     uiSchemaLayoutPath = uiSchemaLayoutPath?.replace('/key', '');
     uiSchemaLayoutPath = uiSchemaLayoutPath?.replace('/', '');
 
-    const newUISchema = UpdateUiElementByKey(
-      layoutKey,
-      uiSchema!,
-      element
-    );
-  
+    const newUISchema = UpdateUiElementByKey(layoutKey, uiSchema!, element);
+
     setUISchema(newUISchema);
     if (element.type === 'Input' && element.dataSchema) {
       setDataSchema((prev) => {
@@ -234,6 +199,8 @@ export default function DesignerContextProvider({
         addElementInPosition,
         removeElement,
         removeLayout,
+        selectedElement,
+        setSelectedElement,
       }}
     >
       {children}

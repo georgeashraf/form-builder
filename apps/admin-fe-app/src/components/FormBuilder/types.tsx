@@ -50,6 +50,7 @@ export type UISchema = {
   type: string;
   label?: string;
   scope?: string;
+  placeholder?: string;
   elements?: UISchema[];
 };
 export type FormElement = {
@@ -69,7 +70,9 @@ export type FormElement = {
     elementInstance: FormElementInstance;
     children?: ReactNode;
   }>;
-  // propertiesComponent: React.FC;
+  propertiesComponent: React.FC<{
+    elementInstance: FormElementInstance;
+  }>;
 };
 
 export type FormElementInstance = {

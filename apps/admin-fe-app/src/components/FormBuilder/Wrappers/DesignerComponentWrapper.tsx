@@ -9,7 +9,7 @@ const DesignerComponentWrapper = ({
 }: {
   element: FormElementInstance;
 }) => {
-  const { removeElement } = useDesigner();
+  const { removeElement, selectedElement, setSelectedElement } = useDesigner();
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const top = useDroppable({
     id: element.key + '-top',
@@ -64,6 +64,10 @@ const DesignerComponentWrapper = ({
       )}
       onMouseEnter={() => setMouseIsOver(true)}
       onMouseLeave={() => setMouseIsOver(false)}
+      onClick={(e) => {
+        e.stopPropagation();
+        setSelectedElement(element);
+      }}
     >
       <div
         ref={top.setNodeRef}
@@ -87,15 +91,17 @@ const DesignerComponentWrapper = ({
             <Button
               className="flex justify-center h-full border rounded-md rounded-l-none bg-error"
               variant={'outline'}
-              onClick={() => removeElement(element.key)}
+              onClick={(e) => {
+                e.stopPropagation();
+                removeElement(element.key);
+                setSelectedElement(null);
+              }}
             >
               <TrashIcon className="h-6 w-6" />
             </Button>
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse">
-            <p className="text-text text-md">
-              Click to Edit Properties
-            </p>
+            <p className="text-text text-md">Click to Edit Properties</p>
           </div>
         </>
       )}

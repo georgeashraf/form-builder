@@ -25,7 +25,7 @@ export const VerticalLayoutElement: FormElement = {
   designerComponent: DesignerComponent,
 
   formComponent: FormComponent,
-  //   propertiesComponent: () => <div>Designer component</div>,
+  propertiesComponent: () => <div>Designer component</div>,
 };
 
 function DesignerComponent({
