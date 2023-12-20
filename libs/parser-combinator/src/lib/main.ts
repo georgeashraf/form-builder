@@ -65,11 +65,15 @@ export function bind(p: any, fn: Function) {
 
 function memoize(fn: Function) {
   const cache = new Map();
-  const cached = function (this: any, val: any) {
-    return cache.has(val)
-      ? cache.get(val)
-      : cache.set(val, fn.call(this, val)) && cache.get(val);
+  return function (args: any) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      console.log('cache hit')
+      return cache.get(key);
+    }
+    //@ts-ignore
+    const result = fn.call(this, args);
+    cache.set(key, result);
+    return result;
   };
-  cached.cache = cache;
-  return cached;
 }
