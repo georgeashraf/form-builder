@@ -1,1 +1,1 @@
-export * from './lib/parser-combinator';
+export * from './lib/main';
