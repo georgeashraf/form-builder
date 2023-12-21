@@ -68,7 +68,48 @@ function memoize(fn: Function) {
   return function (args: any) {
     const key = JSON.stringify(args);
     if (cache.has(key)) {
-      console.log('cache hit')
+      return cache.get(key);
+    }
+    //@ts-ignore
+    const result = fn.call(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+type entry = { continuations: any[]; results: any[] };
+function memoizeCPS(fn: Function) {
+  const cache = new Map<string, entry>();
+  const pushCont = (entry: any, cont: Function) => {
+    entry.continuations.push(cont);
+    return entry;
+  };
+  const pushResult = (entry: any, result: any) => {
+    entry.results.push(result);
+    return entry;
+  };
+  const resultSubsumed = (entry: entry, result: any) => {
+    return entry.results.includes(result);
+  };
+  function makeEntry() {
+    return {
+      continuations: [],
+      results: [],
+    };
+  }
+  function tableRef(str: string) {
+    const entry = cache.get(str);
+    if (entry) {
+      return entry;
+    } else {
+      const newEntry = makeEntry();
+      cache.set(str, newEntry);
+      return newEntry;
+    }
+  }
+  return function (args: any) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      console.log('cache hit');
       return cache.get(key);
     }
     //@ts-ignore
