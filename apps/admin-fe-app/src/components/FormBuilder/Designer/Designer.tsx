@@ -41,8 +41,6 @@ const Designer = () => {
           addElementSchemas(newElement);
         }
         if (typeof over.id === 'string' && over.id.includes('layout')) {
-          // console.log(over);
-          // addElementSchemas(newElement);
           addElementInLayout(newElement, over.id.replace('-layout', ''));
         }
         if (

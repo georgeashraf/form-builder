@@ -48,6 +48,7 @@ export type DataSchema = {
 export type UISchema = {
   key: string;
   type: string;
+  name: string;
   label?: string;
   scope?: string;
   placeholder?: string;

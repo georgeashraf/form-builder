@@ -3,12 +3,14 @@ import {
   DataSchema,
   FormElementInstance,
   SchemaPrimitiveType,
+  SchemaProperty,
   UISchema,
 } from '../types';
 import {
   addPropertyByPath,
   findPath,
   removePropertyByPath,
+  updateElementProperties,
   UpdateUiElementByKey,
 } from '../helpers';
 
@@ -28,6 +30,7 @@ type DesignerContextType = {
   setSelectedElement: React.Dispatch<
     React.SetStateAction<FormElementInstance | null>
   >;
+  updateElementSchemas: (element: FormElementInstance) => void;
 };
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -189,6 +192,30 @@ export default function DesignerContextProvider({
     }
   };
 
+  const updateElementSchemas = (element: FormElementInstance) => {
+    let uiSchemaLayoutPath = findPath(uiSchema, 'key', element.key);
+    uiSchemaLayoutPath = uiSchemaLayoutPath?.replace('/key', '');
+    uiSchemaLayoutPath = uiSchemaLayoutPath?.replace('/', '');
+
+    let dataSchemaControlPath = findPath(dataSchema, 'key', element.key);
+    dataSchemaControlPath = dataSchemaControlPath?.replace('/key', '');
+    dataSchemaControlPath = dataSchemaControlPath?.replace('/', '');
+
+    const newUISchema = updateElementProperties(
+      uiSchema,
+      uiSchemaLayoutPath!,
+      element.uiSchema
+    );
+    const newDataSchema = updateElementProperties(
+      dataSchema,
+      dataSchemaControlPath!,
+      element.dataSchema
+    );
+
+    setUISchema(newUISchema);
+    setDataSchema(newDataSchema);
+    setSelectedElement(element);
+  };
   return (
     <DesignerContext.Provider
       value={{
@@ -201,6 +228,7 @@ export default function DesignerContextProvider({
         removeLayout,
         selectedElement,
         setSelectedElement,
+        updateElementSchemas,
       }}
     >
       {children}

@@ -67,16 +67,6 @@ export function UpdateUiElementByKey(
   return uiSchema;
 }
 
-export function removeElementByKey(
-  key: string,
-  uiSchema: UISchema,
-  dataSchema: DataSchema
-): { uiSchema: UISchema; dataSchema: DataSchema } | null {
-  if (!key) return null;
-
-  return null;
-}
-
 export function findPath(
   obj: any,
   name: string,
@@ -212,55 +202,22 @@ export function addElementInPosition(
   }
 }
 
-export function addElementInLayoutByPath(
-  obj: any,
-  layoutPath: string,
-  element: SchemaProperty | UISchema,
-  layoutKey: string,
-  isRoot = true
-) {
-  console.log('🚀 ~ file: index.ts:199 ~ layoutPath:', layoutPath);
-  console.log('🚀 ~ file: index.ts:199 ~ obj:', obj);
-  if (isRoot) {
-    if (!layoutPath) {
-      if (obj.hasOwnProperty('properties')) {
-        obj['properties'] = { ...obj['properties'], ...element };
-        return obj;
-      }
-      if (obj.hasOwnProperty('elements')) {
-        obj['elements'] = [...obj['elements'], element];
-        return obj;
-      }
-    }
-    //  root object
-    if (obj.hasOwnProperty(layoutPath)) {
-      if (Array.isArray(obj)) {
-        obj = [...obj, element];
-      } else {
-        obj[layoutPath] = { ...obj[layoutPath], ...element };
-      }
-      return obj;
-    }
-  }
-  const p = layoutPath.split('/');
+export function updateElementProperties(obj: any, path: string, newObj: any) {
+  const p = path.split('/');
   const first = p.shift();
   for (var i in obj) {
-    if (!obj.hasOwnProperty(i)) continue;
     if (i == first) {
       if (p.length === 0) {
-        if (parseInt(first) !== NaN && Array.isArray(obj)) {
-          obj = [...obj, element];
+        if (Array.isArray(obj)) {
+          obj[+first] = newObj;
         } else {
-          obj[first] = { ...obj[first], ...element };
+          delete Object.assign(obj, { [Object.keys(newObj)[0]]: obj[first] })[
+            first
+          ];
+          obj[Object.keys(newObj)[0]] = Object.values(newObj)[0];
         }
       } else if (typeof obj[i] == 'object') {
-        addElementInLayoutByPath(
-          obj[i],
-          p.join('/'),
-          element,
-          layoutKey,
-          false
-        );
+        updateElementProperties(obj[i], p.join('/'), newObj);
       }
     }
   }
