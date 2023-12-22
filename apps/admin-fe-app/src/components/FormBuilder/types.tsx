@@ -1,10 +1,16 @@
 import { ReactNode } from 'react';
 import { NumberFieldFormElement } from './FormElements/NumberField';
+import { TextAreaFieldFormElement } from './FormElements/TextArea';
 import { TextFieldFormElement } from './FormElements/TextField';
 import { HorizontalLayoutElement } from './Layouts/Horizontal';
 import { VerticalLayoutElement } from './Layouts/Vertical';
 
-export type ElementsType = 'TextField' | 'HorizontalLayout' | 'VerticalLayout' | 'NumberField';
+export type ElementsType =
+  | 'TextField'
+  | 'HorizontalLayout'
+  | 'VerticalLayout'
+  | 'NumberField'
+  | 'TextAreaField';
 export type SchemaPrimitiveType =
   | 'object'
   | 'array'
@@ -51,6 +57,7 @@ export type UISchema = {
   type: string;
   name: string;
   required?: boolean;
+  variant?: string;
   label?: string;
   scope?: string;
   placeholder?: string;
@@ -94,5 +101,5 @@ export const FormElements: FormElementsType = {
   HorizontalLayout: HorizontalLayoutElement,
   VerticalLayout: VerticalLayoutElement,
   NumberField: NumberFieldFormElement,
-
+  TextAreaField: TextAreaFieldFormElement,
 };

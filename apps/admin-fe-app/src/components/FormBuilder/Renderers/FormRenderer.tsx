@@ -99,7 +99,7 @@ const renderElements = (
             element = {
               key: el.key,
               type: 'Input' as 'Input',
-              subtype: 'TextField' as ElementsType,
+              subtype: el.variant === 'TextArea' ? 'TextAreaField' as ElementsType : 'TextField' as ElementsType ,
               dataSchema: elementDataSchema,
               uiSchema: el,
             };

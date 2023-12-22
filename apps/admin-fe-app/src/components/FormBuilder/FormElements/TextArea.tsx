@@ -1,5 +1,5 @@
-import { Input, Label, Switch } from '@engine/design-system';
-import { TextIcon } from '@radix-ui/react-icons';
+import { Input, Label, Switch, Textarea } from '@engine/design-system';
+import { TextAlignMiddleIcon } from '@radix-ui/react-icons';
 import { Controller, useForm } from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
 import {
@@ -9,20 +9,18 @@ import {
   UISchema,
 } from '../types';
 
-export const TextFieldFormElement: FormElement = {
-  type: 'TextField',
+export const TextAreaFieldFormElement: FormElement = {
+  type: 'TextAreaField',
   construct: (key: string) => ({
     key,
     type: 'Input',
-    subtype: 'TextField',
+    subtype: 'TextAreaField',
     dataSchema: {
       [key]: {
         key,
         type: 'string',
         pattern: '',
         description: 'This is Element Description',
-        maxLength: 255,
-        minLength: 1,
         errorMessage: { type: 'foo must be an Integer' },
       },
     },
@@ -31,15 +29,15 @@ export const TextFieldFormElement: FormElement = {
       type: 'Control',
       required: true,
       name: key,
-      variant: 'Text',
       label: '',
+      variant: 'TextArea',
       placeholder: 'Input Placeholder',
       scope: `#/properties/${key}`,
     },
   }),
   designerBtnElement: {
-    icon: TextIcon,
-    label: 'Text  Field',
+    icon: TextAlignMiddleIcon,
+    label: 'TextArea  field',
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
@@ -60,7 +58,7 @@ function DesignerComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <Input
+      <Textarea
         readOnly
         disabled
         placeholder={elementInstance.uiSchema.placeholder}
@@ -90,7 +88,9 @@ function FormComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <Input placeholder={elementInstance.uiSchema.placeholder} />
+      <Textarea
+        placeholder={elementInstance.uiSchema.placeholder}
+      />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-base-100 text-[0.8rem]">
