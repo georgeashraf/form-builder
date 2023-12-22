@@ -20,5 +20,4 @@ export * from './lib/VerticalLayout';
 export * from './lib/Spinner';
 export * from './lib/Skeleton';
 export * from './lib/Switch';
-
-
+export * from './lib/Progress';
