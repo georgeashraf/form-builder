@@ -30,6 +30,7 @@ export const TextAreaFieldFormElement: FormElement = {
       required: true,
       name: key,
       label: '',
+      rows: 1,
       variant: 'TextArea',
       placeholder: 'Input Placeholder',
       scope: `#/properties/${key}`,
@@ -62,6 +63,7 @@ function DesignerComponent({
         readOnly
         disabled
         placeholder={elementInstance.uiSchema.placeholder}
+        rows={elementInstance.uiSchema.rows}
       />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
@@ -90,6 +92,7 @@ function FormComponent({
       </Label>
       <Textarea
         placeholder={elementInstance.uiSchema.placeholder}
+        rows={elementInstance.uiSchema.rows}
       />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
@@ -224,6 +227,27 @@ function PropertiesComponent({
               <Input
                 {...field}
                 value={field.value}
+                placeholder="Placeholder"
+                className="w-full"
+              />
+              {fieldState.error?.message && (
+                <Label variant={'error'}>{fieldState.error?.message}</Label>
+              )}
+            </>
+          )}
+        />
+      </div>
+      <div className="flex flex-col">
+        <Label className="mb-2">Height</Label>
+        <Controller
+          name={`uiSchema.rows`}
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <>
+              <Input
+                {...field}
+                value={field.value}
+                type={'number'}
                 placeholder="Placeholder"
                 className="w-full"
               />

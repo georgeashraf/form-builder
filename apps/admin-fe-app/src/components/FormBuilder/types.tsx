@@ -58,6 +58,7 @@ export type UISchema = {
   name: string;
   required?: boolean;
   variant?: string;
+  rows?: number;
   label?: string;
   scope?: string;
   placeholder?: string;
