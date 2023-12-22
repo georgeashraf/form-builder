@@ -19,4 +19,6 @@ export * from './lib/HorizontalLayout';
 export * from './lib/VerticalLayout';
 export * from './lib/Spinner';
 export * from './lib/Skeleton';
+export * from './lib/Switch';
+
 
