@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
+import { NumberFieldFormElement } from './FormElements/NumberField';
 import { TextFieldFormElement } from './FormElements/TextField';
 import { HorizontalLayoutElement } from './Layouts/Horizontal';
 import { VerticalLayoutElement } from './Layouts/Vertical';
 
-export type ElementsType = 'TextField' | 'HorizontalLayout' | 'VerticalLayout';
+export type ElementsType = 'TextField' | 'HorizontalLayout' | 'VerticalLayout' | 'NumberField';
 export type SchemaPrimitiveType =
   | 'object'
   | 'array'
@@ -92,4 +93,6 @@ export const FormElements: FormElementsType = {
   TextField: TextFieldFormElement,
   HorizontalLayout: HorizontalLayoutElement,
   VerticalLayout: VerticalLayoutElement,
+  NumberField: NumberFieldFormElement,
+
 };

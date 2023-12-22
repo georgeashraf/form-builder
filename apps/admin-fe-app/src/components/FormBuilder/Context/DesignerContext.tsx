@@ -101,9 +101,6 @@ export default function DesignerContextProvider({
       setUISchema(element.uiSchema);
     }
     if (uiSchema !== undefined && Object.keys(uiSchema).length) {
-      // if (element.uiSchema) {
-      //   element.uiSchema.scope = `#/properties/${element.uiSchema.key}`;
-      // }
       setUISchema((prev) => {
         if (prev)
           return {

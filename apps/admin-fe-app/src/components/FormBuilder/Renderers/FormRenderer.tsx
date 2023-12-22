@@ -10,64 +10,6 @@ import {
 import { findPropertyFromScope } from '../helpers';
 import LayoutComponentWrapper from '../Wrappers/LayoutComponentWrapper';
 
-const testSchema = {
-  type: 'VerticalLayout',
-  key: 'jdudd',
-  elements: [
-    {
-      type: 'HorizontalLayout',
-      key: 'malii9a',
-      elements: [
-        {
-          type: 'Control',
-          key: 'noiau',
-          label: 'X1',
-          scope: '#/properties/firstName',
-        },
-        {
-          type: 'Control',
-          key: 'kapiej',
-          label: 'X2',
-          scope: '#/properties/lastName',
-        },
-      ],
-    },
-    {
-      type: 'HorizontalLayout',
-      key: 'aasueod',
-
-      elements: [
-        {
-          key: 'insos',
-          label: 'X3',
-          type: 'Control',
-          scope: '#/properties/firstName',
-        },
-        {
-          key: 'ndyusj',
-          label: 'X4',
-          type: 'Control',
-          scope: '#/properties/lastName',
-        },
-      ],
-    },
-  ],
-};
-const testDataSchema = {
-  type: 'object',
-  key: 'x',
-  properties: {
-    firstName: {
-      key: 'y',
-      type: 'string',
-    },
-    lastName: {
-      key: 'z',
-      type: 'string',
-    },
-  },
-};
-
 const renderElements = (
   item: UISchema[],
   dataSchema: DataSchema,
@@ -158,6 +100,15 @@ const renderElements = (
               key: el.key,
               type: 'Input' as 'Input',
               subtype: 'TextField' as ElementsType,
+              dataSchema: elementDataSchema,
+              uiSchema: el,
+            };
+            break;
+          case 'number':
+            element = {
+              key: el.key,
+              type: 'Input' as 'Input',
+              subtype: 'NumberField' as ElementsType,
               dataSchema: elementDataSchema,
               uiSchema: el,
             };

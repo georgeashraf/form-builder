@@ -1,5 +1,5 @@
 import { Input, Label, Switch } from '@engine/design-system';
-import { TextIcon } from '@radix-ui/react-icons';
+import { TextNoneIcon } from '@radix-ui/react-icons';
 import { Controller, useForm } from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
 import {
@@ -9,20 +9,18 @@ import {
   UISchema,
 } from '../types';
 
-export const TextFieldFormElement: FormElement = {
-  type: 'TextField',
+export const NumberFieldFormElement: FormElement = {
+  type: 'NumberField',
   construct: (key: string) => ({
     key,
     type: 'Input',
-    subtype: 'TextField',
+    subtype: 'NumberField',
     dataSchema: {
       [key]: {
         key,
-        type: 'string',
+        type: 'number',
         pattern: '',
         description: 'This is Element Description',
-        maxLength: 255,
-        minLength: 1,
         errorMessage: { type: 'foo must be an Integer' },
       },
     },
@@ -37,8 +35,8 @@ export const TextFieldFormElement: FormElement = {
     },
   }),
   designerBtnElement: {
-    icon: TextIcon,
-    label: 'Text  Field',
+    icon: TextNoneIcon,
+    label: 'Number  field',
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
@@ -62,6 +60,7 @@ function DesignerComponent({
       <Input
         readOnly
         disabled
+        type={'number'}
         placeholder={elementInstance.uiSchema.placeholder}
       />
       {elementInstance.dataSchema &&
@@ -89,7 +88,10 @@ function FormComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <Input placeholder={elementInstance.uiSchema.placeholder} />
+      <Input
+        type={'number'}
+        placeholder={elementInstance.uiSchema.placeholder}
+      />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-base-100 text-[0.8rem]">
@@ -244,6 +246,48 @@ function PropertiesComponent({
                 className=""
                 checked={field.value}
                 onCheckedChange={field.onChange}
+              />
+              {fieldState.error?.message && (
+                <Label variant={'error'}>{fieldState.error?.message}</Label>
+              )}
+            </>
+          )}
+        />
+      </div>
+      <div className="flex flex-col">
+        <Label className="mb-2">Minimum</Label>
+        <Controller
+          name={`dataSchema[${elementInstance.key}].minimum`}
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <>
+              <Input
+                {...field}
+                value={field.value}
+                type={'number'}
+                placeholder="Placeholder"
+                className="w-full"
+              />
+              {fieldState.error?.message && (
+                <Label variant={'error'}>{fieldState.error?.message}</Label>
+              )}
+            </>
+          )}
+        />
+      </div>
+      <div className="flex flex-col">
+        <Label className="mb-2">Maximum</Label>
+        <Controller
+          name={`dataSchema[${elementInstance.key}].maximum`}
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <>
+              <Input
+                {...field}
+                value={field.value}
+                type="number"
+                placeholder="Placeholder"
+                className="w-full"
               />
               {fieldState.error?.message && (
                 <Label variant={'error'}>{fieldState.error?.message}</Label>
