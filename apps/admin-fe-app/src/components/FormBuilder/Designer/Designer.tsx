@@ -17,7 +17,6 @@ const Designer = () => {
     selectedElement,
     setSelectedElement,
   } = useDesigner();
-  // console.log("🚀 ~ file: Designer.tsx:12 ~ Designer ~ uiSchema:", uiSchema)
 
   const dropZone = useDroppable({
     id: `${uniqueId.rnd()}-drop-zone`,

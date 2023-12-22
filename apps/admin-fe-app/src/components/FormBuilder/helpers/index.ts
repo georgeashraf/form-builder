@@ -119,7 +119,7 @@ export function removePropertyByPath(obj: any, path: string, isRoot = true) {
     if (!obj.hasOwnProperty(i)) continue;
     if (i == first) {
       if (p.length === 0) {
-        if (parseInt(first) !== NaN && Array.isArray(obj)) {
+        if (Array.isArray(obj)) {
           obj.splice(+first, 1);
         } else {
           delete obj[first];
@@ -167,7 +167,7 @@ export function addPropertyByPath(
     if (!obj.hasOwnProperty(i)) continue;
     if (i == first) {
       if (p.length === 0) {
-        if (parseInt(first) !== NaN && Array.isArray(obj)) {
+        if (Array.isArray(obj)) {
           addElementInPosition(element, keyOfElementBefore, obj, position);
         } else {
           obj[first] = { ...obj[first], ...element };

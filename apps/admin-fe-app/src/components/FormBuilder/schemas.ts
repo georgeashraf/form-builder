@@ -6,6 +6,7 @@ const uiSchemaSchema: z.ZodType<UISchema> = z.lazy(() =>
     key: z.string(),
     type: z.string(),
     name: z.string(),
+    required: z.boolean().optional(),
     label: z.string().optional(),
     scope: z.string(),
     placeholder: z.string().optional(),

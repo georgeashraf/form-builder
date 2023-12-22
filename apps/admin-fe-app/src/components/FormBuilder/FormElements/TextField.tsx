@@ -1,4 +1,4 @@
-import { Input, Label } from '@engine/design-system';
+import { Input, Label, Switch } from '@engine/design-system';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TextAlignCenterIcon } from '@radix-ui/react-icons';
 import { useEffect } from 'react';
@@ -33,6 +33,7 @@ export const TextFieldFormElement: FormElement = {
     uiSchema: {
       key,
       type: 'Control',
+      required: true,
       name: key,
       label: '',
       placeholder: 'Input Placeholder',
@@ -56,7 +57,12 @@ function DesignerComponent({
   const elementKey = elementInstance.uiSchema.key;
   return (
     <div className="flex flex-col gap-2 w-full">
-      <Label variant={'base'}>{elementInstance.uiSchema.label}</Label>
+      <Label variant={'base'}>
+        {elementInstance.uiSchema.label}
+        <span className="text-error">
+          {elementInstance.uiSchema.required && '*'}
+        </span>
+      </Label>
       <Input
         readOnly
         disabled
@@ -77,18 +83,23 @@ function FormComponent({
 }: {
   elementInstance: FormElementInstance;
 }) {
+  const elementKey = elementInstance.uiSchema.key;
+
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label>
         {elementInstance.uiSchema.label}
-        {/* {elementInstance.required && '*'} */}
+        <span className="text-error">
+          {elementInstance.uiSchema.required && '*'}
+        </span>
       </Label>
       <Input placeholder={elementInstance.uiSchema.placeholder} />
-      {/* {elementInstance.helperText && (
-        <p className="text-muted-foreground text-[0.8rem]">
-          {elementInstance.helperText}
-        </p>
-      )} */}
+      {elementInstance.dataSchema &&
+        elementInstance.dataSchema[elementKey]?.description && (
+          <p className="text-base-100 text-[0.8rem]">
+            {elementInstance.dataSchema[elementKey]?.description}
+          </p>
+        )}
     </div>
   );
 }
@@ -114,7 +125,7 @@ function PropertiesComponent({
     const newName = values.uiSchema.name;
     const oldScope = values.uiSchema.scope;
     const scopeArr = oldScope?.split('/');
-    const oldName = scopeArr?.pop()
+    const oldName = scopeArr?.pop();
     let newScope;
     if (scopeArr) {
       scopeArr.push(newName);
@@ -122,7 +133,13 @@ function PropertiesComponent({
     }
 
     values.uiSchema.scope = newScope;
-    delete Object.assign(values.dataSchema, { [newName]: values.dataSchema[oldName!] })[oldName!];
+    if (newName !== oldName) {
+      delete Object.assign(values.dataSchema, {
+        [newName]: values.dataSchema[oldName!],
+      })[oldName!];
+    }
+
+    console.log(values.dataSchema);
     updateElementSchemas({
       ...elementInstance,
       uiSchema: values.uiSchema,
@@ -213,6 +230,25 @@ function PropertiesComponent({
                 value={field.value}
                 placeholder="Placeholder"
                 className="w-full"
+              />
+              {fieldState.error?.message && (
+                <Label variant={'error'}>{fieldState.error?.message}</Label>
+              )}
+            </>
+          )}
+        />
+      </div>
+      <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
+        <Label className="mb-2">Required</Label>
+        <Controller
+          name={`uiSchema.required`}
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <>
+              <Switch
+                className=""
+                checked={field.value}
+                onCheckedChange={field.onChange}
               />
               {fieldState.error?.message && (
                 <Label variant={'error'}>{fieldState.error?.message}</Label>
