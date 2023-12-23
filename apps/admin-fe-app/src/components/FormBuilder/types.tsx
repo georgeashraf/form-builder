@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import { DateFieldFormElement } from './FormElements/DateField';
+import { DateRangeFieldFormElement } from './FormElements/DateRangeField';
 import { NumberFieldFormElement } from './FormElements/NumberField';
 import { TextAreaFieldFormElement } from './FormElements/TextArea';
 import { TextFieldFormElement } from './FormElements/TextField';
@@ -10,7 +12,9 @@ export type ElementsType =
   | 'HorizontalLayout'
   | 'VerticalLayout'
   | 'NumberField'
-  | 'TextAreaField';
+  | 'TextAreaField'
+  | 'DateField'
+  | 'DateRangeField';
 export type SchemaPrimitiveType =
   | 'object'
   | 'array'
@@ -103,4 +107,6 @@ export const FormElements: FormElementsType = {
   VerticalLayout: VerticalLayoutElement,
   NumberField: NumberFieldFormElement,
   TextAreaField: TextAreaFieldFormElement,
+  DateField: DateFieldFormElement,
+  DateRangeField: DateRangeFieldFormElement
 };

@@ -10,7 +10,11 @@ const FormElementsSideBar = () => {
         <SidebarBtnElement formElement={FormElements.TextField} />
         <SidebarBtnElement formElement={FormElements.NumberField} />
       </div>
-      <div className="flex flex-row gap-3">
+      <div className="flex flex-row gap-3 mb-2">
+        <SidebarBtnElement formElement={FormElements.DateField} />
+        <SidebarBtnElement formElement={FormElements.DateRangeField} />
+      </div>
+      <div className="flex flex-row gap-3 mb-2">
         <SidebarBtnElement formElement={FormElements.TextAreaField} />
       </div>
       <Label>Layouts</Label>

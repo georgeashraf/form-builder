@@ -94,12 +94,16 @@ const renderElements = (
           [el.key]: elementSchemaProperties,
         } as SchemaProperty;
         let element;
+        let subtype = 'TextField';
         switch (elementSchemaProperties?.type) {
           case 'string':
+            if (el.variant === 'TextArea') subtype = 'TextAreaField';
+            if (el.variant === 'Date') subtype = 'DateField';
+            if (el.variant === 'DateRange') subtype = 'DateRangeField';
             element = {
               key: el.key,
               type: 'Input' as 'Input',
-              subtype: el.variant === 'TextArea' ? 'TextAreaField' as ElementsType : 'TextField' as ElementsType ,
+              subtype: subtype as ElementsType,
               dataSchema: elementDataSchema,
               uiSchema: el,
             };
