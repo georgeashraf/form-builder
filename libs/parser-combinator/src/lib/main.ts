@@ -42,16 +42,11 @@ export function match() {
 }
 
 // combinator
-
-// export function alt(a: any, b: any) {
-//   return memoize(altMemo(a, b));
-// }
-
 export function alt() {
   return memoize((a: any, b: any) => {
     return memoizeCPS((str: string, cont: Function) => {
-      a(str, cont);
-      b(str, cont);
+      a()(str, cont);
+      b()(str, cont);
     });
   });
 }
@@ -59,63 +54,44 @@ export function seq() {
   const success = succeed();
   return memoize((a: any, b: any) => {
     return memoizeCPS(
-      bind(a, (x: any) => {
-         return bind(b, (y: any) => {
-           return success(x + y);
+      bind(a(), (x: any) => {
+          return bind(b(), (y: any) => {
+            return success(x + y);
         });
       })
     );
   });
 }
 
-// function altMemo(a: any, b: any) {
-//   return memoize((str: string) => {
-//     let result = a(str);
-//     if (result.hasOwnProperty('value')) return result;
-//     return b(str);
-//   });
-// }
 export function bind(p: any, fn: Function) {
   return (str: string, cont: Function) => {
-    p(str, (result: any) => {
+    return p(str, (result: any) => {
       if (result.hasOwnProperty('value')) {
-        fn(result.value)(result.rest, cont)
+        return fn(result.value)(result.rest, cont)
       } else {
-        cont(result)
+        return cont(result)
       }
     });
   };
 }
 
-// function memoize(fn: Function) {
-//   const cache = new Map<any[], any>();
-//   return function (...args: any[]) {
-//     if (cache.has([...args])) {
-//       return cache.get([...args]);
-//     }
-//     //@ts-ignore
-//     const result = fn.call(this, ...args);
-//     cache.set([...args], result);
-//     return result;
-//   };
-// }
-const memoize = (fn: (...args: any[]) => any) => {
-  const alist: { args: any[]; result: any }[] = [];
-
-  return (...args: any[]) => {
-    const entry = alist.find(
-      (entry) => JSON.stringify(entry.args) === JSON.stringify(args)
-    );
-    if (entry) {
-      return entry.result;
-    } else {
-      const result = fn(...args);
-      alist.push({ args, result });
-      return result;
+function memoize(fn: Function) {
+  const cache = new Map<any[], any>();
+  return function (...args: any[]) {
+    if (cache.has([...args])) {
+      return cache.get([...args]);
     }
+    //@ts-ignore
+    const result = fn.call(this, ...args);
+    cache.set([...args], result);
+    return result;
   };
-};
+}
 
+
+export function delayParser(parser: Function): Function {
+  return (...args: any[]) => parser(...args);
+}
 type entry = { continuations: any[]; results: any[] };
 function memoizeCPS(fn: Function) {
   const cache = new Map<string, entry>();
