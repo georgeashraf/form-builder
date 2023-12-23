@@ -1,11 +1,13 @@
 // terminal parsers
-export function succeed(val: any) {
-  return (input: string) => {
-    return {
-      rest: input,
-      value: val,
-    };
-  };
+export function succeed() {
+  return memoize((val: any) => {
+    return memoizeCPS((input: string, cont: Function) => {
+      return cont({
+        rest: input,
+        value: val,
+      });
+    });
+  });
 }
 
 export function failure() {
@@ -16,74 +18,112 @@ export function failure() {
   };
 }
 
-export function match(pattern: string) {
-  const success = succeed(pattern);
-  const fail = failure();
-  return (str: string) => {
-    if (pattern.length > str.length) {
-      return fail(str);
-    }
-    const testString = str.slice(0, pattern.length);
-    if (testString === pattern) {
-      return success(str.slice(pattern.length, str.length));
-    }
-    return fail(str);
-  };
-}
-
-// combinator
-
-export function alt(a: any, b: any) {
-  return memoize(altMemo(a, b));
-}
-export function seq(a: any, b: any) {
-  return bind(a, (x: any) => {
-    return bind(b, (y: any) => {
-      return succeed(x + y);
+export function match() {
+  return memoize((pattern: string) => {
+    return memoizeCPS((str: string, cont: Function) => {
+      if (pattern.length > str.length) {
+        return cont({
+          rest: str,
+        });
+      }
+      const testString = str.slice(0, pattern.length);
+      if (testString === pattern) {
+        return cont({
+          rest: str.slice(pattern.length, str.length),
+          value: pattern,
+        });
+      } else {
+        return cont({
+          rest: str,
+        });
+      }
     });
   });
 }
 
-function altMemo(a: any, b: any) {
-  return memoize((str: string) => {
-    let result = a(str);
-    if (result.hasOwnProperty('value')) return result;
-    return b(str);
+// combinator
+
+// export function alt(a: any, b: any) {
+//   return memoize(altMemo(a, b));
+// }
+
+export function alt() {
+  return memoize((a: any, b: any) => {
+    return memoizeCPS((str: string, cont: Function) => {
+      a(str, cont);
+      b(str, cont);
+    });
   });
 }
+export function seq() {
+  const success = succeed();
+  return memoize((a: any, b: any) => {
+    return memoizeCPS(
+      bind(a, (x: any) => {
+         return bind(b, (y: any) => {
+           return success(x + y);
+        });
+      })
+    );
+  });
+}
+
+// function altMemo(a: any, b: any) {
+//   return memoize((str: string) => {
+//     let result = a(str);
+//     if (result.hasOwnProperty('value')) return result;
+//     return b(str);
+//   });
+// }
 export function bind(p: any, fn: Function) {
-  return (str: string) => {
-    const fail = failure();
-    let result = p(str);
-    if (result.hasOwnProperty('value')) {
-      let newParser = fn(result.value);
-      return newParser(result.rest);
-    }
-    return fail(str);
+  return (str: string, cont: Function) => {
+    p(str, (result: any) => {
+      if (result.hasOwnProperty('value')) {
+        fn(result.value)(result.rest, cont)
+      } else {
+        cont(result)
+      }
+    });
   };
 }
 
-function memoize(fn: Function) {
-  const cache = new Map();
-  return function (args: any) {
-    const key = JSON.stringify(args);
-    if (cache.has(key)) {
-      return cache.get(key);
+// function memoize(fn: Function) {
+//   const cache = new Map<any[], any>();
+//   return function (...args: any[]) {
+//     if (cache.has([...args])) {
+//       return cache.get([...args]);
+//     }
+//     //@ts-ignore
+//     const result = fn.call(this, ...args);
+//     cache.set([...args], result);
+//     return result;
+//   };
+// }
+const memoize = (fn: (...args: any[]) => any) => {
+  const alist: { args: any[]; result: any }[] = [];
+
+  return (...args: any[]) => {
+    const entry = alist.find(
+      (entry) => JSON.stringify(entry.args) === JSON.stringify(args)
+    );
+    if (entry) {
+      return entry.result;
+    } else {
+      const result = fn(...args);
+      alist.push({ args, result });
+      return result;
     }
-    //@ts-ignore
-    const result = fn.call(this, args);
-    cache.set(key, result);
-    return result;
   };
-}
+};
+
 type entry = { continuations: any[]; results: any[] };
 function memoizeCPS(fn: Function) {
   const cache = new Map<string, entry>();
-  const pushCont = (entry: any, cont: Function) => {
+  const pushCont = (entry: entry, cont: Function) => {
     entry.continuations.push(cont);
     return entry;
   };
-  const pushResult = (entry: any, result: any) => {
+  const pushResult = (entry: entry, result: any) => {
     entry.results.push(result);
     return entry;
   };
@@ -106,15 +146,29 @@ function memoizeCPS(fn: Function) {
       return newEntry;
     }
   }
-  return function (args: any) {
-    const key = JSON.stringify(args);
-    if (cache.has(key)) {
-      console.log('cache hit');
-      return cache.get(key);
+  return function (args: string, cont: Function) {
+    let entry = tableRef(args);
+    // first time memoized procedure has been called with str
+    if (entry.continuations.length === 0 && entry.results.length === 0) {
+      entry = pushCont(entry, cont);
+      fn(args, (result: any) => {
+        if (!resultSubsumed(entry, result)) {
+          pushResult(entry, result);
+          for (let index = 0; index < entry.continuations.length; index++) {
+            const innerCont = entry.continuations[index];
+            innerCont(result);
+          }
+        }
+        
+      });
+    } else {
+      // second time memoized procedure has been called with str
+      entry = pushCont(entry, cont);
+      for (let index = 0; index < entry.results.length; index++) {
+        const innerResult = entry.results[index];
+        cont(innerResult);
+      }
     }
-    //@ts-ignore
-    const result = fn.call(this, args);
-    cache.set(key, result);
-    return result;
   };
 }
+

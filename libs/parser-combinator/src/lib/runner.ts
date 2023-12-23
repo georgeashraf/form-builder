@@ -1,13 +1,26 @@
 import { alt, match, seq, succeed } from './main';
 
-const matchFoo = match('foo');
-const matchBar = match('bar');
-const matchFooOrBar = alt(matchFoo, matchBar);
-const matchSeqFooOrBar = seq(matchFoo, matchFoo);
-const success = succeed('ll')
+// left recursive grammar
+const altParser = alt();
+const seqParser = seq();
+const matchParser = match();
+const successParser = succeed();
+// @ts-ignore
+const ps = altParser(
+// @ts-ignore
 
-const r = alt(() => seq(match('a'), r), match('a'));
-console.log(matchFooOrBar('foofoo'));
-console.log(matchFooOrBar('foofoo'));
-
+    () => seqParser(ps, matchParser('a')) , matchParser('a')
+    
+    );
+const testSuccess = successParser('a')
+const testMatch = matchParser('a')
+const seqTest = seqParser(matchParser('a'), matchParser('b'))
+// const xCOnsole = (x: Function) => {
+//     console.log(x.toString())
+// }
+// seqTest('abc', console.log);
 // success('hhhd', console.log)
+// testSuccess('a', console.log)
+// testMatch('a', console.log)
+
+ps('aaa', console.log)
