@@ -4,23 +4,36 @@ import {
   DropdownMenuItem,
   Modal,
 } from '@engine/design-system';
+import { RequestQueryType } from '@engine/shared-types';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DataTable } from '../../components/DataTable';
+import { listRequests } from './api';
 import RequestForm from './RequestForm';
 import { RequestTableColumns } from './RequestTableColumn';
 
 const RequestListing = () => {
   const [open, setOpen] = useState(false);
-
+  const RequestListingParams: RequestQueryType = {
+    // pagination: { limit: 2, offset: 1 },
+    selects: [
+      'key',
+      'creator',
+      'description',
+      'key',
+      'label',
+      'name',
+      'isPublished',
+    ],
+    includes: ['forms'],
+    // filters: { key: { op: '$eq', value: 'key' } },
+  };
   return (
     <div className="mt-20 mx-4 w-full md:w-[100%]  min-h-[45%]">
       <Modal
         trigger={<Button type="submit">Add</Button>}
         title="Create a new request"
         description=""
-        open={open}
-        setOpen={setOpen}
       >
         <RequestForm setOpen={setOpen} />
       </Modal>
@@ -53,6 +66,9 @@ const RequestListing = () => {
             ),
           },
         ]}
+        params={RequestListingParams}
+        listingHandler={listRequests}
+        queryKey={'listingRequests'}
       />
     </div>
   );

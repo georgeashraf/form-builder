@@ -25,34 +25,27 @@ import {
   TableRow,
 } from '@engine/design-system';
 import { useGenericQuery } from '../hooks/useQuery';
-import { listRequests } from '../pages/requests/api';
 import { RequestQueryType } from '@engine/shared-types';
+import { AxiosResponse } from 'axios';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
+  params: RequestQueryType;
+  listingHandler: (params: RequestQueryType) => Promise<AxiosResponse<any, any>>;
+  queryKey: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
+  params,
+  queryKey,
+  listingHandler,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const RequestListingParams: RequestQueryType = {
-    // pagination: { limit: 2, offset: 1 },
-    selects: [
-      'key',
-      'creator',
-      'description',
-      'key',
-      'label',
-      'name',
-      'isPublished',
-    ],
-    includes: ['forms'],
-    // filters: { key: { op: '$eq', value: 'key' } },
-  };
+
   const { data, isLoading } = useGenericQuery(
-    () => listRequests(RequestListingParams),
-    'getRequests',
+    () => listingHandler(params),
+    queryKey,
     {}
   );
   const [columnVisibility, setColumnVisibility] =
