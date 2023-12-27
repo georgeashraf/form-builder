@@ -6,20 +6,23 @@ import { Pagination, Populate, QueryOptions, WhereClaus } from './types';
 export class GenericRepository<Model, ModelColumns, Relations>
   implements AbstractRepository<Model, ModelColumns, Relations>
 {
-  private _model: string;
+  private _tableName: string;
+  private UUID_REGEX =
+    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
-  constructor(model: string, @InjectModel() private readonly knex: Knex) {
-    this._model = model;
+  constructor(tableName: string, @InjectModel() private readonly knex: Knex) {
+    this._tableName = tableName;
   }
+  
   async findOneOrNull(
     id: string | number,
     options?: QueryOptions<ModelColumns, Relations>
   ): Promise<Model | null> {
-    let baseQuery = this.knex<Model>(this._model);
+    let baseQuery = this.knex<Model>(this._tableName);
     if (typeof id === 'string') {
-      baseQuery.where(`${this._model}.key`, id);
+      baseQuery.where(`${this._tableName}.key`, id);
     } else if (typeof id === 'number') {
-      baseQuery.where(`${this._model}.id`, id);
+      baseQuery.where(`${this._tableName}.id`, id);
     } else {
       throw new Error(`id can only be a string or number`);
     }
@@ -34,15 +37,11 @@ export class GenericRepository<Model, ModelColumns, Relations>
   }
 
   async list(queryOptions: QueryOptions<ModelColumns, Relations>) {
-    let baseQuery = this.knex<Model>(this._model);
+    let baseQuery = this.knex<Model>(this._tableName);
     baseQuery = this.parseOptions(baseQuery, queryOptions);
     try {
       const result = await baseQuery;
       if (result) {
-        console.log(
-          '🚀 ~ file: generic.repository.ts:42 ~ list ~ result:',
-          result
-        );
         return result;
       }
     } catch (error) {
@@ -57,13 +56,23 @@ export class GenericRepository<Model, ModelColumns, Relations>
       if (typeof item[k] === 'object' && item[k] !== null) {
         // stringify json objects
         insertObj[k] = JSON.stringify(item[k]);
+      } else if (typeof item[k] === 'string') {
+        // TODO: Handle id resolution from uuiD to handle relations on insertion
+        // let key = k;
+        // let value = item[k];
+        // if (this.UUID_REGEX.test(item[k] as any)) {
+
+        // }
+        insertObj[k] = item[k];
       } else {
         insertObj[k] = item[k];
       }
     }
-    const result = await this.knex.table(this._model).insert(insertObj);
+    const result = await this.knex.table(this._tableName).insert(insertObj);
     return result;
   }
+
+  async extractRelationModelId(key: string) {}
   private parseOptions(
     query: Knex.QueryBuilder,
     options: QueryOptions<ModelColumns, Relations>
@@ -83,7 +92,7 @@ export class GenericRepository<Model, ModelColumns, Relations>
       populate.forEach((element) => {
         const tableName = `${element.model} as ${element.as}`;
         const column1 = `${element.as}.${element.foreignKey}`;
-        const column2 = `${this._model}.id`;
+        const column2 = `${this._tableName}.id`;
         if (element.joinType === 'inner') {
           query.innerJoin(tableName, column1, column2);
         }
@@ -101,26 +110,26 @@ export class GenericRepository<Model, ModelColumns, Relations>
     return query.limit(pagination.limit).offset(pagination.offset);
   }
   private select(query: Knex.QueryBuilder, select: ModelColumns[]) {
-    return query.select(select.map((s) => `${this._model}.${s}`));
+    return query.select(select.map((s) => `${this._tableName}.${s}`));
   }
   private filter(query: Knex.QueryBuilder, where: WhereClaus<ModelColumns>) {
     Object.keys(where).forEach((column) => {
       const value = where[column];
       switch (value.op) {
         case '$eq':
-          query.where(`${this._model}.${column}`, value.value);
+          query.where(`${this._tableName}.${column}`, value.value);
           break;
         case '$ne':
-          query.whereNot(`${this._model}.${column}`, value.value);
+          query.whereNot(`${this._tableName}.${column}`, value.value);
           break;
         case '$in':
-          query.whereIn(`${this._model}.${column}`, value.value);
+          query.whereIn(`${this._tableName}.${column}`, value.value);
           break;
         case '$null':
-          query.whereNull(`${this._model}.${column}`);
+          query.whereNull(`${this._tableName}.${column}`);
           break;
         case '$notNull':
-          query.whereNotNull(`${this._model}.${column}`);
+          query.whereNotNull(`${this._tableName}.${column}`);
           break;
         default:
           break;

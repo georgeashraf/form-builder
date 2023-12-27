@@ -1,12 +1,5 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@engine/design-system';
-import { Cross1Icon, TextAlignCenterIcon } from '@radix-ui/react-icons';
+import { TextAlignCenterIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
-import useDesigner from '../Hooks/useDesigner';
 import { FormElement, FormElementInstance } from '../types';
 
 export const HorizontalLayoutElement: FormElement = {
@@ -15,7 +8,7 @@ export const HorizontalLayoutElement: FormElement = {
     key,
     type: 'Layout',
     subtype: 'HorizontalLayout',
-    uiSchema: { key, type: 'HorizontalLayout', elements: [] },
+    uiSchema: { key, name: key, type: 'HorizontalLayout', elements: [] },
   }),
   designerBtnElement: {
     icon: TextAlignCenterIcon,

@@ -1,4 +1,3 @@
-import { Button } from '@engine/design-system';
 import Designer from './Designer/Designer';
 import {
   DndContext,
@@ -8,9 +7,9 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import DragOverlayWrapper from './Wrappers/DragOverlayWrapper';
-import FormSubmitionForm from './FormSubmitionForm';
 import DesignerContextProvider from './Context/DesignerContext';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import FormSubmitionForm from '../../pages/forms/Formform';
 const FormBuilder = () => {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -23,24 +22,18 @@ const FormBuilder = () => {
       tolerance: 5,
     },
   });
-  const navigate = useNavigate()
   const sensors = useSensors(mouseSensor, touchSensor);
+  const { requestKey } = useParams();
   return (
     <DesignerContextProvider>
       <DndContext sensors={sensors}>
-        <div className="mx-2 flex flex-col w-full h-full  text-text">
-          <div className="flex justify-between border-b-2  gap-3 items-center">
+          <div className="flex justify-evenly border-b-2 items-center">
             <h2>Form:</h2>
-            <FormSubmitionForm />
-            <div className="flex items-center gap-2">
-              <Button>Save</Button>
-              <Button onClick={() => navigate('/form-preview')}>Preview</Button>
-            </div>
+            {requestKey && <FormSubmitionForm requestkey={requestKey} />}
           </div>
           <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-full  bg-[url(/plus.svg)]">
             <Designer />
           </div>
-        </div>
         <DragOverlayWrapper />
       </DndContext>
     </DesignerContextProvider>

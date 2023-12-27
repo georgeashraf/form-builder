@@ -1,6 +1,6 @@
 import { cn } from '@engine/design-system';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   BorderAllIcon,
   HamburgerMenuIcon,
@@ -50,10 +50,12 @@ const DeafultSideBar = ({ setSidebarOpen, sidebarOpen }: SidebarProps) => {
           sidebarOpen ? 'flex' : 'hidden'
         )}
       >
-        <div className=" w-full text-text  bg-background p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
-          <BorderAllIcon />
-          <div>Requests</div>
-        </div>
+        <Link to="/requests">
+          <div className=" w-full text-text  bg-background p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            <BorderAllIcon />
+            <div>Requests</div>
+          </div>
+        </Link>
       </div>
       {/* Small Side Bar */}
       <div

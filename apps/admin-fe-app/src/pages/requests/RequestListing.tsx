@@ -42,7 +42,7 @@ const RequestListing = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link
-                      to={`/form-builder`}
+                      to={`${row.getValue('key')}/form-builder`}
                       className="py-2 px-6 cursor-pointer transition-colors hover:bg-base-200"
                     >
                       Add Form

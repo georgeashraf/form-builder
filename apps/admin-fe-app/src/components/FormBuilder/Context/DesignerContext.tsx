@@ -3,7 +3,6 @@ import {
   DataSchema,
   FormElementInstance,
   SchemaPrimitiveType,
-  SchemaProperty,
   UISchema,
 } from '../types';
 import {

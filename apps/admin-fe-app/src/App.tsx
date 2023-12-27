@@ -28,7 +28,7 @@ function App() {
       errorElement: <ErrorPage />,
       children: [
         { path: '/requests', element: <RequestListing /> },
-        { path: '/form-builder', element: <FormBuilder /> },
+        { path: '/requests/:requestKey/form-builder', element: <FormBuilder /> },
         { path: '/form-preview', element: <FormPreview /> },
 
       ],

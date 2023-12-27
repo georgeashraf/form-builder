@@ -1,13 +1,5 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@engine/design-system';
-import { Cross1Icon, TextAlignCenterIcon } from '@radix-ui/react-icons';
+import { TextAlignCenterIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
-import { text } from 'stream/consumers';
-import useDesigner from '../Hooks/useDesigner';
 import { FormElement, FormElementInstance } from '../types';
 
 export const VerticalLayoutElement: FormElement = {
@@ -16,7 +8,7 @@ export const VerticalLayoutElement: FormElement = {
     key,
     type: 'Layout',
     subtype: 'VerticalLayout',
-    uiSchema: { key, type: 'VerticalLayout', elements: [] },
+    uiSchema: { key, name: key, type: 'VerticalLayout', elements: [] },
   }),
   designerBtnElement: {
     icon: TextAlignCenterIcon,

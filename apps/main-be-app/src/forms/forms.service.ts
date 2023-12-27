@@ -13,6 +13,7 @@ import {
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import { GenericRepository } from '../repository/generic.repository';
+import { RequestsService } from '../requests/requests.service';
 
 @Injectable()
 export class FormsService {
@@ -22,7 +23,10 @@ export class FormsService {
     FormIncludesType
   >;
   // TODO: Inject Repository
-  constructor(@InjectModel() private readonly knex: Knex) {
+  constructor(
+    @InjectModel() private readonly knex: Knex,
+    private readonly requestsService: RequestsService
+  ) {
     this._formRepository = new GenericRepository<
       FormModelType,
       FormColumnsType,
@@ -31,7 +35,12 @@ export class FormsService {
   }
   async create(createFormModel: CreateFormModelType) {
     try {
-      const data = await this._formRepository.create(createFormModel);
+      const { requestKey, ...rest } = createFormModel;
+      const request = await this.requestsService.findOne(requestKey);
+      const data = await this._formRepository.create({
+        ...rest,
+        requestId: request.data.id,
+      });
       return { data };
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') {
