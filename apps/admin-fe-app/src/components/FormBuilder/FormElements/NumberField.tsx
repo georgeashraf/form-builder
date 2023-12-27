@@ -1,12 +1,11 @@
 import { Input, Label, Switch } from '@engine/design-system';
+import { UISchema, SchemaProperty } from '@engine/shared-types';
 import { TextNoneIcon } from '@radix-ui/react-icons';
 import { Controller, useForm } from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
 import {
   FormElement,
   FormElementInstance,
-  SchemaProperty,
-  UISchema,
 } from '../types';
 
 export const NumberFieldFormElement: FormElement = {

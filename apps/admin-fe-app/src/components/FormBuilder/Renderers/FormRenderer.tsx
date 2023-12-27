@@ -1,14 +1,12 @@
 import DesignerComponentWrapper from '../Wrappers/DesignerComponentWrapper';
 import FormComponentWrapper from '../Wrappers/FormComponentWrapper';
 import {
-  DataSchema,
   ElementsType,
   FormElements,
-  SchemaProperty,
-  UISchema,
 } from '../types';
 import { findPropertyFromScope } from '../helpers';
 import LayoutComponentWrapper from '../Wrappers/LayoutComponentWrapper';
+import { UISchema, DataSchema, SchemaProperty } from '@engine/shared-types';
 
 const renderElements = (
   item: UISchema[],

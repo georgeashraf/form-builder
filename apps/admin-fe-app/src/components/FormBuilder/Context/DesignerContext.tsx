@@ -1,9 +1,6 @@
 import { createContext, ReactNode, useState } from 'react';
 import {
-  DataSchema,
   FormElementInstance,
-  SchemaPrimitiveType,
-  UISchema,
 } from '../types';
 import {
   addPropertyByPath,
@@ -12,6 +9,7 @@ import {
   updateElementProperties,
   UpdateUiElementByKey,
 } from '../helpers';
+import { DataSchema, SchemaPrimitiveType, UISchema } from '@engine/shared-types';
 
 type DesignerContextType = {
   dataSchema: DataSchema;
