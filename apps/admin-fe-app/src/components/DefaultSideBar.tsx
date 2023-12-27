@@ -65,7 +65,9 @@ const DeafultSideBar = ({ setSidebarOpen, sidebarOpen }: SidebarProps) => {
         )}
       >
         <div className=" justify-end pr-5 text-text w-full bg-background p-3 rounded-full transform ease-in-out duration-300 flex">
-          <BorderAllIcon />
+          <Link to="/requests">
+            <BorderAllIcon />
+          </Link>
         </div>
       </div>
     </aside>
