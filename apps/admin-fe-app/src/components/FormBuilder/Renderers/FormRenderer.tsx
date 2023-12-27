@@ -17,7 +17,7 @@ const renderElements = (
     switch (el.type) {
       case 'VerticalLayout':
         const VericalLayout =
-          FormElements['VerticalLayout' as ElementsType].designerComponent;
+          FormElements['VerticalLayout' as ElementsType].formComponent;
         return isDesigner ? (
           <LayoutComponentWrapper
             key={el.key}
@@ -41,7 +41,6 @@ const renderElements = (
               subtype: 'VerticalLayout',
               uiSchema: el,
             }}
-            cols={el?.elements?.length}
           >
             {el?.elements?.length
               ? renderElements(el.elements, dataSchema, isDesigner)
@@ -50,7 +49,7 @@ const renderElements = (
         );
       case 'HorizontalLayout':
         const HorizontalLayout =
-          FormElements['HorizontalLayout' as ElementsType].designerComponent;
+          FormElements['HorizontalLayout' as ElementsType].formComponent;
         return isDesigner ? (
           <LayoutComponentWrapper
             key={el.key}
@@ -75,7 +74,6 @@ const renderElements = (
               subtype: 'HorizontalLayout',
               uiSchema: el,
             }}
-            cols={el?.elements?.length}
           >
             {el?.elements?.length
               ? renderElements(el.elements, dataSchema, isDesigner)
@@ -142,7 +140,7 @@ const FormRenderer = ({
   isDesigner: boolean;
 }) => {
   return (
-    <div>
+    <div className='w-full h-full'>
       {dataSchema &&
         uiSchema &&
         renderElements([uiSchema], dataSchema, isDesigner)}

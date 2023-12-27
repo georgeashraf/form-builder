@@ -10,6 +10,7 @@ import { createForm } from './api';
 import useDesigner from '../../components/FormBuilder/Hooks/useDesigner';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import FormPreview from '../../components/FormBuilder/FormPreview';
 
 export default function FormSubmitionForm({
   requestkey,
@@ -90,7 +91,7 @@ export default function FormSubmitionForm({
       </div>
       <div className="flex justify-end gap-3 items-center">
         <Button type="submit">Save</Button>
-        <Button onClick={() => navigate('/form-preview')}>Preview</Button>
+        <FormPreview/>
       </div>
     </form>
   );

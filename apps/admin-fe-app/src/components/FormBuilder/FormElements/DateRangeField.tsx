@@ -1,4 +1,4 @@
-import { DatePicker, DateRangePicker, Input, Label, Switch } from '@engine/design-system';
+import { DateRangePicker, Input, Label, Switch } from '@engine/design-system';
 import { UISchema, SchemaProperty } from '@engine/shared-types';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { Controller, useForm } from 'react-hook-form';
@@ -86,7 +86,7 @@ function FormComponent({
       <DateRangePicker />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
-          <p className="text-base-100 text-[0.8rem]">
+          <p className="text-text text-[0.8rem]">
             {elementInstance.dataSchema[elementKey]?.description}
           </p>
         )}
@@ -101,7 +101,6 @@ function PropertiesComponent({
 }) {
   const { updateElementSchemas } = useDesigner();
   const form = useForm<any>({
-    // resolver: zodResolver(propertiesSchema),
     mode: 'onBlur',
     defaultValues: {
       dataSchema: elementInstance.dataSchema,

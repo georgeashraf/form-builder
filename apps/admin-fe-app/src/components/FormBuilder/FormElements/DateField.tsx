@@ -3,10 +3,7 @@ import { UISchema, SchemaProperty } from '@engine/shared-types';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { Controller, useForm } from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
-import {
-  FormElement,
-  FormElementInstance,
-} from '../types';
+import { FormElement, FormElementInstance } from '../types';
 
 export const DateFieldFormElement: FormElement = {
   type: 'DateField',
@@ -86,7 +83,7 @@ function FormComponent({
       <DatePicker />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
-          <p className="text-base-100 text-[0.8rem]">
+          <p className="text-text text-[0.8rem]">
             {elementInstance.dataSchema[elementKey]?.description}
           </p>
         )}

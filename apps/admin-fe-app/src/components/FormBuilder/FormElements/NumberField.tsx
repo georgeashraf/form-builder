@@ -93,7 +93,7 @@ function FormComponent({
       />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
-          <p className="text-base-100 text-[0.8rem]">
+          <p className="text-text text-[0.8rem]">
             {elementInstance.dataSchema[elementKey]?.description}
           </p>
         )}
@@ -108,7 +108,6 @@ function PropertiesComponent({
 }) {
   const { updateElementSchemas } = useDesigner();
   const form = useForm<any>({
-    // resolver: zodResolver(propertiesSchema),
     mode: 'onBlur',
     defaultValues: {
       dataSchema: elementInstance.dataSchema,
