@@ -4,7 +4,6 @@ import {
   RequestIncludes,
   RequestModel,
   RequestQueryType,
-  RequestRelations,
   requestRelationsMap,
 } from '@engine/shared-types';
 import {
@@ -55,10 +54,6 @@ export class RequestsService {
       const data = await this._requestRepository.list(queryOptions);
       return { data };
     } catch (error) {
-      console.log(
-        '🚀 ~ file: requests.service.ts:57 ~ RequestsService ~ list ~ error:',
-        error
-      );
       throw new BadRequestException(`Couldn't find Requests`);
     }
   }
@@ -88,13 +83,13 @@ export class RequestsService {
     }
     if (query.includes) {
       let populate = [];
-      query.includes.forEach((relation) => {
-        populate.push({
-          model: requestRelationsMap.get(relation),
-          as: relation,
-          joinType: 'left',
-          foreignKey: 'requestId',
-        });
+      populate.push({
+        attributes: ['key', 'dataSchema', 'uiSchema'],
+        model: 'form',
+        as: 'forms',
+        joinType: 'left',
+        foreignKey: 'requestId',
+        hasMany: true,
       });
       queryOptions.populate = populate;
     }

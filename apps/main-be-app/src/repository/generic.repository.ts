@@ -13,7 +13,7 @@ export class GenericRepository<Model, ModelColumns, Relations>
   constructor(tableName: string, @InjectModel() private readonly knex: Knex) {
     this._tableName = tableName;
   }
-  
+
   async findOneOrNull(
     id: string | number,
     options?: QueryOptions<ModelColumns, Relations>
@@ -42,7 +42,8 @@ export class GenericRepository<Model, ModelColumns, Relations>
     try {
       const result = await baseQuery;
       if (result) {
-        return result;
+        const transformedData = this.transformData(result, queryOptions);
+        return transformedData;
       }
     } catch (error) {
       console.log(error);
@@ -72,7 +73,6 @@ export class GenericRepository<Model, ModelColumns, Relations>
     return result;
   }
 
-  async extractRelationModelId(key: string) {}
   private parseOptions(
     query: Knex.QueryBuilder,
     options: QueryOptions<ModelColumns, Relations>
@@ -87,7 +87,7 @@ export class GenericRepository<Model, ModelColumns, Relations>
     );
     return query;
   }
-  private populate(query: Knex.QueryBuilder, populate: Populate<Relations>[]) {
+  private populate(query: Knex.QueryBuilder, populate: Populate[]) {
     if (populate.length > 0) {
       populate.forEach((element) => {
         const tableName = `${element.model} as ${element.as}`;
@@ -102,6 +102,11 @@ export class GenericRepository<Model, ModelColumns, Relations>
         if (element.joinType === 'right') {
           query.rightJoin(tableName, column1, column2);
         }
+        query.select(
+          element.attributes.map(
+            (e) => `${element.as}.${e} as ${element.as}.${e}`
+          )
+        );
       });
     }
     return query;
@@ -137,13 +142,79 @@ export class GenericRepository<Model, ModelColumns, Relations>
     });
     return query;
   }
-  private iterate(obj) {
+  private iterateNestedObj(obj) {
     Object.keys(obj).forEach((key) => {
       console.log(`key: ${key}, value: ${obj[key]}`);
 
       if (typeof obj[key] === 'object' && obj[key] !== null) {
-        this.iterate(obj[key]);
+        this.iterateNestedObj(obj[key]);
       }
     });
+  }
+  private transformData(
+    data: any[],
+    queryOptions: QueryOptions<ModelColumns, Relations>
+  ) {
+    let records = new Map<string, any>();
+    let foreignKeysMap = new Map<string, { hasMany: boolean }>();
+    queryOptions.populate.forEach((e) =>
+      foreignKeysMap.set(e.as, { hasMany: e.hasMany })
+    );
+
+    data.forEach((record) => {
+      let recordMap = new Map<string, any>();
+      for (const key in record) {
+        // populated property
+        if (key.includes('.')) {
+          const populatedModel = key.split('.')[0];
+          const populatedModelProperty = key.split('.')[1];
+          const foreignKeyEntry = foreignKeysMap.get(populatedModel);
+          const entry = recordMap.get(populatedModel);
+          if (entry) {
+            foreignKeyEntry.hasMany
+              ? recordMap.set(populatedModel, [
+                  { ...entry[0], [populatedModelProperty]: record[key] },
+                ])
+              : recordMap.set(populatedModel, {
+                  ...entry,
+                  [populatedModelProperty]: record[key],
+                });
+            // entry[key.split('.')[1]] = record[key];
+          } else {
+            foreignKeyEntry.hasMany
+              ? recordMap.set(populatedModel, [{
+                  [key.split('.')[1]]: record[key],
+                }])
+              : recordMap.set(populatedModel, {
+                  [key.split('.')[1]]: record[key],
+                });
+          }
+        } else {
+          // original model property
+          recordMap.set(key, record[key]);
+        }
+      }
+      if (records.has(record['key'])) {
+        // merge many2many objects
+        const mergedResult = this.mergeProperties(
+          Object.fromEntries(recordMap),
+          records.get(record['key'])
+        );
+        records.set(record['key'], mergedResult);
+      } else {
+        records.set(record['key'], Object.fromEntries(recordMap));
+      }
+    });
+    return Array.from(records.values());
+  }
+
+  private mergeProperties(obj1: any, obj2: any) {
+    let result;
+    for (const p in obj1) {
+      if (obj2.hasOwnProperty(p) && Array.isArray(obj1[p])) {
+        result = { ...obj1, [p]: [...obj1[p as any], ...obj2[p as any]] };
+      }
+    }
+    return result ?? obj1;
   }
 }

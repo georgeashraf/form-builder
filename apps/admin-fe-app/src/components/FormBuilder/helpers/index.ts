@@ -1,9 +1,6 @@
+import { DataSchema, SchemaProperty, SchemaPropertyBody, UISchema } from '@engine/shared-types';
 import {
-  DataSchema,
   FormElementInstance,
-  SchemaProperty,
-  SchemaPropertyBody,
-  UISchema,
 } from '../types';
 
 export function findPropertyFromScope(

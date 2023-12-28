@@ -1,7 +1,7 @@
 export type QueryOptions<ModelColumns, Relations> = {
   where?: WhereClaus<ModelColumns>;
   select?: ModelColumns[];
-  populate?: Populate<Relations>[];
+  populate?: Populate[];
   sort?: Sort<ModelColumns>;
   pagination?: Pagination;
 };
@@ -15,12 +15,13 @@ export type WhereClaus<ModelColumns> = {
   [key in ModelColumns as string]: { op: Operator; value: any };
 };
 
-export type Populate<Relations> = {
+export type Populate = {
   model: string;
-  as: Relations;
+  as: string;
   joinType: JoinType;
   foreignKey: string;
-  returning?: string[];
+  attributes: string[];
+  hasMany: boolean;
 };
 
 export interface Sort<ModelColumns> {
