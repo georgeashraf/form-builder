@@ -57,7 +57,7 @@ export const RequestTableColumns: ColumnDef<RequestWithRelations>[] = [
       return (
         <div className="flex flex-col">
           {forms?.map((form) => (
-            <div className="border-b-2">
+            <div className="border-b-2" key={form.key}>
               <FormPreview
                 //@ts-ignore
                 previewDataSchema={form.dataSchema}
