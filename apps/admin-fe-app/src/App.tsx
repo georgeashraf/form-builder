@@ -7,6 +7,7 @@ import ErrorPage from './components/ErrorPage';
 import 'react-toastify/dist/ReactToastify.css';
 import FormBuilder from './components/FormBuilder/FormBuilder';
 import FormPreview from './components/FormBuilder/FormPreview';
+import DesignerContextProvider from './components/FormBuilder/Context/DesignerContext';
 
 function App() {
   // Check user set theme mode...
@@ -28,9 +29,10 @@ function App() {
       errorElement: <ErrorPage />,
       children: [
         { path: '/requests', element: <RequestListing /> },
-        { path: '/requests/:requestKey/form-builder', element: <FormBuilder /> },
-        { path: '/form-preview', element: <FormPreview /> },
-
+        {
+          path: '/requests/:requestKey/form-builder',
+          element: <FormBuilder />,
+        },
       ],
     },
   ]);
@@ -49,7 +51,9 @@ function App() {
     <div className="App" data-theme={theme}>
       <Suspense>
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
+          <DesignerContextProvider>
+            <RouterProvider router={router} />
+          </DesignerContextProvider>
         </QueryClientProvider>
       </Suspense>
     </div>

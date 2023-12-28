@@ -91,7 +91,7 @@ export default function FormSubmitionForm({
       </div>
       <div className="flex justify-end gap-3 items-center">
         <Button type="submit">Save</Button>
-        <FormPreview/>
+        <FormPreview trigger={<Button type="submit">Preview</Button>} />
       </div>
     </form>
   );

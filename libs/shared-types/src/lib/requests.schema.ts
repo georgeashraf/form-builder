@@ -60,6 +60,8 @@ export const requestRelationsMap = new Map<string, string>([['forms', 'form']]);
 export type RequestModel = z.infer<typeof RequestModelSchema>;
 export type CreateRequestType = z.infer<typeof CreateRequestSchema>;
 export type RequestRelations = z.infer<typeof RequestRelations>;
+export type RequestWithRelations = z.infer<typeof RequestWithRelations>;
+
 
 export type RequestColumns = keyof RequestModel;
 export type RequestIncludes = keyof RequestRelations;

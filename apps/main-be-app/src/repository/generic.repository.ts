@@ -182,9 +182,11 @@ export class GenericRepository<Model, ModelColumns, Relations>
             // entry[key.split('.')[1]] = record[key];
           } else {
             foreignKeyEntry.hasMany
-              ? recordMap.set(populatedModel, [{
-                  [key.split('.')[1]]: record[key],
-                }])
+              ? recordMap.set(populatedModel, [
+                  {
+                    [key.split('.')[1]]: record[key],
+                  },
+                ])
               : recordMap.set(populatedModel, {
                   [key.split('.')[1]]: record[key],
                 });

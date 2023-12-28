@@ -7,7 +7,6 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import DragOverlayWrapper from './Wrappers/DragOverlayWrapper';
-import DesignerContextProvider from './Context/DesignerContext';
 import { useParams } from 'react-router-dom';
 import FormSubmitionForm from '../../pages/forms/Formform';
 const FormBuilder = () => {
@@ -25,18 +24,16 @@ const FormBuilder = () => {
   const sensors = useSensors(mouseSensor, touchSensor);
   const { requestKey } = useParams();
   return (
-    <DesignerContextProvider>
-      <DndContext sensors={sensors}>
-          <div className="flex justify-evenly border-b-2 items-center">
-            <h2>Form:</h2>
-            {requestKey && <FormSubmitionForm requestkey={requestKey} />}
-          </div>
-          <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-full  bg-[url(/plus.svg)]">
-            <Designer />
-          </div>
-        <DragOverlayWrapper />
-      </DndContext>
-    </DesignerContextProvider>
+    <DndContext sensors={sensors}>
+      <div className="flex justify-evenly border-b-2 items-center">
+        <h2>Form:</h2>
+        {requestKey && <FormSubmitionForm requestkey={requestKey} />}
+      </div>
+      <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-full  bg-[url(/plus.svg)]">
+        <Designer />
+      </div>
+      <DragOverlayWrapper />
+    </DndContext>
   );
 };
 

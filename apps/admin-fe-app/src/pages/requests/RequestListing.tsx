@@ -45,18 +45,18 @@ const RequestListing = () => {
             cell: ({ row }) => (
               <DataTableRowActions>
                 <div className="flex flex-col">
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className='border-b-2'>
                     <Link
                       to={`${row.getValue('key')}/edit`}
-                      className="py-2 px-6 cursor-pointer transition-colors hover:bg-base-200"
+                      className="cursor-pointer transition-colors hover:bg-base-200"
                     >
                       Edit
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className='border-b-2'>
                     <Link
                       to={`${row.getValue('key')}/form-builder`}
-                      className="py-2 px-6 cursor-pointer transition-colors hover:bg-base-200"
+                      className="cursor-pointer transition-colors hover:bg-base-200"
                     >
                       Add Form
                     </Link>

@@ -84,7 +84,7 @@ export class RequestsService {
     if (query.includes) {
       let populate = [];
       populate.push({
-        attributes: ['key', 'dataSchema', 'uiSchema'],
+        attributes: ['key', 'name', 'dataSchema', 'uiSchema'],
         model: 'form',
         as: 'forms',
         joinType: 'left',

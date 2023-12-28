@@ -1,20 +1,30 @@
-import { Button, Modal } from '@engine/design-system';
+import { Modal } from '@engine/design-system';
+import { DataSchema, UISchema } from '@engine/shared-types';
+import { ReactNode } from 'react';
 import useDesigner from './Hooks/useDesigner';
 import FormRenderer from './Renderers/FormRenderer';
 
-const FormPreview = () => {
+const FormPreview = ({
+  previewDataSchema,
+  previewUISchema,
+  trigger,
+}: {
+  previewDataSchema?: DataSchema;
+  previewUISchema?: UISchema;
+  trigger?: ReactNode
+}) => {
   const { dataSchema, uiSchema } = useDesigner();
   return (
     <div className="w-full">
       <Modal
-        trigger={<Button type="submit">Preview</Button>}
+        trigger={trigger}
         title="Preview Form"
         description="Form display preview"
       >
         <div className="flex w-full h-full">
           <FormRenderer
-            dataSchema={dataSchema}
-            uiSchema={uiSchema}
+            dataSchema={previewDataSchema ?? dataSchema}
+            uiSchema={previewUISchema ?? uiSchema}
             isDesigner={false}
           />
         </div>
