@@ -1,5 +1,6 @@
 import {
   Button,
+  FormSelect,
   Input,
   Label,
   Select,
@@ -15,7 +16,6 @@ import {
   MinusCircledIcon,
   PlusCircledIcon,
 } from '@radix-ui/react-icons';
-import { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
 import { FormElement, FormElementInstance } from '../types';
@@ -70,11 +70,9 @@ function DesignerComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <Select>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder={elementInstance.uiSchema.placeholder} />
-        </SelectTrigger>
-      </Select>
+      <FormSelect
+        placeholder={elementInstance.uiSchema.placeholder}
+      />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-base-100 text-[0.8rem]">
@@ -99,19 +97,16 @@ function FormComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <Select>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder={elementInstance.uiSchema.placeholder} />
-        </SelectTrigger>
-        <SelectContent side="top">
-          {elementInstance.dataSchema &&
-            elementInstance.dataSchema[elementKey]?.oneOf?.map((option) => (
-              <SelectItem key={option.title} value={option.const}>
-                {option.title}
-              </SelectItem>
-            ))}
-        </SelectContent>
-      </Select>
+      <FormSelect
+        options={
+          elementInstance.dataSchema
+            ? elementInstance.dataSchema[elementKey]?.oneOf
+            : []
+        }
+        getOptionValue={(option) => option.const.toString()}
+        getOptionLabel={(option) => option.title}
+        placeholder={elementInstance.uiSchema.placeholder}
+      />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-text text-[0.8rem]">
