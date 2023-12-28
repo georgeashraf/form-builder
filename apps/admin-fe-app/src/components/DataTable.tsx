@@ -25,13 +25,12 @@ import {
   TableRow,
 } from '@engine/design-system';
 import { useGenericQuery } from '../hooks/useQuery';
-import { RequestQueryType } from '@engine/shared-types';
 import { AxiosResponse } from 'axios';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  params: RequestQueryType;
-  listingHandler: (params: RequestQueryType) => Promise<AxiosResponse<any, any>>;
+  params: any;
+  listingHandler: (params: any) => Promise<AxiosResponse<any, any>>;
   queryKey: string;
 }
 

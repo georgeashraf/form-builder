@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   BorderAllIcon,
   HamburgerMenuIcon,
+  ListBulletIcon,
   RowsIcon,
 } from '@radix-ui/react-icons';
 enum Routes {
@@ -56,6 +57,12 @@ const DeafultSideBar = ({ setSidebarOpen, sidebarOpen }: SidebarProps) => {
             <div>Requests</div>
           </div>
         </Link>
+        <Link to="/lists">
+          <div className=" w-full text-text  bg-background p-2 pl-8 rounded-full transform ease-in-out duration-300 flex flex-row items-center space-x-3">
+            <ListBulletIcon />
+            <div>Lists</div>
+          </div>
+        </Link>
       </div>
       {/* Small Side Bar */}
       <div
@@ -67,6 +74,11 @@ const DeafultSideBar = ({ setSidebarOpen, sidebarOpen }: SidebarProps) => {
         <div className=" justify-end pr-5 text-text w-full bg-background p-3 rounded-full transform ease-in-out duration-300 flex">
           <Link to="/requests">
             <BorderAllIcon />
+          </Link>
+        </div>
+        <div className=" justify-end pr-5 text-text w-full bg-background p-3 rounded-full transform ease-in-out duration-300 flex">
+          <Link to="/Lists">
+            <ListBulletIcon />
           </Link>
         </div>
       </div>

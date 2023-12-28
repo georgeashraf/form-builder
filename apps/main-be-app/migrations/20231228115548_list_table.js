@@ -7,6 +7,7 @@ exports.up = function (knex) {
     table.increments('id').primary();
     table.uuid('key').defaultTo(knex.raw('(UUID())'));
     table.string('group', 255).notNullable();
+    table.string('label', 255).nullable();
     table.string('value', 255).nullable();
     table.jsonb('jsonValue').nullable();
     table

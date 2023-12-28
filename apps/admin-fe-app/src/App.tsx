@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import FormBuilder from './components/FormBuilder/FormBuilder';
 import FormPreview from './components/FormBuilder/FormPreview';
 import DesignerContextProvider from './components/FormBuilder/Context/DesignerContext';
+import ListListing from './pages/lists/ListListing';
 
 function App() {
   // Check user set theme mode...
@@ -33,6 +34,7 @@ function App() {
           path: '/requests/:requestKey/form-builder',
           element: <FormBuilder />,
         },
+        { path: '/lists', element: <ListListing /> },
       ],
     },
   ]);

@@ -4,6 +4,7 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { RequestsModule } from './requests/requests.module';
 import { FormsModule } from './forms/forms.module';
+import { ListsModule } from './lists/lists.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { FormsModule } from './forms/forms.module';
       },
     }),
     RequestsModule,
-    FormsModule
+    FormsModule,
+    ListsModule
   ],
   controllers: [],
   providers: [],
