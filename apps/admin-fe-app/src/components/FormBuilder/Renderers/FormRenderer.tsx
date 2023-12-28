@@ -96,6 +96,8 @@ const renderElements = (
             if (el.variant === 'TextArea') subtype = 'TextAreaField';
             if (el.variant === 'Date') subtype = 'DateField';
             if (el.variant === 'DateRange') subtype = 'DateRangeField';
+            if (el.variant === 'SingleSelect') subtype = 'SelectField';
+
             element = {
               key: el.key,
               type: 'Input' as 'Input',

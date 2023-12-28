@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { DateFieldFormElement } from './FormElements/DateField';
 import { DateRangeFieldFormElement } from './FormElements/DateRangeField';
 import { NumberFieldFormElement } from './FormElements/NumberField';
+import { SelectFieldFormElement } from './FormElements/SelectField';
 import { TextAreaFieldFormElement } from './FormElements/TextArea';
 import { TextFieldFormElement } from './FormElements/TextField';
 import { HorizontalLayoutElement } from './Layouts/Horizontal';
@@ -15,7 +16,8 @@ export type ElementsType =
   | 'NumberField'
   | 'TextAreaField'
   | 'DateField'
-  | 'DateRangeField';
+  | 'DateRangeField'
+  | 'SelectField';
 export type FormElement = {
   type: ElementsType;
 
@@ -56,5 +58,6 @@ export const FormElements: FormElementsType = {
   NumberField: NumberFieldFormElement,
   TextAreaField: TextAreaFieldFormElement,
   DateField: DateFieldFormElement,
-  DateRangeField: DateRangeFieldFormElement
+  DateRangeField: DateRangeFieldFormElement,
+  SelectField: SelectFieldFormElement,
 };

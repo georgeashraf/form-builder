@@ -2,12 +2,10 @@ import * as React from 'react';
 import { cn } from './utils/helpers';
 
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  isJson: boolean;
-}
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, ref, isJson=false) => {
+  ({ className, ...props }, ref) => {
     return (
       <textarea
         className={cn(
