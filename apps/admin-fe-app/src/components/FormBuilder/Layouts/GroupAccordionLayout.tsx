@@ -18,7 +18,7 @@ export const GroupAccordionLayoutElement: FormElement = {
       key,
       name: key,
       type: 'GroupAccordionLayout',
-      label: '',
+      label: 'Group',
       elements: [],
     },
   }),
@@ -62,7 +62,7 @@ function FormComponent({
 }) {
   return (
     <Accordion
-      className={`flex flex-row flex-grow items-start gap-4 justify-between flex-1`}
+      className={`flex tems-start gap-4 justify-between flex-1`}
       type="single"
       collapsible
     >

@@ -38,7 +38,7 @@ export default function DesignerContextProvider({
   children: ReactNode;
 }) {
   const baseDataSchema = {
-    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    $schema: '',
     title: 'Form',
     description: 'New Form DataSchema',
     type: 'object' as SchemaPrimitiveType,

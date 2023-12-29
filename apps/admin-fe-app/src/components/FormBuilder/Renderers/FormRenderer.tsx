@@ -4,11 +4,15 @@ import { ElementsType, FormElements } from '../types';
 import { findPropertyFromScope } from '../helpers';
 import LayoutComponentWrapper from '../Wrappers/LayoutComponentWrapper';
 import { UISchema, DataSchema, SchemaProperty } from '@engine/shared-types';
+import { FieldValues, useForm, UseFormReturn } from 'react-hook-form';
+import { ajvResolver } from '@hookform/resolvers/ajv';
+import { Button } from '@engine/design-system';
 
 const renderElements = (
   item: UISchema[],
   dataSchema: DataSchema,
-  isDesigner: boolean
+  isDesigner: boolean,
+  form: UseFormReturn<FieldValues, any, undefined>
 ) => {
   return item.map((el) => {
     switch (el.type) {
@@ -26,7 +30,7 @@ const renderElements = (
             }}
           >
             {el?.elements?.length
-              ? renderElements(el.elements, dataSchema, isDesigner)
+              ? renderElements(el.elements, dataSchema, isDesigner, form)
               : null}
           </LayoutComponentWrapper>
         ) : (
@@ -40,7 +44,7 @@ const renderElements = (
             }}
           >
             {el?.elements?.length
-              ? renderElements(el.elements, dataSchema, isDesigner)
+              ? renderElements(el.elements, dataSchema, isDesigner, form)
               : null}
           </VericalLayout>
         );
@@ -59,7 +63,7 @@ const renderElements = (
           >
             {' '}
             {el?.elements?.length
-              ? renderElements(el.elements, dataSchema, isDesigner)
+              ? renderElements(el.elements, dataSchema, isDesigner, form)
               : null}{' '}
           </LayoutComponentWrapper>
         ) : (
@@ -73,7 +77,7 @@ const renderElements = (
             }}
           >
             {el?.elements?.length
-              ? renderElements(el.elements, dataSchema, isDesigner)
+              ? renderElements(el.elements, dataSchema, isDesigner, form)
               : null}
           </HorizontalLayout>
         );
@@ -91,7 +95,7 @@ const renderElements = (
             }}
           >
             {el?.elements?.length
-              ? renderElements(el.elements, dataSchema, isDesigner)
+              ? renderElements(el.elements, dataSchema, isDesigner, form)
               : null}
           </LayoutComponentWrapper>
         ) : (
@@ -105,7 +109,7 @@ const renderElements = (
             }}
           >
             {el?.elements?.length
-              ? renderElements(el.elements, dataSchema, isDesigner)
+              ? renderElements(el.elements, dataSchema, isDesigner, form)
               : null}
           </GroupAccordionLayout>
         );
@@ -162,7 +166,11 @@ const renderElements = (
           isDesigner ? (
             <DesignerComponentWrapper key={element.key} element={element} />
           ) : (
-            <FormComponentWrapper key={element.key} element={element} />
+            <FormComponentWrapper
+              key={element.key}
+              element={element}
+              form={form}
+            />
           )
         ) : (
           <div></div>
@@ -179,11 +187,44 @@ const FormRenderer = ({
   uiSchema?: UISchema;
   isDesigner: boolean;
 }) => {
+  const form = useForm({
+    resolver: async (data, context, options) => {
+      // you can debug your validation schema here
+      // console.log('formData', data);
+      // console.log(
+      //   'validation result',
+      //   await ajvResolver(dataSchema as any, { strict: false })(
+      //     data,
+      //     context,
+      //     options
+      //   )
+      // );
+      return ajvResolver(dataSchema as any, { strict: false })(data, context, options);
+    },
+    mode: 'all',
+  });
+  const onSubmit = (data: any) => {
+    alert(JSON.stringify(data))
+  };
   return (
     <div className="w-full h-full">
-      {dataSchema &&
-        uiSchema &&
-        renderElements([uiSchema], dataSchema, isDesigner)}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {dataSchema &&
+          uiSchema &&
+          renderElements([uiSchema], dataSchema, isDesigner, form)}
+        {!isDesigner && (
+          <div className="flex flex-row mt-10">
+            <Button
+              type="submit"
+              variant="default"
+              size="default"
+              className="ml-auto hidden h-8 lg:flex px-5 py-3"
+            >
+              Submit
+            </Button>
+          </div>
+        )}
+      </form>
     </div>
   );
 };
