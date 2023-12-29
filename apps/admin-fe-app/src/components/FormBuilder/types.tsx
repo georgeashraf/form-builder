@@ -2,6 +2,7 @@ import { SchemaProperty, UISchema } from '@engine/shared-types';
 import { ReactNode } from 'react';
 import { DateFieldFormElement } from './FormElements/DateField';
 import { DateRangeFieldFormElement } from './FormElements/DateRangeField';
+import { MultiSelectFieldFormElement } from './FormElements/MultiSelectField';
 import { NumberFieldFormElement } from './FormElements/NumberField';
 import { SelectFieldFormElement } from './FormElements/SelectField';
 import { TextAreaFieldFormElement } from './FormElements/TextArea';
@@ -17,7 +18,9 @@ export type ElementsType =
   | 'TextAreaField'
   | 'DateField'
   | 'DateRangeField'
-  | 'SelectField';
+  | 'SelectField'
+  | 'MultiSelectField';
+
 export type FormElement = {
   type: ElementsType;
 
@@ -60,4 +63,5 @@ export const FormElements: FormElementsType = {
   DateField: DateFieldFormElement,
   DateRangeField: DateRangeFieldFormElement,
   SelectField: SelectFieldFormElement,
+  MultiSelectField: MultiSelectFieldFormElement,
 };

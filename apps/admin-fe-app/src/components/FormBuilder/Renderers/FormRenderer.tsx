@@ -1,9 +1,6 @@
 import DesignerComponentWrapper from '../Wrappers/DesignerComponentWrapper';
 import FormComponentWrapper from '../Wrappers/FormComponentWrapper';
-import {
-  ElementsType,
-  FormElements,
-} from '../types';
+import { ElementsType, FormElements } from '../types';
 import { findPropertyFromScope } from '../helpers';
 import LayoutComponentWrapper from '../Wrappers/LayoutComponentWrapper';
 import { UISchema, DataSchema, SchemaProperty } from '@engine/shared-types';
@@ -114,6 +111,14 @@ const renderElements = (
               dataSchema: elementDataSchema,
               uiSchema: el,
             };
+          case 'array':
+            element = {
+              key: el.key,
+              type: 'Input' as 'Input',
+              subtype: 'MultiSelectField' as ElementsType,
+              dataSchema: elementDataSchema,
+              uiSchema: el,
+            };
             break;
 
           default:
@@ -142,7 +147,7 @@ const FormRenderer = ({
   isDesigner: boolean;
 }) => {
   return (
-    <div className='w-full h-full'>
+    <div className="w-full h-full">
       {dataSchema &&
         uiSchema &&
         renderElements([uiSchema], dataSchema, isDesigner)}

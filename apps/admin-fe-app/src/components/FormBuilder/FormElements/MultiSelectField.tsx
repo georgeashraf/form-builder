@@ -15,17 +15,18 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
 import { FormElement, FormElementInstance } from '../types';
 
-export const SelectFieldFormElement: FormElement = {
-  type: 'SelectField',
+export const MultiSelectFieldFormElement: FormElement = {
+  type: 'MultiSelectField',
   construct: (key: string) => ({
     key,
     type: 'Input',
-    subtype: 'SelectField',
+    subtype: 'MultiSelectField',
     dataSchema: {
-      [key]: {
+      [key]: { 
         key,
-        type: 'string',
-        oneOf: [{ const: 'option1', title: 'Option1' }],
+        type: 'array',
+        anyOf: [{ const: 'option1', title: 'Option1' }] ,
+        uniqueItems: true,
         errorMessage: { type: 'foo must be an Integer' },
       },
     },
@@ -34,7 +35,7 @@ export const SelectFieldFormElement: FormElement = {
       type: 'Control',
       required: true,
       name: key,
-      variant: 'SingleSelect',
+      variant: 'MultiSelect',
       label: '',
       placeholder: 'Input Placeholder',
       scope: `#/properties/${key}`,
@@ -42,7 +43,7 @@ export const SelectFieldFormElement: FormElement = {
   }),
   designerBtnElement: {
     icon: ArrowDownIcon,
-    label: 'Dropdown Field',
+    label: 'Multi-Dropdown Field',
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
@@ -63,9 +64,7 @@ function DesignerComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <FormSelect
-        placeholder={elementInstance.uiSchema.placeholder}
-      />
+      <FormSelect isMulti placeholder={elementInstance.uiSchema.placeholder} />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-base-100 text-[0.8rem]">
@@ -91,9 +90,10 @@ function FormComponent({
         </span>
       </Label>
       <FormSelect
+        isMulti
         options={
           elementInstance.dataSchema
-            ? elementInstance.dataSchema[elementKey]?.oneOf
+            ? elementInstance.dataSchema[elementKey]?.anyOf
             : []
         }
         getOptionValue={(option) => option.const.toString()}
@@ -123,7 +123,7 @@ function PropertiesComponent({
       uiSchema: elementInstance.uiSchema,
       selectOptions:
         (elementInstance.dataSchema &&
-          elementInstance.dataSchema[elementInstance.uiSchema.key].oneOf) ||
+          elementInstance.dataSchema[elementInstance.uiSchema.key].anyOf) ||
         [],
     },
   });
@@ -152,7 +152,7 @@ function PropertiesComponent({
         [newName]: values.dataSchema[oldName!],
       })[oldName!];
     }
-    values.dataSchema[newName].oneOf = values.selectOptions;
+    values.dataSchema[newName].anyOf = values.selectOptions;
     updateElementSchemas({
       ...elementInstance,
       uiSchema: values.uiSchema,

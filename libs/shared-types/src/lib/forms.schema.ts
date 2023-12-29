@@ -77,7 +77,8 @@ export type SchemaPropertyBody = {
   dependentRequired?: {
     [key: string]: string[];
   };
-  oneOf?: any[];
+  oneOf?: { const: string; title: string }[];
+  anyOf?: { const: string; title: string }[];
 };
 
 export type SchemaProperty = {

@@ -1,4 +1,4 @@
-import RSelect, { MultiValue, Props, PropsValue } from 'react-select';
+import RSelect, { Props } from 'react-select';
 import { cn } from './utils/helpers';
 
 export function FormSelect<Option, isMulti extends boolean = false>(
@@ -12,7 +12,7 @@ export function FormSelect<Option, isMulti extends boolean = false>(
         closeMenuOnSelect={!props.isMulti}
         classNames={{
           placeholder: () => 'text-gray-400',
-          multiValue: () => 'px-2 py rounded flex gap-1',
+          multiValue: () => 'px-2 py rounded flex gap-1 bg-background',
           multiValueLabel: () => 'text-sm',
           control: (props) =>
             cn(

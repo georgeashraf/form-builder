@@ -15,8 +15,11 @@ const FormElementsSideBar = () => {
         <SidebarBtnElement formElement={FormElements.DateRangeField} />
       </div>
       <div className="flex flex-row gap-3 mb-2">
-        <SidebarBtnElement formElement={FormElements.TextAreaField} />
         <SidebarBtnElement formElement={FormElements.SelectField} />
+        <SidebarBtnElement formElement={FormElements.MultiSelectField} />
+      </div>
+      <div className="flex flex-row gap-3 mb-2">
+        <SidebarBtnElement formElement={FormElements.TextAreaField} />
       </div>
       <Label>Layouts</Label>
       <div className="flex flex-row gap-3">

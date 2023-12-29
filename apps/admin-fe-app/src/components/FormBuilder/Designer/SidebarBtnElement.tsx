@@ -27,7 +27,7 @@ export const SidebarBtnElement = ({
       {...draggable.attributes}
     >
       <Icon className="h-8 w-8 text-text cursor-grab" />
-      <p className="text-xs">{label}</p>
+      <p className="text-xs ">{label}</p>
     </Button>
   );
 };
