@@ -20,15 +20,7 @@ export const VerticalLayoutElement: FormElement = {
   propertiesComponent: () => <div>Designer component</div>,
 };
 
-function DesignerComponent({
-  elementInstance,
-  cols = 1,
-  children,
-}: {
-  elementInstance: FormElementInstance;
-  cols?: number;
-  children?: ReactNode;
-}) {
+function DesignerComponent({ children }: { children?: ReactNode }) {
   return (
     <>
       <div
@@ -40,15 +32,7 @@ function DesignerComponent({
   );
 }
 
-function FormComponent({
-  elementInstance,
-  cols = 1,
-  children,
-}: {
-  elementInstance: FormElementInstance;
-  cols?: number;
-  children?: ReactNode;
-}) {
+function FormComponent({ children }: { children?: ReactNode }) {
   return (
     <div
       className={`flex flex-col flex-grow items-start gap-4 justify-between flex-1 `}

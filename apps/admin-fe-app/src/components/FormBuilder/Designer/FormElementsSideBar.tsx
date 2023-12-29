@@ -26,6 +26,9 @@ const FormElementsSideBar = () => {
         <SidebarBtnElement formElement={FormElements.HorizontalLayout} />
         <SidebarBtnElement formElement={FormElements.VerticalLayout} />
       </div>
+      <div className="flex flex-row gap-3">
+        <SidebarBtnElement formElement={FormElements.GroupAccordionLayout} />
+      </div>
     </div>
   );
 };

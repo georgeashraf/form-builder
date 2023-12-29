@@ -7,6 +7,7 @@ import { NumberFieldFormElement } from './FormElements/NumberField';
 import { SelectFieldFormElement } from './FormElements/SelectField';
 import { TextAreaFieldFormElement } from './FormElements/TextArea';
 import { TextFieldFormElement } from './FormElements/TextField';
+import { GroupAccordionLayoutElement } from './Layouts/GroupAccordionLayout';
 import { HorizontalLayoutElement } from './Layouts/Horizontal';
 import { VerticalLayoutElement } from './Layouts/Vertical';
 
@@ -14,6 +15,7 @@ export type ElementsType =
   | 'TextField'
   | 'HorizontalLayout'
   | 'VerticalLayout'
+  | 'GroupAccordionLayout'
   | 'NumberField'
   | 'TextAreaField'
   | 'DateField'
@@ -58,6 +60,7 @@ export const FormElements: FormElementsType = {
   TextField: TextFieldFormElement,
   HorizontalLayout: HorizontalLayoutElement,
   VerticalLayout: VerticalLayoutElement,
+  GroupAccordionLayout: GroupAccordionLayoutElement,
   NumberField: NumberFieldFormElement,
   TextAreaField: TextAreaFieldFormElement,
   DateField: DateFieldFormElement,

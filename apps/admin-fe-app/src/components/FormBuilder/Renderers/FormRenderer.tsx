@@ -77,6 +77,39 @@ const renderElements = (
               : null}
           </HorizontalLayout>
         );
+      case 'GroupAccordionLayout':
+        const GroupAccordionLayout =
+          FormElements['GroupAccordionLayout' as ElementsType].formComponent;
+        return isDesigner ? (
+          <LayoutComponentWrapper
+            key={el.key}
+            element={{
+              key: el.key,
+              type: 'Layout',
+              subtype: 'GroupAccordionLayout',
+              uiSchema: el,
+            }}
+          >
+            {el?.elements?.length
+              ? renderElements(el.elements, dataSchema, isDesigner)
+              : null}
+          </LayoutComponentWrapper>
+        ) : (
+          <GroupAccordionLayout
+            key={el.key}
+            elementInstance={{
+              key: el.key,
+              type: 'Layout',
+              subtype: 'GroupAccordionLayout',
+              uiSchema: el,
+            }}
+          >
+            {el?.elements?.length
+              ? renderElements(el.elements, dataSchema, isDesigner)
+              : null}
+          </GroupAccordionLayout>
+        );
+
       case 'Control':
         const scope = el.scope;
         const elementSchemaProperties = findPropertyFromScope(

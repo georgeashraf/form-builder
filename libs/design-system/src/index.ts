@@ -23,5 +23,4 @@ export * from './lib/Switch';
 export * from './lib/Progress';
 export * from './lib/DatePickers';
 export * from './lib/FormSelect';
-
-
+export * from './lib/Accordion';
