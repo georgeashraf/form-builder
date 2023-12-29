@@ -25,6 +25,7 @@ export const MultiSelectFieldFormElement: FormElement = {
       [key]: { 
         key,
         type: 'array',
+        description: 'This element description',
         anyOf: [{ const: 'option1', title: 'Option1' }] ,
         uniqueItems: true,
         errorMessage: { type: 'foo must be an Integer' },

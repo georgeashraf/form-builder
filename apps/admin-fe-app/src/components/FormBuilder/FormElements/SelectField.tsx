@@ -25,6 +25,7 @@ export const SelectFieldFormElement: FormElement = {
       [key]: {
         key,
         type: 'string',
+        description: 'This element description',
         oneOf: [{ const: 'option1', title: 'Option1' }],
         errorMessage: { type: 'foo must be an Integer' },
       },
@@ -63,9 +64,7 @@ function DesignerComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <FormSelect
-        placeholder={elementInstance.uiSchema.placeholder}
-      />
+      <FormSelect placeholder={elementInstance.uiSchema.placeholder} />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-base-100 text-[0.8rem]">
