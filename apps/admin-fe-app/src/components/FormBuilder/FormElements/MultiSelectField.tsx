@@ -37,8 +37,12 @@ export const MultiSelectFieldFormElement: FormElement = {
           anyOf: [
             { const: 'option1', title: 'Option1' },
             { const: 'option2', title: 'Option2' },
+            { const: 'option3', title: 'Option3' },
+            { const: 'option4', title: 'Option4' },
           ],
         },
+        minItems: 3,
+        maxItems: 6,
         uniqueItems: true,
         errorMessage: { type: 'foo must be an Integer' },
       },
@@ -152,7 +156,8 @@ function PropertiesComponent({
       uiSchema: elementInstance.uiSchema,
       selectOptions:
         (elementInstance.dataSchema &&
-          elementInstance.dataSchema[elementInstance.uiSchema.key].anyOf) ||
+          elementInstance.dataSchema[elementInstance.uiSchema.key].items
+            ?.anyOf) ||
         [],
     },
   });
@@ -181,7 +186,10 @@ function PropertiesComponent({
         [newName]: values.dataSchema[oldName!],
       })[oldName!];
     }
-    values.dataSchema[newName].anyOf = values.selectOptions;
+    if (values.dataSchema[newName].items) {
+      // @ts-ignore
+      values.dataSchema[newName].items.anyOf = values.selectOptions;
+    }
     updateElementSchemas({
       ...elementInstance,
       uiSchema: values.uiSchema,
@@ -293,6 +301,7 @@ function PropertiesComponent({
                   value={field.value}
                   placeholder="Min"
                   className="w-full"
+                  onChange={(v) => field.onChange(+v.target.value)}
                 />
                 {fieldState.error?.message && (
                   <Label variant={'error'}>{fieldState.error?.message}</Label>
@@ -310,9 +319,14 @@ function PropertiesComponent({
               <>
                 <Input
                   {...field}
-                  value={field.value}
+                  value={field.value === 0 ? undefined : field.value}
                   placeholder="Max"
                   className="w-full"
+                  onChange={(v) =>
+                    field.onChange(
+                      v.target.value === '' ? undefined : +v.target.value
+                    )
+                  }
                 />
                 {fieldState.error?.message && (
                   <Label variant={'error'}>{fieldState.error?.message}</Label>
