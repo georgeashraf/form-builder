@@ -6,7 +6,13 @@ import { cn } from '../utils/helpers';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { Calendar } from '../Calendar';
 
-export function DatePicker() {
+export function DatePicker({
+  value,
+  onChange,
+}: {
+  value?: string;
+  onChange?: (d?: Date) => void;
+}) {
   const [date, setDate] = React.useState<Date>();
 
   return (
@@ -20,14 +26,16 @@ export function DatePicker() {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, 'PPP') : <span>Pick a date</span>}
+          {value && format(value, 'PPP')}
+          {date && format(date, 'PPP')}
+          {!date && !value && <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
-          selected={date}
-          onSelect={setDate}
+          selected={value ? new Date(value) : date}
+          onSelect={onChange ?? setDate}
           initialFocus
         />
       </PopoverContent>

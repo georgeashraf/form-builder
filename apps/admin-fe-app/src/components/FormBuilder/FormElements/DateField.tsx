@@ -1,7 +1,13 @@
 import { DatePicker, Input, Label, Switch } from '@engine/design-system';
 import { UISchema, SchemaProperty } from '@engine/shared-types';
 import { CalendarIcon } from '@radix-ui/react-icons';
-import { Controller, useForm } from 'react-hook-form';
+import { format } from 'date-fns';
+import {
+  Controller,
+  FieldValues,
+  useForm,
+  UseFormReturn,
+} from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
 import { FormElement, FormElementInstance } from '../types';
 
@@ -67,10 +73,13 @@ function DesignerComponent({
 
 function FormComponent({
   elementInstance,
+  form,
 }: {
   elementInstance: FormElementInstance;
+  form?: UseFormReturn<FieldValues, any, undefined>;
 }) {
   const elementKey = elementInstance.uiSchema.key;
+  const elementName = elementInstance.uiSchema.name;
 
   return (
     <div className="flex flex-col gap-2 w-full">
@@ -80,7 +89,25 @@ function FormComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <DatePicker />
+      <Controller
+        name={`${elementName}`}
+        control={form?.control}
+        render={({ field, fieldState }) => (
+          <>
+            <DatePicker
+              {...field}
+              value={field.value}
+              onChange={(v?: Date) =>
+                field.onChange(v ? v.toISOString() : new Date())
+              }
+            />
+            {fieldState.error?.message && (
+              <Label variant={'error'}>{fieldState.error?.message}</Label>
+            )}
+          </>
+        )}
+      />
+
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-text text-[0.8rem]">

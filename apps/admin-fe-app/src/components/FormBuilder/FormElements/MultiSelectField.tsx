@@ -11,7 +11,13 @@ import {
   MinusCircledIcon,
   PlusCircledIcon,
 } from '@radix-ui/react-icons';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import {
+  Controller,
+  FieldValues,
+  useFieldArray,
+  useForm,
+  UseFormReturn,
+} from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
 import { FormElement, FormElementInstance } from '../types';
 
@@ -22,11 +28,17 @@ export const MultiSelectFieldFormElement: FormElement = {
     type: 'Input',
     subtype: 'MultiSelectField',
     dataSchema: {
-      [key]: { 
+      [key]: {
         key,
         type: 'array',
         description: 'This element description',
-        anyOf: [{ const: 'option1', title: 'Option1' }] ,
+        items: {
+          type: 'string',
+          anyOf: [
+            { const: 'option1', title: 'Option1' },
+            { const: 'option2', title: 'Option2' },
+          ],
+        },
         uniqueItems: true,
         errorMessage: { type: 'foo must be an Integer' },
       },
@@ -78,10 +90,16 @@ function DesignerComponent({
 
 function FormComponent({
   elementInstance,
+  form,
 }: {
   elementInstance: FormElementInstance;
+  form?: UseFormReturn<FieldValues, any, undefined>;
 }) {
   const elementKey = elementInstance.uiSchema.key;
+  const elementName = elementInstance.uiSchema.name;
+  const options = elementInstance.dataSchema
+    ? elementInstance.dataSchema[elementKey]?.items?.anyOf
+    : [];
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label>
@@ -90,16 +108,26 @@ function FormComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <FormSelect
-        isMulti
-        options={
-          elementInstance.dataSchema
-            ? elementInstance.dataSchema[elementKey]?.anyOf
-            : []
-        }
-        getOptionValue={(option) => option.const.toString()}
-        getOptionLabel={(option) => option.title}
-        placeholder={elementInstance.uiSchema.placeholder}
+      <Controller
+        name={`${elementName}`}
+        control={form?.control}
+        render={({ field, fieldState }) => (
+          <>
+            <FormSelect
+              {...field}
+              isMulti
+              options={options}
+              value={options?.filter((o) => field.value?.includes(o.const))}
+              getOptionValue={(option) => option.const.toString()}
+              getOptionLabel={(option) => option.title}
+              placeholder={elementInstance.uiSchema.placeholder}
+              onChange={(o) => field.onChange(o.map((c) => c.const))}
+            />
+            {fieldState.error?.message && (
+              <Label variant={'error'}>{fieldState.error?.message}</Label>
+            )}
+          </>
+        )}
       />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
@@ -251,6 +279,48 @@ function PropertiesComponent({
             </>
           )}
         />
+      </div>
+      <div className="flex">
+        <div className="flex flex-col">
+          <Label className="mb-2">Minimum Items</Label>
+          <Controller
+            name={`dataSchema[${elementInstance.key}].minItems`}
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <>
+                <Input
+                  {...field}
+                  value={field.value}
+                  placeholder="Min"
+                  className="w-full"
+                />
+                {fieldState.error?.message && (
+                  <Label variant={'error'}>{fieldState.error?.message}</Label>
+                )}
+              </>
+            )}
+          />
+        </div>
+        <div className="flex flex-col">
+          <Label className="mb-2">Maximum Items</Label>
+          <Controller
+            name={`dataSchema[${elementInstance.key}].maxItems`}
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <>
+                <Input
+                  {...field}
+                  value={field.value}
+                  placeholder="Max"
+                  className="w-full"
+                />
+                {fieldState.error?.message && (
+                  <Label variant={'error'}>{fieldState.error?.message}</Label>
+                )}
+              </>
+            )}
+          />
+        </div>
       </div>
       <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
         <Label className="mb-2">Required</Label>

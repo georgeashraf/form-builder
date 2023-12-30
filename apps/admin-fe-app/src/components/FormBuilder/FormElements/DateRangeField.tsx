@@ -1,12 +1,16 @@
 import { DateRangePicker, Input, Label, Switch } from '@engine/design-system';
 import { UISchema, SchemaProperty } from '@engine/shared-types';
 import { CalendarIcon } from '@radix-ui/react-icons';
-import { Controller, useForm } from 'react-hook-form';
-import useDesigner from '../Hooks/useDesigner';
+import { addDays } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 import {
-  FormElement,
-  FormElementInstance,
-} from '../types';
+  Controller,
+  FieldValues,
+  useForm,
+  UseFormReturn,
+} from 'react-hook-form';
+import useDesigner from '../Hooks/useDesigner';
+import { FormElement, FormElementInstance } from '../types';
 
 export const DateRangeFieldFormElement: FormElement = {
   type: 'DateRangeField',
@@ -17,8 +21,15 @@ export const DateRangeFieldFormElement: FormElement = {
     dataSchema: {
       [key]: {
         key,
-        type: 'string',
-        pattern: '',
+        type: 'object',
+        properties: {
+          from: {
+            type: 'string',
+          },
+          to: {
+            type: 'string',
+          },
+        },
         description: 'This is Element Description',
         errorMessage: { type: 'foo must be an Integer' },
       },
@@ -70,10 +81,13 @@ function DesignerComponent({
 
 function FormComponent({
   elementInstance,
+  form,
 }: {
   elementInstance: FormElementInstance;
+  form?: UseFormReturn<FieldValues, any, undefined>;
 }) {
   const elementKey = elementInstance.uiSchema.key;
+  const elementName = elementInstance.uiSchema.name;
 
   return (
     <div className="flex flex-col gap-2 w-full">
@@ -83,7 +97,31 @@ function FormComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <DateRangePicker />
+      <Controller
+        name={`${elementName}`}
+        control={form?.control}
+        render={({ field, fieldState }) => (
+          <>
+            <DateRangePicker
+              {...field}
+              value={field.value}
+              onChange={(v?: DateRange) =>
+                field.onChange(
+                  v
+                    ? { from: v.from?.toISOString(), to: v.to?.toISOString() }
+                    : {
+                        from: new Date().toISOString(),
+                        to: addDays(new Date(), 20).toISOString(),
+                      }
+                )
+              }
+            />
+            {fieldState.error?.message && (
+              <Label variant={'error'}>{fieldState.error?.message}</Label>
+            )}
+          </>
+        )}
+      />
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-text text-[0.8rem]">

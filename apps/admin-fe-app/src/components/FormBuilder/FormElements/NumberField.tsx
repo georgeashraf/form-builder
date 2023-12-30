@@ -1,12 +1,14 @@
 import { Input, Label, Switch } from '@engine/design-system';
 import { UISchema, SchemaProperty } from '@engine/shared-types';
 import { TextNoneIcon } from '@radix-ui/react-icons';
-import { Controller, useForm } from 'react-hook-form';
-import useDesigner from '../Hooks/useDesigner';
 import {
-  FormElement,
-  FormElementInstance,
-} from '../types';
+  Controller,
+  FieldValues,
+  useForm,
+  UseFormReturn,
+} from 'react-hook-form';
+import useDesigner from '../Hooks/useDesigner';
+import { FormElement, FormElementInstance } from '../types';
 
 export const NumberFieldFormElement: FormElement = {
   type: 'NumberField',
@@ -74,11 +76,13 @@ function DesignerComponent({
 
 function FormComponent({
   elementInstance,
+  form,
 }: {
   elementInstance: FormElementInstance;
+  form?: UseFormReturn<FieldValues, any, undefined>;
 }) {
   const elementKey = elementInstance.uiSchema.key;
-
+  const elementName = elementInstance.uiSchema.name;
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label>
@@ -87,10 +91,27 @@ function FormComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <Input
-        type={'number'}
-        placeholder={elementInstance.uiSchema.placeholder}
+      <Controller
+        name={`${elementName}`}
+        control={form?.control}
+        render={({ field, fieldState }) => (
+          <>
+            <Input
+              type={'number'}
+              placeholder={elementInstance.uiSchema.placeholder}
+              defaultValue={0}
+              {...field}
+              value={field.value}
+              onChange={v => field.onChange(+v.target.value)}
+
+            />
+            {fieldState.error?.message && (
+              <Label variant={'error'}>{fieldState.error?.message}</Label>
+            )}
+          </>
+        )}
       />
+
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-text text-[0.8rem]">

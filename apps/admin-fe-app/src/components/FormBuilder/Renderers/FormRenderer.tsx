@@ -129,9 +129,7 @@ const renderElements = (
           case 'string':
             if (el.variant === 'TextArea') subtype = 'TextAreaField';
             if (el.variant === 'Date') subtype = 'DateField';
-            if (el.variant === 'DateRange') subtype = 'DateRangeField';
             if (el.variant === 'SingleSelect') subtype = 'SelectField';
-
             element = {
               key: el.key,
               type: 'Input' as 'Input',
@@ -148,11 +146,21 @@ const renderElements = (
               dataSchema: elementDataSchema,
               uiSchema: el,
             };
+            break;
           case 'array':
             element = {
               key: el.key,
               type: 'Input' as 'Input',
               subtype: 'MultiSelectField' as ElementsType,
+              dataSchema: elementDataSchema,
+              uiSchema: el,
+            };
+            break;
+          case 'object':
+            element = {
+              key: el.key,
+              type: 'Input' as 'Input',
+              subtype: 'DateRangeField' as ElementsType,
               dataSchema: elementDataSchema,
               uiSchema: el,
             };
@@ -190,21 +198,25 @@ const FormRenderer = ({
   const form = useForm({
     resolver: async (data, context, options) => {
       // you can debug your validation schema here
-      // console.log('formData', data);
-      // console.log(
-      //   'validation result',
-      //   await ajvResolver(dataSchema as any, { strict: false })(
-      //     data,
-      //     context,
-      //     options
-      //   )
-      // );
-      return ajvResolver(dataSchema as any, { strict: false })(data, context, options);
+      console.log('formData', data);
+      console.log(
+        'validation result',
+        await ajvResolver(dataSchema as any, { strict: false })(
+          data,
+          context,
+          options
+        )
+      );
+      return ajvResolver(dataSchema as any, { strict: false })(
+        data,
+        context,
+        options
+      );
     },
     mode: 'all',
   });
   const onSubmit = (data: any) => {
-    alert(JSON.stringify(data))
+    alert(JSON.stringify(data));
   };
   return (
     <div className="w-full h-full">

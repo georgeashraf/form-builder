@@ -11,7 +11,13 @@ import {
   MinusCircledIcon,
   PlusCircledIcon,
 } from '@radix-ui/react-icons';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import {
+  Controller,
+  FieldValues,
+  useFieldArray,
+  useForm,
+  UseFormReturn,
+} from 'react-hook-form';
 import useDesigner from '../Hooks/useDesigner';
 import { FormElement, FormElementInstance } from '../types';
 
@@ -77,10 +83,16 @@ function DesignerComponent({
 
 function FormComponent({
   elementInstance,
+  form,
 }: {
   elementInstance: FormElementInstance;
+  form?: UseFormReturn<FieldValues, any, undefined>;
 }) {
   const elementKey = elementInstance.uiSchema.key;
+  const elementName = elementInstance.uiSchema.name;
+  const options = elementInstance.dataSchema
+    ? elementInstance.dataSchema[elementKey]?.oneOf
+    : [];
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label>
@@ -89,16 +101,27 @@ function FormComponent({
           {elementInstance.uiSchema.required && '*'}
         </span>
       </Label>
-      <FormSelect
-        options={
-          elementInstance.dataSchema
-            ? elementInstance.dataSchema[elementKey]?.oneOf
-            : []
-        }
-        getOptionValue={(option) => option.const.toString()}
-        getOptionLabel={(option) => option.title}
-        placeholder={elementInstance.uiSchema.placeholder}
+      <Controller
+        name={`${elementName}`}
+        control={form?.control}
+        render={({ field, fieldState }) => (
+          <>
+            <FormSelect
+              {...field}
+              options={options}
+              value={options?.find((o) => o.const === field.value)}
+              getOptionValue={(option) => option.const.toString()}
+              getOptionLabel={(option) => option.title}
+              placeholder={elementInstance.uiSchema.placeholder}
+              onChange={(o) => field.onChange(o?.const)}
+            />
+            {fieldState.error?.message && (
+              <Label variant={'error'}>{fieldState.error?.message}</Label>
+            )}
+          </>
+        )}
       />
+
       {elementInstance.dataSchema &&
         elementInstance.dataSchema[elementKey]?.description && (
           <p className="text-text text-[0.8rem]">

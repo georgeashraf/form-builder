@@ -60,7 +60,7 @@ export type SchemaPropertyBody = {
   type: SchemaPrimitiveType | SchemaPrimitiveType[];
   description?: string;
   properties?: SchemaProperty;
-  items?: { type: SchemaPrimitiveType | SchemaPrimitiveType[] };
+  items?: SchemaPropertyBody;
   minItems?: number;
   maxItems?: number;
   uniqueItems?: boolean;
