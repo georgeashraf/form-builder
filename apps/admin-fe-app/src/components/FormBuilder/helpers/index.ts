@@ -1,7 +1,10 @@
-import { DataSchema, SchemaProperty, SchemaPropertyBody, UISchema } from '@engine/shared-types';
 import {
-  FormElementInstance,
-} from '../types';
+  DataSchema,
+  SchemaProperty,
+  SchemaPropertyBody,
+  UISchema,
+} from '@engine/shared-types';
+import { FormElementInstance } from '../types';
 
 export function findPropertyFromScope(
   scope: string,
@@ -199,19 +202,23 @@ export function addElementInPosition(
   }
 }
 
-export function updateElementProperties(obj: any, path: string, newObj: any) {
-  const p = path.split('/');
+export function updateElementProperties(obj: any, oldPath: string, newObj: any) {
+  const p = oldPath.split('/');
   const first = p.shift();
   for (var i in obj) {
     if (i == first) {
       if (p.length === 0) {
+        // for uiSchema update
         if (Array.isArray(obj)) {
           obj[+first] = newObj;
         } else {
-          delete Object.assign(obj, { [Object.keys(newObj)[0]]: obj[first] })[
-            first
-          ];
+          // for dataschema update
+          // delete Object.assign(obj, { [Object.keys(newObj)[0]]: obj[first] })[
+          //   first
+          // ];
+          delete obj[first]
           obj[Object.keys(newObj)[0]] = Object.values(newObj)[0];
+
         }
       } else if (typeof obj[i] == 'object') {
         updateElementProperties(obj[i], p.join('/'), newObj);

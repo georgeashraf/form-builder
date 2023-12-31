@@ -1,4 +1,4 @@
-import { Input, Label, Switch } from '@engine/design-system';
+import { Button, Input, Label, Switch } from '@engine/design-system';
 import { UISchema, SchemaProperty } from '@engine/shared-types';
 import { TextIcon } from '@radix-ui/react-icons';
 import {
@@ -52,7 +52,7 @@ function DesignerComponent({
 }: {
   elementInstance: FormElementInstance;
 }) {
-  const elementKey = elementInstance.uiSchema.key;
+  const elementName = elementInstance.uiSchema.name;
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label variant={'base'}>
@@ -67,9 +67,9 @@ function DesignerComponent({
         placeholder={elementInstance.uiSchema.placeholder}
       />
       {elementInstance.dataSchema &&
-        elementInstance.dataSchema[elementKey]?.description && (
+        elementInstance.dataSchema[elementName]?.description && (
           <p className="text-base-100 text-[0.8rem]">
-            {elementInstance.dataSchema[elementKey]?.description}
+            {elementInstance.dataSchema[elementName]?.description}
           </p>
         )}
     </div>
@@ -145,8 +145,8 @@ function PropertiesComponent({
       scopeArr.push(newName);
       newScope = scopeArr.join('/');
     }
+    const newUiSchema = {...values.uiSchema, scope: newScope}
 
-    values.uiSchema.scope = newScope;
     if (newName !== oldName) {
       delete Object.assign(values.dataSchema, {
         [newName]: values.dataSchema[oldName!],
@@ -155,15 +155,14 @@ function PropertiesComponent({
 
     updateElementSchemas({
       ...elementInstance,
-      uiSchema: values.uiSchema,
+      uiSchema: newUiSchema,
       dataSchema: values.dataSchema,
     });
   }
 
   return (
     <form
-      onSubmit={(e) => e.preventDefault()}
-      onBlur={form.handleSubmit(updateSchemas)}
+      onSubmit={form.handleSubmit(updateSchemas)}
       className="space-y-3"
     >
       <div className="flex flex-col">
@@ -214,7 +213,7 @@ function PropertiesComponent({
       <div className="flex flex-col">
         <Label className="mb-2">Description</Label>
         <Controller
-          name={`dataSchema[${elementInstance.key}].description`}
+          name={`dataSchema[${elementInstance.uiSchema.name}].description`}
           control={form.control}
           render={({ field, fieldState }) => (
             <>
@@ -270,6 +269,7 @@ function PropertiesComponent({
           )}
         />
       </div>
+      <Button type="submit">Save</Button>
     </form>
   );
 }
