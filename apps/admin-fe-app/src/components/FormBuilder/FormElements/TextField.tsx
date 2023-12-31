@@ -1,14 +1,32 @@
-import { Button, Input, Label, Switch } from '@engine/design-system';
+import {
+  Button,
+  Input,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Switch,
+} from '@engine/design-system';
 import { UISchema, SchemaProperty } from '@engine/shared-types';
 import { TextIcon } from '@radix-ui/react-icons';
 import {
   Controller,
   FieldValues,
+  useFieldArray,
   useForm,
   UseFormReturn,
 } from 'react-hook-form';
+import RulesForm from '../Designer/SidebarRulesForm';
+import { buildConditionObject } from '../helpers';
 import useDesigner from '../Hooks/useDesigner';
-import { FormElement, FormElementInstance } from '../types';
+import {
+  FormElement,
+  FormElementInstance,
+  Operator,
+  RuleEffects,
+} from '../types';
 
 export const TextFieldFormElement: FormElement = {
   type: 'TextField',
@@ -124,7 +142,7 @@ function PropertiesComponent({
 }: {
   elementInstance: FormElementInstance;
 }) {
-  const { updateElementSchemas } = useDesigner();
+  const { updateElementSchemas, elementsMap } = useDesigner();
   const form = useForm<any>({
     mode: 'onBlur',
     defaultValues: {
@@ -132,9 +150,17 @@ function PropertiesComponent({
       uiSchema: elementInstance.uiSchema,
     },
   });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'formRules',
+  });
   function updateSchemas(values: {
     uiSchema: UISchema;
     dataSchema: SchemaProperty;
+    formRules: {
+      operator: Operator;
+      value: string;
+    }[];
   }) {
     const newName = values.uiSchema.name;
     const oldScope = values.uiSchema.scope;
@@ -145,7 +171,17 @@ function PropertiesComponent({
       scopeArr.push(newName);
       newScope = scopeArr.join('/');
     }
-    const newUiSchema = {...values.uiSchema, scope: newScope}
+    const newUiSchema = {
+      ...values.uiSchema,
+      scope: newScope,
+      rule: {
+        effect: values.uiSchema.rule?.effect,
+        condition: {
+          scope: newScope,
+          schema: buildConditionObject(values.formRules),
+        },
+      },
+    };
 
     if (newName !== oldName) {
       delete Object.assign(values.dataSchema, {
@@ -161,10 +197,7 @@ function PropertiesComponent({
   }
 
   return (
-    <form
-      onSubmit={form.handleSubmit(updateSchemas)}
-      className="space-y-3"
-    >
+    <form onSubmit={form.handleSubmit(updateSchemas)} className="space-y-3">
       <div className="flex flex-col">
         <Label className="mb-2">Label</Label>
         <Controller
@@ -269,7 +302,62 @@ function PropertiesComponent({
           )}
         />
       </div>
-      <Button type="submit">Save</Button>
+      <div className="flex flex-col">
+        <Label className="mb-2">Rule Effect</Label>
+        <Controller
+          name={`uiSchema.rule.effect`}
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <>
+              <Select
+                value={field.value}
+                onValueChange={(value) => field.onChange(value)}
+              >
+                <SelectTrigger className="h-8 w-full">
+                  <SelectValue placeholder={field.value} />
+                </SelectTrigger>
+                <SelectContent className="bg-base-100" side="top">
+                  {RuleEffects.map((effect) => (
+                    <SelectItem key={effect} value={`${effect}`}>
+                      {effect}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {fieldState.error?.message && (
+                <Label variant={'error'}>{fieldState.error?.message}</Label>
+              )}
+            </>
+          )}
+        />
+      </div>
+      <div className="flex flex-col">
+        <Label className="mb-2">Rule Element</Label>
+        <Controller
+          name={`uiSchema.rule.condition.scope`}
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className="h-8 w-full">
+                  <SelectValue placeholder={'select element'} />
+                </SelectTrigger>
+                <SelectContent className="bg-base-100" side="top">
+                  {Array.from(elementsMap.keys()).map((elementKey) => (
+                    <SelectItem key={elementKey} value={`${elementKey}`}>
+                      {elementsMap.get(elementKey)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {fieldState.error?.message && (
+                <Label variant={'error'}>{fieldState.error?.message}</Label>
+              )}
+            </>
+          )}
+        />
+      </div>
+      <RulesForm form={form} append={append} fields={fields} remove={remove} />
     </form>
   );
 }

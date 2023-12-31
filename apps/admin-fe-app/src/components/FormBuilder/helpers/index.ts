@@ -4,7 +4,7 @@ import {
   SchemaPropertyBody,
   UISchema,
 } from '@engine/shared-types';
-import { FormElementInstance } from '../types';
+import { FormElementInstance, Operator } from '../types';
 
 export function findPropertyFromScope(
   scope: string,
@@ -202,7 +202,11 @@ export function addElementInPosition(
   }
 }
 
-export function updateElementProperties(obj: any, oldPath: string, newObj: any) {
+export function updateElementProperties(
+  obj: any,
+  oldPath: string,
+  newObj: any
+) {
   const p = oldPath.split('/');
   const first = p.shift();
   for (var i in obj) {
@@ -216,9 +220,8 @@ export function updateElementProperties(obj: any, oldPath: string, newObj: any) 
           // delete Object.assign(obj, { [Object.keys(newObj)[0]]: obj[first] })[
           //   first
           // ];
-          delete obj[first]
+          delete obj[first];
           obj[Object.keys(newObj)[0]] = Object.values(newObj)[0];
-
         }
       } else if (typeof obj[i] == 'object') {
         updateElementProperties(obj[i], p.join('/'), newObj);
@@ -226,4 +229,45 @@ export function updateElementProperties(obj: any, oldPath: string, newObj: any) 
     }
   }
   return obj;
+}
+
+export function buildConditionObject(
+  formRules: {
+    operator: Operator;
+    value: string;
+  }[]
+) {
+  let schema: { [key: string]: any } = {};
+  for (const rule of formRules) {
+    if (rule.operator === 'ne') {
+      if (schema.hasOwnProperty('not')) {
+        schema['not']['enum'].push(rule.value);
+      } else {
+        schema['not'] = { enum: [rule.value] };
+      }
+    }
+    if (rule.operator === 'eq') {
+      if (schema.hasOwnProperty('enum')) {
+        schema['enum'].push(rule.value);
+      } else {
+        schema['enum'] = [rule.value];
+      }
+    }
+    if (rule.operator === 'gt') {
+      schema['exclusiveMinimum'] = rule.value;
+    }
+    if (rule.operator === 'gte') {
+      schema['minimum'] = rule.value;
+    }
+    if (rule.operator === 'lt') {
+      schema['exclusiveMaximum'] = rule.value;
+    }
+    if (rule.operator === 'lte') {
+      schema['maximum'] = rule.value;
+    }
+    if (rule.operator === 'contains') {
+      schema['contains'] = { enum: [rule.value] };
+    }
+  }
+  return schema
 }

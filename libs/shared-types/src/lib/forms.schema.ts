@@ -104,10 +104,10 @@ export type UISchema = {
   placeholder?: string;
   elements?: UISchema[];
   rule?: {
-    effect: 'HIDE' | 'SHOW' | 'ENABLE' | 'DISABLE';
-    condition: {
-      scope: string;
-      schema: SchemaPropertyBody;
+    effect?: 'HIDE' | 'SHOW' | 'ENABLE' | 'DISABLE';
+    condition?: {
+      scope?: string;
+      schema?: Partial<SchemaPropertyBody>;
     };
   };
 };

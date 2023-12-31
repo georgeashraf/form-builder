@@ -12,6 +12,9 @@ import { GroupAccordionLayoutElement } from './Layouts/GroupAccordionLayout';
 import { HorizontalLayoutElement } from './Layouts/Horizontal';
 import { VerticalLayoutElement } from './Layouts/Vertical';
 
+export const RuleEffects = ['HIDE', 'SHOW', 'ENABLE', 'DISABLE'] as const;
+export const OPERATORS = ['eq', 'ne', 'contains', 'lt', 'lte', 'gt', 'gte'] as const;
+export type Operator = typeof OPERATORS[number];
 export type ElementsType =
   | 'TextField'
   | 'HorizontalLayout'
@@ -39,7 +42,7 @@ export type FormElement = {
   }>;
   formComponent: React.FC<{
     elementInstance: FormElementInstance;
-    form?: UseFormReturn<FieldValues, any, undefined>
+    form?: UseFormReturn<FieldValues, any, undefined>;
     children?: ReactNode;
   }>;
   propertiesComponent: React.FC<{

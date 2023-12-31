@@ -12,20 +12,23 @@ import { MinusCircledIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import {
   Controller,
   FieldValues,
-  useFieldArray,
+  UseFieldArrayAppend,
+  UseFieldArrayRemove,
   UseFormReturn,
 } from 'react-hook-form';
+import { OPERATORS } from '../types';
 
-const operators = ['eq', 'ne', 'contains', 'lt', 'lte', 'gt', 'gte'];
 const RulesForm = ({
+  fields,
+  append,
+  remove,
   form,
 }: {
+  fields: Record<'id', string>[];
+  append: UseFieldArrayAppend<FieldValues, 'formRules'>;
+  remove: UseFieldArrayRemove;
   form: UseFormReturn<FieldValues, any, undefined>;
 }) => {
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: 'formRules',
-  });
   return (
     <div className="flex flex-col">
       {fields.map(({ id }, index) => (
@@ -51,7 +54,7 @@ const RulesForm = ({
                     <SelectValue placeholder={field.value} />
                   </SelectTrigger>
                   <SelectContent className="bg-base-100" side="top">
-                    {operators.map((op) => (
+                    {OPERATORS.map((op) => (
                       <SelectItem key={op} value={`${op}`}>
                         {op}
                       </SelectItem>
@@ -84,7 +87,9 @@ const RulesForm = ({
         Add Rule Condition
       </Button>
 
-      <Button type="submit" variant={'secondary'}>Save Changes</Button>
+      <Button type="submit" variant={'secondary'}>
+        Save Changes
+      </Button>
     </div>
   );
 };

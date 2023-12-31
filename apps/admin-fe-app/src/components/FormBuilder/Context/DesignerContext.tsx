@@ -1,7 +1,5 @@
 import { createContext, ReactNode, useState } from 'react';
-import {
-  FormElementInstance,
-} from '../types';
+import { FormElementInstance } from '../types';
 import {
   addPropertyByPath,
   findPath,
@@ -9,11 +7,16 @@ import {
   updateElementProperties,
   UpdateUiElementByKey,
 } from '../helpers';
-import { DataSchema, SchemaPrimitiveType, UISchema } from '@engine/shared-types';
+import {
+  DataSchema,
+  SchemaPrimitiveType,
+  UISchema,
+} from '@engine/shared-types';
 
 type DesignerContextType = {
   dataSchema: DataSchema;
   uiSchema?: UISchema;
+  elementsMap: Map<string, string>;
   addElementSchemas: (element: FormElementInstance) => void;
   removeElement: (key: string) => void;
   removeLayout: (key: string) => void;
@@ -46,10 +49,18 @@ export default function DesignerContextProvider({
   };
   const [dataSchema, setDataSchema] = useState<DataSchema>(baseDataSchema);
   const [uiSchema, setUISchema] = useState<UISchema | undefined>();
+  const [elementsMap, setElementsMap] = useState<Map<string, string>>(
+    new Map()
+  );
+
   const [selectedElement, setSelectedElement] =
     useState<FormElementInstance | null>(null);
 
   const removeElement = (key: string) => {
+    setElementsMap((prev) => {
+      prev?.delete(key);
+      return new Map(prev);
+    });
     let dataSchemaControlPath = findPath(dataSchema, 'key', key);
     dataSchemaControlPath = dataSchemaControlPath?.replace('/key', '');
     dataSchemaControlPath = dataSchemaControlPath?.replace('/', '');
@@ -75,6 +86,10 @@ export default function DesignerContextProvider({
   };
 
   const removeLayout = (key: string) => {
+    setElementsMap((prev) => {
+      prev?.delete(key);
+      return new Map(prev);
+    });
     let uiSchemaControlPath = findPath(uiSchema, 'key', key);
     uiSchemaControlPath = uiSchemaControlPath?.replace('/', '');
     uiSchemaControlPath = uiSchemaControlPath?.replace('/key', '');
@@ -119,6 +134,11 @@ export default function DesignerContextProvider({
         };
       });
     }
+    if (element.type === 'Input') {
+      setElementsMap(
+        new Map(elementsMap.set(element.key, element.uiSchema.name))
+      );
+    }
   };
   const addElementInPosition = (
     element: FormElementInstance,
@@ -160,6 +180,11 @@ export default function DesignerContextProvider({
 
       setDataSchema(newDataSchema);
     }
+    if (element.type === 'Input') {
+      setElementsMap(
+        new Map(elementsMap.set(element.key, element.uiSchema.name))
+      );
+    }
   };
 
   const addElementInLayout = (
@@ -183,6 +208,11 @@ export default function DesignerContextProvider({
           },
         };
       });
+    }
+    if (element.type === 'Input') {
+      setElementsMap(
+        new Map(elementsMap.set(element.key, element.uiSchema.name))
+      );
     }
   };
 
@@ -209,6 +239,11 @@ export default function DesignerContextProvider({
     setUISchema(newUISchema);
     setDataSchema(newDataSchema);
     setSelectedElement(element);
+    if (element.type === 'Input') {
+      setElementsMap(
+        new Map(elementsMap.set(element.key, element.uiSchema.name))
+      );
+    }
   };
   return (
     <DesignerContext.Provider
@@ -223,6 +258,7 @@ export default function DesignerContextProvider({
         selectedElement,
         setSelectedElement,
         updateElementSchemas,
+        elementsMap,
       }}
     >
       {children}
