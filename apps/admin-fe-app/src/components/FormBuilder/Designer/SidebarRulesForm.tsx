@@ -32,7 +32,7 @@ const RulesForm = ({
         <div className="flex border-2" key={index}>
           <Button
             variant={'outline'}
-            className="gap-2"
+            className="gap-2 border-accent"
             onClick={() => remove(index)}
           >
             <MinusCircledIcon />
@@ -47,7 +47,7 @@ const RulesForm = ({
                   value={field.value}
                   onValueChange={(value) => field.onChange(value)}
                 >
-                  <SelectTrigger className="h-8 w-[70px]">
+                  <SelectTrigger className="h-8 w-[70px] border-base-100">
                     <SelectValue placeholder={field.value} />
                   </SelectTrigger>
                   <SelectContent className="bg-base-100" side="top">
@@ -72,7 +72,7 @@ const RulesForm = ({
                   {...field}
                   value={field.value}
                   placeholder="Placeholder"
-                  className="w-full"
+                  className="w-full border-base-100"
                 />
               )}
             />

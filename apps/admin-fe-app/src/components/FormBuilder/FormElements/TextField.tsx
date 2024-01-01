@@ -222,7 +222,7 @@ function PropertiesComponent({
                 }}
                 value={field.value}
                 placeholder="Label"
-                className="w-full"
+                className="w-full border-base-100"
               />
               {fieldState.error?.message && (
                 <Label variant={'error'}>{fieldState.error?.message}</Label>
@@ -243,7 +243,7 @@ function PropertiesComponent({
                 {...field}
                 value={field.value}
                 placeholder="Name"
-                className="w-full"
+                className="w-full border-base-100"
               />
               {fieldState.error?.message && (
                 <Label variant={'error'}>{fieldState.error?.message}</Label>
@@ -264,7 +264,7 @@ function PropertiesComponent({
                 {...field}
                 value={field.value}
                 placeholder="Description"
-                className="w-full"
+                className="w-full border-base-100"
               />
               {fieldState.error?.message && (
                 <Label variant={'error'}>{fieldState.error?.message}</Label>
@@ -284,7 +284,7 @@ function PropertiesComponent({
                 {...field}
                 value={field.value}
                 placeholder="Placeholder"
-                className="w-full"
+                className="w-full border-base-100"
               />
               {fieldState.error?.message && (
                 <Label variant={'error'}>{fieldState.error?.message}</Label>
@@ -323,7 +323,7 @@ function PropertiesComponent({
                 value={field.value}
                 onValueChange={(value) => field.onChange(value)}
               >
-                <SelectTrigger className="h-8 w-full">
+                <SelectTrigger className="h-8 w-full border-base-100">
                   <SelectValue placeholder={field.value} />
                 </SelectTrigger>
                 <SelectContent className="bg-base-100" side="top">
@@ -349,7 +349,7 @@ function PropertiesComponent({
           render={({ field, fieldState }) => (
             <>
               <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger className="h-8 w-full">
+                <SelectTrigger className="h-8 w-full border-base-100">
                   <SelectValue placeholder={'select element'} />
                 </SelectTrigger>
                 <SelectContent className="bg-base-100" side="top">
