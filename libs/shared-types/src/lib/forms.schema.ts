@@ -92,6 +92,16 @@ export type DataSchema = {
   properties: SchemaProperty;
   required?: string[];
 };
+export type ControlEffect = 'HIDE' | 'SHOW' | 'ENABLE' | 'DISABLE';
+export type Rule = {
+  effect?: ControlEffect;
+  condition?: {
+    key?: string;
+    scope?: string;
+    schema?: Partial<SchemaPropertyBody>;
+  };
+};
+
 export type UISchema = {
   key: string;
   type: string;
@@ -103,11 +113,5 @@ export type UISchema = {
   scope?: string;
   placeholder?: string;
   elements?: UISchema[];
-  rule?: {
-    effect?: 'HIDE' | 'SHOW' | 'ENABLE' | 'DISABLE';
-    condition?: {
-      scope?: string;
-      schema?: Partial<SchemaPropertyBody>;
-    };
-  };
+  rule?: Rule;
 };

@@ -1,5 +1,7 @@
 import {
   DataSchema,
+  Rule,
+  SchemaPrimitiveType,
   SchemaProperty,
   SchemaPropertyBody,
   UISchema,
@@ -269,5 +271,20 @@ export function buildConditionObject(
       schema['contains'] = { enum: [rule.value] };
     }
   }
-  return schema
+  return schema;
+}
+
+export function evaluateRule(
+  value: number | string | string[] | number[],
+  rule: Rule
+) {
+  if (typeof value === 'string') {
+    if (rule.condition?.schema?.hasOwnProperty('enum')) {
+      if (
+        rule.condition?.schema?.enum?.includes(value as SchemaPrimitiveType)
+      ) {
+        return true;
+      }
+    }
+  }
 }

@@ -8,7 +8,9 @@ import {
   UpdateUiElementByKey,
 } from '../helpers';
 import {
+  ControlEffect,
   DataSchema,
+  Rule,
   SchemaPrimitiveType,
   UISchema,
 } from '@engine/shared-types';
@@ -31,6 +33,14 @@ type DesignerContextType = {
     React.SetStateAction<FormElementInstance | null>
   >;
   updateElementSchemas: (element: FormElementInstance) => void;
+  elementsToWatch: Map<
+    string,
+    {
+      rule: Rule;
+      dependableElementName: string;
+    }
+  >;
+  uiElementsState: Map<string, ControlEffect>;
 };
 
 export const DesignerContext = createContext<DesignerContextType | null>(null);
@@ -49,10 +59,18 @@ export default function DesignerContextProvider({
   };
   const [dataSchema, setDataSchema] = useState<DataSchema>(baseDataSchema);
   const [uiSchema, setUISchema] = useState<UISchema | undefined>();
+  // maps element key => element name
   const [elementsMap, setElementsMap] = useState<Map<string, string>>(
     new Map()
   );
-
+  const elementsToWatch: Map<
+    string,
+    {
+      rule: Rule;
+      dependableElementName: string;
+    }
+  > = new Map();
+  const uiElementsState: Map<string, ControlEffect> = new Map();
   const [selectedElement, setSelectedElement] =
     useState<FormElementInstance | null>(null);
 
@@ -259,6 +277,8 @@ export default function DesignerContextProvider({
         setSelectedElement,
         updateElementSchemas,
         elementsMap,
+        elementsToWatch,
+        uiElementsState,
       }}
     >
       {children}

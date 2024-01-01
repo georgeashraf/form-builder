@@ -17,7 +17,7 @@ import {
   UseFormReturn,
 } from 'react-hook-form';
 import RulesForm from '../Designer/SidebarRulesForm';
-import { buildConditionObject } from '../helpers';
+import { buildConditionObject, findPath } from '../helpers';
 import useDesigner from '../Hooks/useDesigner';
 import {
   FormElement,
@@ -104,7 +104,11 @@ function FormComponent({
   const elementKey = elementInstance.uiSchema.key;
   const elementName = elementInstance.uiSchema.name;
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div
+      className={`"flex flex-col gap-2 w-full" ${
+        effect === 'HIDE' ? 'hidden' : ''
+      } ${effect === 'DISABLE' ? 'pointer-events-none opacity-80' : ''}`}
+    >
       <Label>
         {elementInstance.uiSchema.label}
         <span className="text-error">
@@ -120,9 +124,7 @@ function FormComponent({
               placeholder={elementInstance.uiSchema.placeholder}
               defaultValue={''}
               {...field}
-              className={`${effect === 'SHOW' ? 'hidden' : ''} ${
-                effect === 'ENABLE' ? 'pointer-events-none opacity-50' : ''
-              }`}
+              disabled={effect === 'DISABLE'}
             />
             {fieldState.error?.message && (
               <Label variant={'error'}>{fieldState.error?.message}</Label>
@@ -145,12 +147,12 @@ function PropertiesComponent({
 }: {
   elementInstance: FormElementInstance;
 }) {
-  const { updateElementSchemas, elementsMap } = useDesigner();
+  const { updateElementSchemas, elementsMap, dataSchema } = useDesigner();
   const form = useForm<any>({
     defaultValues: {
       dataSchema: elementInstance.dataSchema,
       uiSchema: elementInstance.uiSchema,
-      formRules: []
+      formRules: [],
     },
   });
 
@@ -177,8 +179,17 @@ function PropertiesComponent({
       rule: {
         effect: values.uiSchema.rule?.effect,
         condition: {
-          scope: values.uiSchema.rule?.condition?.scope,
-          schema: buildConditionObject(values.formRules),
+          key: values.uiSchema.rule?.condition?.key ?? undefined,
+          scope: values.uiSchema.rule?.condition?.key
+            ? `#${findPath(
+                dataSchema,
+                'key',
+                values.uiSchema.rule?.condition?.key!
+              )?.replace('/key', '')}`
+            : undefined,
+          schema: values.formRules
+            ? buildConditionObject(values.formRules)
+            : undefined,
         },
       },
     };
@@ -333,7 +344,7 @@ function PropertiesComponent({
       <div className="flex flex-col">
         <Label className="mb-2">Rule Element</Label>
         <Controller
-          name={`uiSchema.rule.condition.scope`}
+          name={`uiSchema.rule.condition.key`}
           control={form.control}
           render={({ field, fieldState }) => (
             <>
@@ -356,7 +367,7 @@ function PropertiesComponent({
           )}
         />
       </div>
-      <RulesForm form={form}/>
+      <RulesForm form={form} />
     </form>
   );
 }
