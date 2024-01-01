@@ -79,7 +79,6 @@ const FormRenderer = ({
   };
   return (
     <div className="w-full h-full">
-      {forceRender.toString()}
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {dataSchema && uiSchema && (
           <ElementRenderer

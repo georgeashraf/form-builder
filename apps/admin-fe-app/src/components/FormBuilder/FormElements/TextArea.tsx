@@ -68,7 +68,7 @@ function DesignerComponent({
 }: {
   elementInstance: FormElementInstance;
 }) {
-  const elementKey = elementInstance.uiSchema.key;
+  const elementName = elementInstance.uiSchema.name;
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label variant={'base'}>
@@ -84,9 +84,9 @@ function DesignerComponent({
         rows={elementInstance.uiSchema.rows}
       />
       {elementInstance.dataSchema &&
-        elementInstance.dataSchema[elementKey]?.description && (
+        elementInstance.dataSchema[elementName]?.description && (
           <p className="text-base-100 text-[0.8rem]">
-            {elementInstance.dataSchema[elementKey]?.description}
+            {elementInstance.dataSchema[elementName]?.description}
           </p>
         )}
     </div>
