@@ -23,7 +23,7 @@ export const HorizontalLayoutElement: FormElement = {
 function DesignerComponent({ children }: { children?: ReactNode }) {
   return (
     <div
-      className={`flex flex-row min-h-[100px] w-full items-start gap-4 justify-between flex-1 border-primary border-4 	 `}
+      className={`flex flex-row  min-w-[100px] min-h-[100px] flex-1 w-full items-start gap-4 justify-between border-secondary border-4 	 `}
     >
       {children}
     </div>

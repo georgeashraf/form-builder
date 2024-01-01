@@ -24,7 +24,7 @@ function DesignerComponent({ children }: { children?: ReactNode }) {
   return (
     <>
       <div
-        className={`flex flex-col min-h-[150px]  items-start gap-4 justify-between flex-1  border-primary border-4  `}
+        className={`flex flex-col min-w-[100px] min-h-[150px]  items-start gap-4 justify-between flex-1  border-secondary border-4  `}
       >
         {children}
       </div>
