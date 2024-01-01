@@ -12,23 +12,20 @@ import { MinusCircledIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import {
   Controller,
   FieldValues,
-  UseFieldArrayAppend,
-  UseFieldArrayRemove,
+  useFieldArray,
   UseFormReturn,
 } from 'react-hook-form';
 import { OPERATORS } from '../types';
 
 const RulesForm = ({
-  fields,
-  append,
-  remove,
   form,
 }: {
-  fields: Record<'id', string>[];
-  append: UseFieldArrayAppend<FieldValues, 'formRules'>;
-  remove: UseFieldArrayRemove;
   form: UseFormReturn<FieldValues, any, undefined>;
 }) => {
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'formRules',
+  });
   return (
     <div className="flex flex-col">
       {fields.map(({ id }, index) => (
@@ -82,7 +79,12 @@ const RulesForm = ({
           </div>
         </div>
       ))}
-      <Button variant={'outline'} className="gap-2" onClick={() => append({})}>
+      <Button
+        variant={'outline'}
+        className="gap-2"
+        type='button'
+        onClick={() => append({ operator: 'eq', value: 'value' })}
+      >
         <PlusCircledIcon />
         Add Rule Condition
       </Button>

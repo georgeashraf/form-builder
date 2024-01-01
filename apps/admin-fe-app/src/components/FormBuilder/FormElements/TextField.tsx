@@ -1,5 +1,4 @@
 import {
-  Button,
   Input,
   Label,
   Select,
@@ -9,12 +8,11 @@ import {
   SelectValue,
   Switch,
 } from '@engine/design-system';
-import { UISchema, SchemaProperty } from '@engine/shared-types';
+import { UISchema, SchemaProperty, ControlEffect } from '@engine/shared-types';
 import { TextIcon } from '@radix-ui/react-icons';
 import {
   Controller,
   FieldValues,
-  useFieldArray,
   useForm,
   UseFormReturn,
 } from 'react-hook-form';
@@ -97,9 +95,11 @@ function DesignerComponent({
 function FormComponent({
   elementInstance,
   form,
+  effect,
 }: {
   elementInstance: FormElementInstance;
   form?: UseFormReturn<FieldValues, any, undefined>;
+  effect?: ControlEffect;
 }) {
   const elementKey = elementInstance.uiSchema.key;
   const elementName = elementInstance.uiSchema.name;
@@ -120,6 +120,9 @@ function FormComponent({
               placeholder={elementInstance.uiSchema.placeholder}
               defaultValue={''}
               {...field}
+              className={`${effect === 'SHOW' ? 'hidden' : ''} ${
+                effect === 'ENABLE' ? 'pointer-events-none opacity-50' : ''
+              }`}
             />
             {fieldState.error?.message && (
               <Label variant={'error'}>{fieldState.error?.message}</Label>
@@ -144,16 +147,13 @@ function PropertiesComponent({
 }) {
   const { updateElementSchemas, elementsMap } = useDesigner();
   const form = useForm<any>({
-    mode: 'onBlur',
     defaultValues: {
       dataSchema: elementInstance.dataSchema,
       uiSchema: elementInstance.uiSchema,
+      formRules: []
     },
   });
-  const { fields, append, remove } = useFieldArray({
-    control: form.control,
-    name: 'formRules',
-  });
+
   function updateSchemas(values: {
     uiSchema: UISchema;
     dataSchema: SchemaProperty;
@@ -177,7 +177,7 @@ function PropertiesComponent({
       rule: {
         effect: values.uiSchema.rule?.effect,
         condition: {
-          scope: newScope,
+          scope: values.uiSchema.rule?.condition?.scope,
           schema: buildConditionObject(values.formRules),
         },
       },
@@ -195,7 +195,6 @@ function PropertiesComponent({
       dataSchema: values.dataSchema,
     });
   }
-
   return (
     <form onSubmit={form.handleSubmit(updateSchemas)} className="space-y-3">
       <div className="flex flex-col">
@@ -357,7 +356,7 @@ function PropertiesComponent({
           )}
         />
       </div>
-      <RulesForm form={form} append={append} fields={fields} remove={remove} />
+      <RulesForm form={form}/>
     </form>
   );
 }
