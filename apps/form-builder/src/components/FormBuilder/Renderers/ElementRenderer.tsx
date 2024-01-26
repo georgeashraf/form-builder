@@ -167,7 +167,7 @@ export const ElementRenderer = ({
                 el.rule?.condition?.scope?.split('/').pop()!,
                 {
                   rule: el.rule,
-                  dependableElementName: el.name
+                  dependableElementName: el.name,
                 }
               );
               uiElementsState.set(

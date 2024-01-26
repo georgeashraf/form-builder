@@ -1,7 +1,7 @@
 {
-  "name": "admin-fe-app",
+  "name": "form-builder",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/admin-fe-app/src",
+  "sourceRoot": "apps/form-builder/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,8 +9,8 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/apps/admin-fe-app",
-        "postcssConfig": "apps/admin-fe-app/postcss.config.js"
+        "outputPath": "dist/apps/form-builder",
+        "postcssConfig": "apps/form-builder/postcss.config.js"
       },
       "configurations": {
         "development": {
@@ -25,15 +25,15 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "admin-fe-app:build"
+        "buildTarget": "form-builder:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "admin-fe-app:build:development",
+          "buildTarget": "form-builder:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "admin-fe-app:build:production",
+          "buildTarget": "form-builder:build:production",
           "hmr": false
         }
       }
@@ -42,14 +42,14 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "admin-fe-app:build"
+        "buildTarget": "form-builder:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "admin-fe-app:build:development"
+          "buildTarget": "form-builder:build:development"
         },
         "production": {
-          "buildTarget": "admin-fe-app:build:production"
+          "buildTarget": "form-builder:build:production"
         }
       }
     },
@@ -58,20 +58,20 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/apps/admin-fe-app"
+        "reportsDirectory": "../../coverage/apps/form-builder"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/admin-fe-app/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/form-builder/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "admin-fe-app:build"
+        "buildTarget": "form-builder:build"
       }
     }
   },

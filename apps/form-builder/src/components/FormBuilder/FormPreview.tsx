@@ -11,7 +11,7 @@ const FormPreview = ({
 }: {
   previewDataSchema?: DataSchema;
   previewUISchema?: UISchema;
-  trigger?: ReactNode
+  trigger?: ReactNode;
 }) => {
   const { dataSchema, uiSchema } = useDesigner();
   return (

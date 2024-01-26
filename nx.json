@@ -67,6 +67,9 @@
         "linter": "eslint",
         "unitTestRunner": "jest"
       }
+    },
+    "@nx/workspace:move": {
+      "projectNameAndRootFormat": "as-provided"
     }
   }
 }

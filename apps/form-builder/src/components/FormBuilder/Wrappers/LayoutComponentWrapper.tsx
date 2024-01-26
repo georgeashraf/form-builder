@@ -1,6 +1,4 @@
-import {
-  useDroppable,
-} from '@dnd-kit/core';
+import { useDroppable } from '@dnd-kit/core';
 import {
   cn,
   Tooltip,
@@ -11,7 +9,7 @@ import {
 import { Cross1Icon, MoveIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 import useDesigner from '../Hooks/useDesigner';
-import {FormElementInstance, FormElements } from '../types';
+import { FormElementInstance, FormElements } from '../types';
 
 const LayoutComponentWrapper = ({
   element,

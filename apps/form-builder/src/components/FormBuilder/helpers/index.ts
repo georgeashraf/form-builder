@@ -281,7 +281,9 @@ export function evaluateRule(
   if (typeof value === 'string' || typeof value === 'number') {
     if (rule.condition?.schema?.hasOwnProperty('enum')) {
       if (
-        rule.condition?.schema?.enum?.includes(value.toString() as SchemaPrimitiveType)
+        rule.condition?.schema?.enum?.includes(
+          value.toString() as SchemaPrimitiveType
+        )
       ) {
         return true;
       }

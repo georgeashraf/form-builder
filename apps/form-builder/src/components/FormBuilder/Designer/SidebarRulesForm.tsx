@@ -82,7 +82,7 @@ const RulesForm = ({
       <Button
         variant={'outline'}
         className="gap-2"
-        type='button'
+        type="button"
         onClick={() => append({ operator: 'eq', value: 'value' })}
       >
         <PlusCircledIcon />
