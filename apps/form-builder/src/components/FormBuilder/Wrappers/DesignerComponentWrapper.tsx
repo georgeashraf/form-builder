@@ -60,7 +60,7 @@ const DesignerComponentWrapper = ({
       {...draggable.attributes}
       className={cn(
         'relative flex flex-col w-full  hover:cursor-pointer rounded-md ring-1 ring-primary ring-inset',
-        element.type === 'Layout' ? 'h-full' : 'h-[120px]'
+        element.type === 'Layout' ? 'h-full' : 'min-h-[120px]'
       )}
       onMouseEnter={() => setMouseIsOver(true)}
       onMouseLeave={() => setMouseIsOver(false)}
@@ -115,7 +115,7 @@ const DesignerComponentWrapper = ({
         className={cn(
           'flex w-full items-center rounded-md bg-primary  px-4 py-2 pointer-events-none opacity-100',
           mouseIsOver && 'opacity-30',
-          element.type === 'Layout' ? 'h-full' : 'h-[120px]'
+          element.type === 'Layout' ? 'h-full' : 'min-h-[120px]'
         )}
       >
         <DesignerElement elementInstance={element} />
