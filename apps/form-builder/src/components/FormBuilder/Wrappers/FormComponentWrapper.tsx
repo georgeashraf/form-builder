@@ -11,7 +11,11 @@ const FormComponentWrapper = ({
   effect?: ControlEffect;
 }) => {
   const FormElement = FormElements[element.subtype].formComponent;
-  return <FormElement elementInstance={element} form={form} effect={effect} />;
+  return (
+    <div className="w-full">
+      <FormElement elementInstance={element} form={form} effect={effect} />
+    </div>
+  );
 };
 
 export default FormComponentWrapper;

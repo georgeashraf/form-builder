@@ -59,7 +59,7 @@ const DesignerComponentWrapper = ({
       {...draggable.listeners}
       {...draggable.attributes}
       className={cn(
-        'relative flex flex-col  hover:cursor-pointer rounded-md ring-1 ring-primary ring-inset',
+        'relative flex flex-col w-full  hover:cursor-pointer rounded-md ring-1 ring-primary ring-inset',
         element.type === 'Layout' ? 'h-full' : 'h-[120px]'
       )}
       onMouseEnter={() => setMouseIsOver(true)}
