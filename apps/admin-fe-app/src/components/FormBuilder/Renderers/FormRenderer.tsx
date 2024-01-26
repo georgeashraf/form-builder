@@ -75,7 +75,7 @@ const FormRenderer = ({
   }, [form.watch]);
 
   const onSubmit = (data: any) => {
-    alert(JSON.stringify(data));
+    alert(JSON.stringify(data, null, 4));
   };
   return (
     <div className="w-full h-full">
