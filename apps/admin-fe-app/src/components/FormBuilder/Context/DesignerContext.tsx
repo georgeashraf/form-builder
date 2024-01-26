@@ -127,6 +127,10 @@ export default function DesignerContextProvider({
     }
   };
   const addElementSchemas = (element: FormElementInstance) => {
+    if (uiSchema === undefined && element.type === 'Input') {
+      alert('You Cant add an input outside of a layout ')
+      return
+    }
     if (uiSchema === undefined) {
       setUISchema(element.uiSchema);
     }
