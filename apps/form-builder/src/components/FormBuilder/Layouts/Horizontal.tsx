@@ -33,7 +33,7 @@ function DesignerComponent({ children }: { children?: ReactNode }) {
 function FormComponent({ children }: { children?: ReactNode }) {
   return (
     <div
-      className={`flex flex-row flex-grow items-start gap-4 justify-between flex-1`}
+      className={`flex flex-row flex-grow w-full items-start gap-4 justify-between flex-1`}
     >
       {children}
     </div>
